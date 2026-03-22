@@ -1,0 +1,436 @@
+{
+  "total": 47,
+  "categories": {
+    "sofas": 34,
+    "sillas": 0,
+    "sillones": 0,
+    "restauraciones": 2,
+    "taller": 0,
+    "familia": 11
+  },
+  "photos": [
+    {
+      "filename": "sofa-esquinero-gris-taller.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-taller",
+      "path": "fotos/sofas/sofa-esquinero-gris-taller.jpg",
+      "original_file": "03570ead-f623-4ba0-8c78-d8c85ca72e52.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-gris-base-madera.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-base-madera",
+      "path": "fotos/sofas/sofa-esquinero-gris-base-madera.jpg",
+      "original_file": "05a0a3fb-06f7-42c3-a4ab-14f8aa344336.jpg",
+      "width": 1200,
+      "height": 1600
+    },
+    {
+      "filename": "sofa-esquinero-gris-almohadones.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-almohadones",
+      "path": "fotos/sofas/sofa-esquinero-gris-almohadones.jpg",
+      "original_file": "06ee2b6b-0ff0-467f-969b-cbe9d18945c0.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-dos-cuerpos-mostaza.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-dos-cuerpos-mostaza",
+      "path": "fotos/sofas/sofa-dos-cuerpos-mostaza.jpg",
+      "original_file": "115c4780-4c69-4381-84be-4bf9d27d69ce.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-azul-base-madera-hogar.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-azul-base-madera-hogar",
+      "path": "fotos/sofas/sofa-azul-base-madera-hogar.jpg",
+      "original_file": "13345cb0-d767-4e77-afc0-df35070abf92.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-gris-con-ottoman-exterior.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-gris-con-ottoman-exterior",
+      "path": "fotos/sofas/sofa-gris-con-ottoman-exterior.jpg",
+      "original_file": "13a3292c-a3a9-4da4-9085-c1f2476b8e3e.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-oscuro-almohadones-etnicos.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-oscuro-almohadones-etnicos",
+      "path": "fotos/sofas/sofa-esquinero-oscuro-almohadones-etnicos.jpg",
+      "original_file": "20160624_171314_HDR.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-beige-vivo-contrastante-naranja.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-beige-vivo-contrastante-naranja",
+      "path": "fotos/sofas/sofa-beige-vivo-contrastante-naranja.jpg",
+      "original_file": "20160818_100026.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-clasico-beige-brazos-curvos.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-clasico-beige-brazos-curvos",
+      "path": "fotos/sofas/sofa-clasico-beige-brazos-curvos.jpg",
+      "original_file": "20160819_131443.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-turquesa-hogar.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-turquesa-hogar",
+      "path": "fotos/sofas/sofa-esquinero-turquesa-hogar.jpg",
+      "original_file": "20160915_141711.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-blanco-taller.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-blanco-taller",
+      "path": "fotos/sofas/sofa-esquinero-blanco-taller.jpg",
+      "original_file": "25192e0c-1416-4ce6-ab35-c0cfd5ec59db.jpg",
+      "width": 1152,
+      "height": 2048
+    },
+    {
+      "filename": "sofa-esquinero-gris-grande-base-madera.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-grande-base-madera",
+      "path": "fotos/sofas/sofa-esquinero-gris-grande-base-madera.jpg",
+      "original_file": "44e86e50-1d9d-4a6e-8015-3cd71388cfac.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-blanco-almohadones-grises.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-blanco-almohadones-grises",
+      "path": "fotos/sofas/sofa-esquinero-blanco-almohadones-grises.jpg",
+      "original_file": "4ba97386-6329-43e8-8cf2-cfe64dba517d.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-beige-ottoman-hogar.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-beige-ottoman-hogar",
+      "path": "fotos/sofas/sofa-esquinero-beige-ottoman-hogar.jpg",
+      "original_file": "4c40435b-337b-41fa-b2eb-a2ac0e4bbbaa.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-gris-hogar-living.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-hogar-living",
+      "path": "fotos/sofas/sofa-esquinero-gris-hogar-living.jpg",
+      "original_file": "5c2c2972-0d0f-455b-9371-364d56c9b2f0.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-crema-ottoman-taller.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-crema-ottoman-taller",
+      "path": "fotos/sofas/sofa-esquinero-crema-ottoman-taller.jpg",
+      "original_file": "89dfe547-cb74-4617-95e7-387a4e735503.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-aqua-taller.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-aqua-taller",
+      "path": "fotos/sofas/sofa-esquinero-aqua-taller.jpg",
+      "original_file": "970496a5-122e-447e-8ea6-5c2d132f1217.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-blanco-exterior.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-blanco-exterior",
+      "path": "fotos/sofas/sofa-blanco-exterior.jpg",
+      "original_file": "IMG_20211117_124742.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-gris-oscuro-hogar.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-gris-oscuro-hogar",
+      "path": "fotos/sofas/sofa-gris-oscuro-hogar.jpg",
+      "original_file": "IMG_2721.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-beige-tachas.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-beige-tachas",
+      "path": "fotos/sofas/sofa-esquinero-beige-tachas.jpg",
+      "original_file": "PHOTO-2022-11-18-09-24-25.jpg",
+      "width": 800,
+      "height": 450
+    },
+    {
+      "filename": "sofa-dos-cuerpos-verde-base-madera.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-dos-cuerpos-verde-base-madera",
+      "path": "fotos/sofas/sofa-dos-cuerpos-verde-base-madera.jpg",
+      "original_file": "PHOTO-2022-11-18-09-19-20.jpg",
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "filename": "sofa-crema-ottoman-vista-lateral.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-crema-ottoman-vista-lateral",
+      "path": "fotos/sofas/sofa-crema-ottoman-vista-lateral.jpg",
+      "original_file": "a75bc8c6-c3a7-4566-ac2c-6d140a6c4486.jpg",
+      "width": 1152,
+      "height": 2048
+    },
+    {
+      "filename": "sofa-esquinero-gris-hogar-detalle.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-hogar-detalle",
+      "path": "fotos/sofas/sofa-esquinero-gris-hogar-detalle.jpg",
+      "original_file": "aca7fa23-72d2-42d2-8c4f-60132ca842d3.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-funda-blanca.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-funda-blanca",
+      "path": "fotos/sofas/sofa-esquinero-funda-blanca.jpg",
+      "original_file": "ad33f07a-c9af-418a-a627-38a8fba5f14e.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-gris-ottoman-vista-frontal.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-gris-ottoman-vista-frontal",
+      "path": "fotos/sofas/sofa-gris-ottoman-vista-frontal.jpg",
+      "original_file": "bddebc99-c230-4dcd-8083-d1b3c9253732.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-beige-chaise.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-beige-chaise",
+      "path": "fotos/sofas/sofa-esquinero-beige-chaise.jpg",
+      "original_file": "be386bb6-065c-4b13-a56e-fe83f1555569.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-gris-compacto.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-compacto",
+      "path": "fotos/sofas/sofa-esquinero-gris-compacto.jpg",
+      "original_file": "c4839014-3f8f-4147-a70a-f6de3fb4748d.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-gris-oscuro-almohadones-azules.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-gris-oscuro-almohadones-azules",
+      "path": "fotos/sofas/sofa-gris-oscuro-almohadones-azules.jpg",
+      "original_file": "d434a1c1-cce8-4b27-972e-335e003d080d.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-u-beige-hogar-moderno.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-u-beige-hogar-moderno",
+      "path": "fotos/sofas/sofa-u-beige-hogar-moderno.jpg",
+      "original_file": "d4ad3b33-0be1-47c7-b067-2746802061c2.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-gris-mesas-redondas.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-mesas-redondas",
+      "path": "fotos/sofas/sofa-esquinero-gris-mesas-redondas.jpg",
+      "original_file": "d501a3bc-db95-44e0-960e-86c44d4ab706.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "sofa-esquinero-gris-chaise-taller.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-chaise-taller",
+      "path": "fotos/sofas/sofa-esquinero-gris-chaise-taller.jpg",
+      "original_file": "d8e361fa-907c-4461-8040-227351d41a21.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-dos-cuerpos-verde-frontal.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-dos-cuerpos-verde-frontal",
+      "path": "fotos/sofas/sofa-dos-cuerpos-verde-frontal.jpg",
+      "original_file": "df32909d-4119-4d82-bcee-415f176c9f4c.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-gris-taller-2.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-gris-taller-2",
+      "path": "fotos/sofas/sofa-esquinero-gris-taller-2.jpg",
+      "original_file": "e4aa4397-2f11-4ebd-abcc-d5fc78ef8ae7.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "sofa-esquinero-azul-marino-base-madera.jpg",
+      "category": "sofas",
+      "descriptive_name": "sofa-esquinero-azul-marino-base-madera",
+      "path": "fotos/sofas/sofa-esquinero-azul-marino-base-madera.jpg",
+      "original_file": "ebb35db9-cd54-4380-be22-3e46b3148421.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "restauracion-chesterfield-cuero-1.jpg",
+      "category": "restauraciones",
+      "descriptive_name": "restauracion-chesterfield-cuero-1",
+      "path": "fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg",
+      "original_file": "20160912_132705.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "restauracion-chesterfield-cuero-2.jpg",
+      "category": "restauraciones",
+      "descriptive_name": "restauracion-chesterfield-cuero-2",
+      "path": "fotos/restauraciones/restauracion-chesterfield-cuero-2.jpg",
+      "original_file": "20160912_132707.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "familia-grupo-hombres-parador.jpg",
+      "category": "familia",
+      "descriptive_name": "familia-grupo-hombres-parador",
+      "path": "fotos/familia/familia-grupo-hombres-parador.jpg",
+      "original_file": "20241006_143117.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "pablo-calistro-con-hijas.jpg",
+      "category": "familia",
+      "descriptive_name": "pablo-calistro-con-hijas",
+      "path": "fotos/familia/pablo-calistro-con-hijas.jpg",
+      "original_file": "IMG_4142.jpg",
+      "width": 1200,
+      "height": 1600
+    },
+    {
+      "filename": "pablo-y-esposa-retrato.jpg",
+      "category": "familia",
+      "descriptive_name": "pablo-y-esposa-retrato",
+      "path": "fotos/familia/pablo-y-esposa-retrato.jpg",
+      "original_file": "IMG_5181.jpg",
+      "width": 1200,
+      "height": 1600
+    },
+    {
+      "filename": "leonardo-marinolli-cumpleanos.jpg",
+      "category": "familia",
+      "descriptive_name": "leonardo-marinolli-cumpleanos",
+      "path": "fotos/familia/leonardo-marinolli-cumpleanos.jpg",
+      "original_file": "IMG_6826.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "pablo-y-esposa-restaurante.jpg",
+      "category": "familia",
+      "descriptive_name": "pablo-y-esposa-restaurante",
+      "path": "fotos/familia/pablo-y-esposa-restaurante.jpg",
+      "original_file": "IMG_7272.jpg",
+      "width": 1200,
+      "height": 1600
+    },
+    {
+      "filename": "familia-grupo-noche.jpg",
+      "category": "familia",
+      "descriptive_name": "familia-grupo-noche",
+      "path": "fotos/familia/familia-grupo-noche.jpg",
+      "original_file": "IMG_7314.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "familia-celebracion-fiesta.jpg",
+      "category": "familia",
+      "descriptive_name": "familia-celebracion-fiesta",
+      "path": "fotos/familia/familia-celebracion-fiesta.jpg",
+      "original_file": "IMG_8483.jpg",
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "filename": "leonardo-grupo-parador-fito.jpg",
+      "category": "familia",
+      "descriptive_name": "leonardo-grupo-parador-fito",
+      "path": "fotos/familia/leonardo-grupo-parador-fito.jpg",
+      "original_file": "20241006_143051.jpg",
+      "width": 1200,
+      "height": 1600
+    },
+    {
+      "filename": "leonardo-pareja-playa-1.jpg",
+      "category": "familia",
+      "descriptive_name": "leonardo-pareja-playa-1",
+      "path": "fotos/familia/leonardo-pareja-playa-1.jpg",
+      "original_file": "6333924d-df72-4d1a-a263-db8c1c2f121a.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "leonardo-pareja-playa-2.jpg",
+      "category": "familia",
+      "descriptive_name": "leonardo-pareja-playa-2",
+      "path": "fotos/familia/leonardo-pareja-playa-2.jpg",
+      "original_file": "e9f6d171-680e-4985-b70b-3a6021fd73bc.jpg",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "filename": "familia-grupo-jardin.jpg",
+      "category": "familia",
+      "descriptive_name": "familia-grupo-jardin",
+      "path": "fotos/familia/familia-grupo-jardin.jpg",
+      "original_file": "ef551bb4-c4d9-42c0-955b-4cd67071c723.jpg",
+      "width": 1200,
+      "height": 1600
+    }
+  ]
+}

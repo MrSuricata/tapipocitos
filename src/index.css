@@ -1,0 +1,352 @@
+@import 'tailwindcss';
+@import "tw-animate-css";
+
+@layer base {
+  * {
+    @apply border-border
+  }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  button, .button-text {
+    font-family: 'Inter', sans-serif;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+:root {
+  --background: oklch(0.96 0.012 70);
+  --foreground: oklch(0.18 0.03 35);
+
+  --card: oklch(0.995 0.003 70);
+  --card-foreground: oklch(0.18 0.03 35);
+
+  --popover: oklch(0.995 0.003 70);
+  --popover-foreground: oklch(0.18 0.03 35);
+
+  --primary: oklch(0.32 0.06 40);
+  --primary-foreground: oklch(0.97 0.008 70);
+
+  --secondary: oklch(0.90 0.015 60);
+  --secondary-foreground: oklch(0.18 0.03 35);
+
+  --muted: oklch(0.55 0.02 40);
+  --muted-foreground: oklch(0.55 0.02 40);
+
+  --accent: oklch(0.62 0.14 50);
+  --accent-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  --border: oklch(0.88 0.012 60);
+  --input: oklch(0.88 0.012 60);
+  --ring: oklch(0.62 0.14 50);
+
+  --radius: 0.625rem;
+
+  --color-leather: oklch(0.42 0.08 45);
+  --color-fabric: oklch(0.85 0.02 65);
+  --color-wood: oklch(0.50 0.10 55);
+  --color-cream: oklch(0.94 0.015 75);
+  --color-velvet: oklch(0.35 0.12 15);
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-full: 9999px;
+
+  --font-display: 'Playfair Display', serif;
+  --font-sans: 'Open Sans', sans-serif;
+  --font-ui: 'Inter', sans-serif;
+}
+
+/* Fabric texture background */
+.bg-texture {
+  position: relative;
+}
+
+.bg-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(90, 59, 46, 0.015) 2px,
+      rgba(90, 59, 46, 0.015) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(90, 59, 46, 0.015) 2px,
+      rgba(90, 59, 46, 0.015) 4px
+    );
+  background-size: 4px 4px;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.parallax-bg {
+  transition: transform 0.15s ease-out;
+}
+
+/* Subtle linen texture */
+.subtle-fabric-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.subtle-fabric-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Image containers */
+.card-image-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.card-image-zoom {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card-image-container:hover .card-image-zoom {
+  transform: scale(1.06);
+}
+
+/* Stitch pattern border */
+.stitch-border-top {
+  position: relative;
+}
+
+.stitch-border-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--accent) 0px,
+    var(--accent) 8px,
+    transparent 8px,
+    transparent 14px
+  );
+  opacity: 0.5;
+}
+
+/* Stitch pattern bottom */
+.stitch-border-bottom {
+  position: relative;
+}
+
+.stitch-border-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--accent) 0px,
+    var(--accent) 8px,
+    transparent 8px,
+    transparent 14px
+  );
+  opacity: 0.4;
+}
+
+/* Decorative divider */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 1rem 0;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  height: 1px;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+/* Warm gradient cards */
+.warm-card {
+  background: linear-gradient(135deg, var(--card) 0%, oklch(0.97 0.015 65) 100%);
+}
+
+/* WhatsApp button */
+.whatsapp-btn {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+  background: linear-gradient(135deg, #20BD5A 0%, #0E7A6F 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+}
+
+/* Gallery placeholder images */
+.gallery-placeholder {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.03) 3px,
+    rgba(255,255,255,0.03) 6px
+  );
+  pointer-events: none;
+}
+
+/* Gradient color schemes for categories */
+.gradient-sofas {
+  background: linear-gradient(135deg, oklch(0.45 0.08 45) 0%, oklch(0.55 0.10 50) 50%, oklch(0.40 0.06 40) 100%);
+}
+
+.gradient-sillas {
+  background: linear-gradient(135deg, oklch(0.50 0.06 220) 0%, oklch(0.60 0.08 230) 50%, oklch(0.45 0.05 215) 100%);
+}
+
+.gradient-restauraciones {
+  background: linear-gradient(135deg, oklch(0.40 0.10 35) 0%, oklch(0.50 0.12 40) 50%, oklch(0.35 0.08 30) 100%);
+}
+
+.gradient-especiales {
+  background: linear-gradient(135deg, oklch(0.35 0.12 350) 0%, oklch(0.45 0.10 355) 50%, oklch(0.30 0.10 345) 100%);
+}
+
+.gradient-sillones {
+  background: linear-gradient(135deg, oklch(0.45 0.06 140) 0%, oklch(0.55 0.08 145) 50%, oklch(0.40 0.05 135) 100%);
+}
+
+.gradient-otros {
+  background: linear-gradient(135deg, oklch(0.50 0.04 60) 0%, oklch(0.60 0.06 65) 50%, oklch(0.45 0.03 55) 100%);
+}
+
+/* Section divider with thread pattern */
+.thread-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 20%, var(--accent) 80%, transparent 100%);
+  position: relative;
+  opacity: 0.3;
+}
+
+/* Smooth section transitions */
+section {
+  position: relative;
+}
+
+/* Trust badge style */
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: oklch(1 0 0 / 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid oklch(1 0 0 / 0.1);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* Process step connector */
+.step-connector {
+  position: relative;
+}
+
+.step-connector::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--border));
+  transform: translateY(-50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax-bg {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .card-image-zoom {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .whatsapp-btn:hover {
+    transform: none !important;
+  }
+}
