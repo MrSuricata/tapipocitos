@@ -2,7 +2,11 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Package, Images, Sparkle, ChartBar } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
 
-export function AdminDashboard() {
+interface AdminDashboardProps {
+  onNavigate: (view: string) => void
+}
+
+export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const { products, projects, testimonials } = useStore()
 
   const stats = [
@@ -12,6 +16,7 @@ export function AdminDashboard() {
       icon: Package,
       color: 'text-blue-600',
       bg: 'bg-blue-50',
+      view: 'products',
     },
     {
       title: 'Trabajos',
@@ -19,6 +24,7 @@ export function AdminDashboard() {
       icon: Images,
       color: 'text-green-600',
       bg: 'bg-green-50',
+      view: 'projects',
     },
     {
       title: 'Testimonios',
@@ -26,6 +32,7 @@ export function AdminDashboard() {
       icon: Sparkle,
       color: 'text-purple-600',
       bg: 'bg-purple-50',
+      view: 'testimonials',
     },
   ]
 
@@ -40,7 +47,11 @@ export function AdminDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat) => (
-          <Card key={stat.title}>
+          <Card
+            key={stat.title}
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => onNavigate(stat.view)}
+          >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -69,7 +80,10 @@ export function AdminDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="p-4 bg-secondary/50 rounded-lg">
+            <div
+              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => onNavigate('products')}
+            >
               <h4 className="font-semibold text-foreground mb-2">
                 📦 Gestión de Productos
               </h4>
@@ -78,7 +92,10 @@ export function AdminDashboard() {
                 completar todos los campos para una mejor presentación.
               </p>
             </div>
-            <div className="p-4 bg-secondary/50 rounded-lg">
+            <div
+              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => onNavigate('projects')}
+            >
               <h4 className="font-semibold text-foreground mb-2">
                 🖼️ Trabajos Realizados
               </h4>
@@ -87,7 +104,10 @@ export function AdminDashboard() {
                 categorización adecuada.
               </p>
             </div>
-            <div className="p-4 bg-secondary/50 rounded-lg">
+            <div
+              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => onNavigate('testimonials')}
+            >
               <h4 className="font-semibold text-foreground mb-2">
                 ⭐ Testimonios
               </h4>

@@ -271,14 +271,20 @@ export function AdminProducts() {
 
               <div className="space-y-2">
                 <Label htmlFor="color">Color</Label>
-                <Input
-                  id="color"
-                  value={formData.color}
-                  onChange={(e) =>
-                    setFormData({ ...formData, color: e.target.value })
-                  }
-                  placeholder="Ej: Marrón oscuro"
-                />
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="color"
+                    value={formData.color || '#8B7355'}
+                    onChange={(e) => setFormData({...formData, color: e.target.value})}
+                    className="w-10 h-10 rounded cursor-pointer border-0 p-0"
+                  />
+                  <Input
+                    value={formData.color}
+                    onChange={(e) => setFormData({...formData, color: e.target.value})}
+                    placeholder="Ej: #8B7355 o Marrón oscuro"
+                    className="flex-1"
+                  />
+                </div>
               </div>
             </div>
 

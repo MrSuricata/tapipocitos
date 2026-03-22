@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { X } from '@phosphor-icons/react'
 
 const SHOWCASE_PHOTOS = [
   { src: '/fotos/sofas/sofa-esquinero-beige-ottoman-hogar.jpg', alt: 'Sofa esquinero beige en hogar' },
@@ -12,6 +14,17 @@ const SHOWCASE_PHOTOS = [
 ]
 
 export function PhotoShowcase() {
+  const [selectedPhoto, setSelectedPhoto] = useState<{ src: string; alt: string } | null>(null)
+
+  useEffect(() => {
+    if (!selectedPhoto) return
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedPhoto(null)
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [selectedPhoto])
+
   return (
     <section className="py-8 overflow-hidden bg-[#2C1810]" aria-label="Trabajos recientes">
       {/* Label */}
@@ -35,7 +48,8 @@ export function PhotoShowcase() {
           {[...SHOWCASE_PHOTOS, ...SHOWCASE_PHOTOS].map((photo, i) => (
             <div
               key={i}
-              className="flex-shrink-0 w-56 h-40 md:w-72 md:h-48 rounded-lg overflow-hidden group"
+              className="flex-shrink-0 w-56 h-40 md:w-72 md:h-48 rounded-lg overflow-hidden group cursor-pointer"
+              onClick={() => setSelectedPhoto(photo)}
             >
               <img
                 src={photo.src}
@@ -67,6 +81,33 @@ export function PhotoShowcase() {
           }
         }
       `}</style>
+
+      {/* Lightbox modal */}
+      {selectedPhoto && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors z-10"
+            onClick={() => setSelectedPhoto(null)}
+            aria-label="Cerrar"
+          >
+            <X size={32} weight="bold" />
+          </button>
+          <div
+            className="flex flex-col items-center gap-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedPhoto.src}
+              alt={selectedPhoto.alt}
+              className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg"
+            />
+            <p className="text-white/70 text-sm text-center">{selectedPhoto.alt}</p>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

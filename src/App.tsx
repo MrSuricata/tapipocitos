@@ -87,7 +87,7 @@ function App() {
           onLogout={handleLogout}
           onBackToSite={() => setCurrentView('home')}
         >
-          {adminView === 'dashboard' && <AdminDashboard />}
+          {adminView === 'dashboard' && <AdminDashboard onNavigate={(view) => setAdminView(view as AdminView)} />}
           {adminView === 'products' && <AdminProducts />}
           {adminView === 'projects' && <AdminProjects />}
           {adminView === 'testimonials' && <AdminTestimonials />}
