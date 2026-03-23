@@ -342,13 +342,25 @@ export function Hero({ onNavigate }: HeroProps) {
   const del = (v: number) => (prefersReducedMotion ? 0 : v)
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-texture">
-      {/* -- Warm leather/wood gradient background -- */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* -- Full background photo -- */}
+      <div className="absolute inset-0">
+        <img
+          src="/fotos/sofas/sofa-esquinero-beige-ottoman-hogar.jpg"
+          alt=""
+          className="w-full h-full object-cover"
+          aria-hidden="true"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F5F0EB]/85 via-[#F5F0EB]/75 to-[#F5F0EB]/90" />
+      </div>
+
+      {/* -- Warm leather/wood gradient on top -- */}
       <div
         className="absolute inset-0 parallax-bg"
         style={{
           background:
-            'linear-gradient(135deg, rgba(139,115,85,0.18) 0%, rgba(201,122,64,0.10) 25%, transparent 50%, rgba(160,100,55,0.12) 75%, rgba(101,67,33,0.16) 100%)',
+            'linear-gradient(135deg, rgba(139,115,85,0.12) 0%, rgba(201,122,64,0.08) 25%, transparent 50%, rgba(160,100,55,0.10) 75%, rgba(101,67,33,0.12) 100%)',
           transform: prefersReducedMotion
             ? 'none'
             : `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
@@ -356,10 +368,10 @@ export function Hero({ onNavigate }: HeroProps) {
       />
 
       {/* Warm radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(201,122,64,0.14),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(201,122,64,0.10),transparent_60%)]" />
 
       {/* Secondary subtle glow bottom */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_90%,rgba(139,115,85,0.10),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_90%,rgba(139,115,85,0.08),transparent_50%)]" />
 
       {/* -- Real sofa photo background -- */}
       <div

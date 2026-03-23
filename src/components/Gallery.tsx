@@ -283,16 +283,15 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               value={filter}
               onValueChange={(value) => value && setFilter(value)}
               className="flex flex-wrap justify-center gap-2"
+              data-wrap=""
             >
               {categories.map((category) => (
                 <ToggleGroupItem
                   key={category}
                   value={category}
-                  className="button-text px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground transition-all rounded-full"
+                  className="button-text px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground transition-all rounded-full whitespace-nowrap"
                   style={{
                     transitionDuration: `${DESIGN_TOKENS.animations.duration.fast}ms`,
-                    flex: 'none',
-                    minWidth: 'fit-content',
                   }}
                   aria-label={`Filtrar por ${category}`}
                 >
