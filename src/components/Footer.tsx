@@ -1,4 +1,4 @@
-import { Armchair, Phone, Envelope, MapPin, WhatsappLogo } from '@phosphor-icons/react'
+import { Armchair, Phone, Envelope, MapPin, WhatsappLogo, InstagramLogo, FacebookLogo } from '@phosphor-icons/react'
 
 function StitchBorder() {
   return (
@@ -118,18 +118,18 @@ export function Footer() {
               {/* WhatsApp quick link - primary */}
               <li>
                 <a
-                  href="https://wa.me/59899511196?text=Hola%20TAPIPOCITOS!%20Quiero%20consultar%20por%20un%20trabajo%20de%20tapiceria."
+                  href="https://wa.me/59899251310?text=Hola%20TAPIPOCITOS!%20Quiero%20consultar%20por%20un%20trabajo%20de%20tapiceria."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 opacity-90 hover:opacity-100 transition-all group"
                 >
                   <WhatsappLogo size={20} weight="fill" className="text-green-400 group-hover:scale-110 transition-transform" />
-                  <span className="hover:text-green-300 transition-colors">+598 99 123 456</span>
+                  <span className="hover:text-green-300 transition-colors">+598 99 251 310</span>
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={18} weight="duotone" className="text-amber-400/70" />
-                <span className="opacity-75">+598 99 123 456</span>
+                <span className="opacity-75">+598 99 251 310</span>
               </li>
               <li className="flex items-center gap-2">
                 <Envelope size={18} weight="duotone" className="text-amber-400/70" />
@@ -137,7 +137,15 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={18} weight="duotone" className="text-amber-400/70" />
-                <span className="opacity-75">Montevideo, Uruguay</span>
+                <a href="https://www.google.com/maps/search/Pedro+Cosio+2430+Montevideo" target="_blank" rel="noopener noreferrer" className="opacity-75 hover:opacity-100 transition-opacity">Pedro Cosio 2430, Montevideo</a>
+              </li>
+              <li className="flex items-center gap-3 pt-2">
+                <a href="https://www.instagram.com/tapipocitos/" target="_blank" rel="noopener noreferrer" className="opacity-75 hover:opacity-100 transition-opacity hover:text-pink-400">
+                  <InstagramLogo size={22} weight="fill" />
+                </a>
+                <a href="https://www.facebook.com/tapipocitos" target="_blank" rel="noopener noreferrer" className="opacity-75 hover:opacity-100 transition-opacity hover:text-blue-400">
+                  <FacebookLogo size={22} weight="fill" />
+                </a>
               </li>
             </ul>
           </div>

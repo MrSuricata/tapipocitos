@@ -234,13 +234,12 @@ export function About() {
                 costuras: fundas, moldes, almohadones. Así nació TAPIPOCITOS.
               </p>
               <p>
-                Con el tiempo se sumó su hija Rosana Calistro, especializada en
-                trabajos en madera, lustre y artesanía manual para muebles de
-                estilo, remodelación y reconstrucción. Más tarde llegó Leonardo
-                Marinolli, esposo de Rosana, quien hoy dirige el taller. También
-                contribuyó Mariela Calistro con sus trabajos en cuero reciclado,
-                Johnny Ridvanovich, y los nietos Brian y Leandro. Diego y Marcelo
-                completan el equipo en el taller.
+                Hoy el taller lo dirige Leonardo Marinolli, esposo de Rosana
+                Calistro. Leonardo corta, mide, presupuesta y visita los trabajos.
+                Pablo sigue activo, participando en lo que puede, y Maris continúa
+                con algunas costuras. El equipo lo completan Marcelo y Diego, que
+                tapizan, cortan, rellenan — hacen de todo. Los trabajos de madera
+                y armazones se delegan a un carpintero de confianza.
               </p>
               <p className="italic border-l-4 border-accent pl-4 py-1">
                 No somos una fábrica. Somos una familia — abuelos, hijos, yernos,

@@ -198,7 +198,7 @@ export function Contact({ prefilledData }: ContactProps) {
             className="mt-8"
           >
             <a
-              href="https://wa.me/59899511196?text=Hola%20TAPIPOCITOS!%20Quiero%20consultar%20por%20un%20trabajo%20de%20tapiceria."
+              href="https://wa.me/59899251310?text=Hola%20TAPIPOCITOS!%20Quiero%20consultar%20por%20un%20trabajo%20de%20tapiceria."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
@@ -388,7 +388,7 @@ export function Contact({ prefilledData }: ContactProps) {
           <div className="space-y-6">
             {/* WhatsApp primary contact card */}
             <a
-              href="https://wa.me/59899511196?text=Hola%20TAPIPOCITOS!%20Quiero%20consultar%20por%20un%20trabajo%20de%20tapiceria."
+              href="https://wa.me/59899251310?text=Hola%20TAPIPOCITOS!%20Quiero%20consultar%20por%20un%20trabajo%20de%20tapiceria."
               target="_blank"
               rel="noopener noreferrer"
               className="block group"
@@ -407,7 +407,7 @@ export function Contact({ prefilledData }: ContactProps) {
                         WhatsApp
                       </p>
                       <p className="text-sm font-medium" style={{ color: '#25D366' }}>
-                        +598 99 123 456
+                        +598 99 251 310
                       </p>
                       <p className="text-xs mt-0.5" style={{ color: DESIGN_TOKENS.colors.description }}>
                         Respuesta en menos de 2 horas
@@ -434,7 +434,7 @@ export function Contact({ prefilledData }: ContactProps) {
                       className="text-sm"
                       style={{ color: DESIGN_TOKENS.colors.description }}
                     >
-                      +598 99 123 456
+                      +598 99 251 310
                     </p>
                   </div>
                 </div>
@@ -470,7 +470,14 @@ export function Contact({ prefilledData }: ContactProps) {
                       className="text-sm"
                       style={{ color: DESIGN_TOKENS.colors.description }}
                     >
-                      Montevideo, Uruguay
+                      <a
+                        href="https://www.google.com/maps/search/Pedro+Cosio+2430+Montevideo+Uruguay"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline"
+                      >
+                        Pedro Cosio 2430, Montevideo
+                      </a>
                     </p>
                   </div>
                 </div>
@@ -488,13 +495,7 @@ export function Contact({ prefilledData }: ContactProps) {
                       className="text-sm"
                       style={{ color: DESIGN_TOKENS.colors.description }}
                     >
-                      Lunes a Viernes: 9:00 - 18:00
-                    </p>
-                    <p
-                      className="text-sm"
-                      style={{ color: DESIGN_TOKENS.colors.description }}
-                    >
-                      Sabados: 9:00 - 13:00
+                      Lunes a Viernes: 8:00 - 17:00
                     </p>
                   </div>
                 </div>
