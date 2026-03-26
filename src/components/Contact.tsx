@@ -211,7 +211,7 @@ export function Contact({ prefilledData }: ContactProps) {
               className="text-sm mt-3 opacity-70"
               style={{ color: DESIGN_TOKENS.colors.description }}
             >
-              Respuesta rapida de Lunes a Sabado
+              Respuesta rapida de Lunes a Viernes
             </p>
           </motion.div>
         </motion.div>
