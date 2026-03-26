@@ -277,7 +277,7 @@ export function AdminProjects() {
 
       {/* ── Modal de edición moderno ── */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[92vh] overflow-hidden p-0 gap-0 rounded-2xl">
+        <DialogContent className="max-w-5xl w-[95vw] max-h-[95vh] overflow-hidden p-0 gap-0 rounded-2xl">
           {/* Modal header */}
           <div className="flex items-center justify-between px-6 py-4 border-b bg-card/80 backdrop-blur-sm sticky top-0 z-10">
             <div className="flex items-center gap-3">
@@ -303,17 +303,17 @@ export function AdminProjects() {
           </div>
 
           {/* Modal body */}
-          <div className="overflow-y-auto max-h-[calc(92vh-130px)]">
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_320px]">
+          <div className="overflow-y-auto max-h-[calc(95vh-130px)]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px]">
               {/* Left: Form */}
-              <div className="p-6 space-y-5">
+              <div className="p-8 space-y-6">
                 {/* Título */}
                 <div>
                   <Input
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Nombre del trabajo..."
-                    className="text-lg font-semibold border-0 border-b rounded-none px-0 focus-visible:ring-0 focus-visible:border-accent placeholder:text-muted-foreground/40 h-auto py-2"
+                    className="text-xl font-semibold border-0 border-b-2 rounded-none px-0 focus-visible:ring-0 focus-visible:border-accent placeholder:text-muted-foreground/40 h-auto py-3"
                   />
                 </div>
 
@@ -349,8 +349,8 @@ export function AdminProjects() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Describí el trabajo realizado, materiales, proceso..."
-                    rows={4}
-                    className="resize-none bg-muted/30 border-muted focus-visible:bg-white transition-colors"
+                    rows={5}
+                    className="resize-y bg-muted/30 border-muted focus-visible:bg-white transition-colors min-h-[120px]"
                   />
                 </div>
 
@@ -444,7 +444,7 @@ export function AdminProjects() {
               </div>
 
               {/* Right: Image upload */}
-              <div className="border-l bg-muted/20 p-6">
+              <div className="border-l bg-muted/20 p-8">
                 <Label className="text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
                   <ImageIcon size={13} /> Foto del trabajo
                 </Label>
@@ -462,7 +462,7 @@ export function AdminProjects() {
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="w-full aspect-[4/3] object-cover"
+                        className="w-full aspect-[3/2] object-cover"
                       />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div className="text-white text-center">
@@ -472,7 +472,7 @@ export function AdminProjects() {
                       </div>
                     </div>
                   ) : (
-                    <div className="aspect-[4/3] flex flex-col items-center justify-center gap-3 p-6">
+                    <div className="aspect-[3/2] flex flex-col items-center justify-center gap-3 p-6">
                       <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center">
                         <CloudArrowUp size={24} className="text-muted-foreground" />
                       </div>
