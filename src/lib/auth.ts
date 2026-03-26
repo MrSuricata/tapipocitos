@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { AdminUser } from './types'
 
-const ADMIN_PASSWORD = 'tapipocitos2024'
 const TOKEN_DURATION = 24 * 60 * 60 * 1000
 
 export function useAuth() {
@@ -14,19 +13,29 @@ export function useAuth() {
     }
   })
 
-  const login = (password: string): boolean => {
-    if (password === ADMIN_PASSWORD) {
-      const token = generateToken()
-      const user: AdminUser = {
-        username: 'admin',
-        token,
-        expiresAt: Date.now() + TOKEN_DURATION,
+  const login = async (password: string): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        const token = generateToken()
+        const user: AdminUser = {
+          username: 'admin',
+          token,
+          expiresAt: Date.now() + TOKEN_DURATION,
+        }
+        setAdminUser(user)
+        localStorage.setItem('tapipocitos_admin', JSON.stringify(user))
+        return true
       }
-      setAdminUser(user)
-      localStorage.setItem('tapipocitos_admin', JSON.stringify(user))
-      return true
+      return false
+    } catch {
+      return false
     }
-    return false
   }
 
   const logout = () => {

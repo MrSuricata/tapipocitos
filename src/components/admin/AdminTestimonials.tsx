@@ -5,13 +5,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
   Table,
   TableBody,
   TableCell,
@@ -22,15 +15,15 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Plus, Pencil, Trash, Star } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { generateId } from '@/lib/auth'
 import { useStore } from '@/lib/store'
 import type { Testimonial } from '@/lib/types'
 
 export function AdminTestimonials() {
-  const { testimonials, setTestimonials } = useStore()
+  const { testimonials, addTestimonial, updateTestimonial, deleteTestimonial } = useStore()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null)
-  const [formData, setFormData] = useState<Partial<Testimonial>>({
+  const [saving, setSaving] = useState(false)
+  const [formData, setFormData] = useState({
     name: '',
     text: '',
     date: '',
@@ -40,7 +33,12 @@ export function AdminTestimonials() {
   const handleOpenDialog = (testimonial?: Testimonial) => {
     if (testimonial) {
       setEditingTestimonial(testimonial)
-      setFormData(testimonial)
+      setFormData({
+        name: testimonial.name,
+        text: testimonial.text,
+        date: testimonial.date,
+        rating: testimonial.rating,
+      })
     } else {
       setEditingTestimonial(null)
       setFormData({
@@ -53,35 +51,42 @@ export function AdminTestimonials() {
     setIsDialogOpen(true)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name || !formData.text || !formData.date) {
       toast.error('Completa todos los campos obligatorios')
       return
     }
 
+    setSaving(true)
+
     if (editingTestimonial) {
-      setTestimonials((current) =>
-        (current || []).map((t) =>
-          t.id === editingTestimonial.id ? { ...formData, id: t.id } as Testimonial : t
-        )
-      )
-      toast.success('Testimonio actualizado')
-    } else {
-      const newTestimonial: Testimonial = {
-        ...formData as Testimonial,
-        id: generateId(),
+      const ok = await updateTestimonial(editingTestimonial.id, formData)
+      if (ok) {
+        toast.success('Testimonio actualizado')
+        setIsDialogOpen(false)
+      } else {
+        toast.error('Error al actualizar el testimonio')
       }
-      setTestimonials((current) => [...(current || []), newTestimonial])
-      toast.success('Testimonio creado')
+    } else {
+      const ok = await addTestimonial(formData)
+      if (ok) {
+        toast.success('Testimonio creado')
+        setIsDialogOpen(false)
+      } else {
+        toast.error('Error al crear el testimonio')
+      }
     }
 
-    setIsDialogOpen(false)
+    setSaving(false)
   }
 
-  const handleDelete = (id: string) => {
-    if (confirm('¿Estás seguro de eliminar este testimonio?')) {
-      setTestimonials((current) => (current || []).filter((t) => t.id !== id))
+  const handleDelete = async (id: string) => {
+    if (!confirm('¿Estás seguro de eliminar este testimonio?')) return
+    const ok = await deleteTestimonial(id)
+    if (ok) {
       toast.success('Testimonio eliminado')
+    } else {
+      toast.error('Error al eliminar el testimonio')
     }
   }
 
@@ -217,29 +222,28 @@ export function AdminTestimonials() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="rating">Calificación</Label>
-              <Select
-                value={formData.rating?.toString()}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, rating: parseInt(value) })
-                }
-              >
-                <SelectTrigger id="rating">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="5">⭐⭐⭐⭐⭐ (5 estrellas)</SelectItem>
-                  <SelectItem value="4">⭐⭐⭐⭐ (4 estrellas)</SelectItem>
-                  <SelectItem value="3">⭐⭐⭐ (3 estrellas)</SelectItem>
-                  <SelectItem value="2">⭐⭐ (2 estrellas)</SelectItem>
-                  <SelectItem value="1">⭐ (1 estrella)</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Calificación</Label>
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, rating: star })}
+                    className="p-1 hover:scale-110 transition-transform"
+                  >
+                    <Star
+                      size={28}
+                      weight={star <= formData.rating ? 'fill' : 'regular'}
+                      className={star <= formData.rating ? 'text-accent' : 'text-muted-foreground/40'}
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex gap-2 pt-4">
-              <Button onClick={handleSave} className="flex-1">
-                {editingTestimonial ? 'Actualizar' : 'Crear'} Testimonio
+              <Button onClick={handleSave} className="flex-1" disabled={saving}>
+                {saving ? 'Guardando...' : editingTestimonial ? 'Actualizar Testimonio' : 'Crear Testimonio'}
               </Button>
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                 Cancelar

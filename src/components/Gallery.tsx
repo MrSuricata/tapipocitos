@@ -132,8 +132,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Cuero vacuno', 'Espuma alta densidad', 'Resortes zig-zag', 'Madera de eucalipto'],
     client: 'Familia Pereira',
-    completedDate: 'Enero 2024',
-    createdAt: Date.now(),
+    completed_date: 'Enero 2024',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p2',
@@ -143,8 +144,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Tela lino', 'Espuma densidad 28', 'Clavos tapiceros'],
     client: 'Restaurant La Pasiva',
-    completedDate: 'Marzo 2024',
-    createdAt: Date.now(),
+    completed_date: 'Marzo 2024',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p3',
@@ -154,8 +156,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Terciopelo italiano', 'Crin natural', 'Muelles bicónicos', 'Tachas de bronce'],
     client: 'Sr. Martinez',
-    completedDate: 'Noviembre 2023',
-    createdAt: Date.now(),
+    completed_date: 'Noviembre 2023',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p4',
@@ -165,8 +168,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Tela antimanchas', 'Cuero sintetico premium', 'Espuma ignifuga', 'Guata de poliester'],
     client: 'Hotel Boutique Carrasco',
-    completedDate: 'Septiembre 2023',
-    createdAt: Date.now(),
+    completed_date: 'Septiembre 2023',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p5',
@@ -176,8 +180,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Chenille importado', 'Espuma soft', 'Estructura pino reforzado', 'Patas acero inox'],
     client: 'Familia Gonzalez',
-    completedDate: 'Febrero 2024',
-    createdAt: Date.now(),
+    completed_date: 'Febrero 2024',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p6',
@@ -187,8 +192,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Pana importada', 'Tachas doradas', 'Yute', 'Espuma de 30kg'],
     client: 'Sra. Bentancor',
-    completedDate: 'Diciembre 2023',
-    createdAt: Date.now(),
+    completed_date: 'Diciembre 2023',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p7',
@@ -198,8 +204,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Cuero sintetico', 'Hilo encerado dorado', 'Espuma de 25kg'],
     client: 'Bar El Barzon',
-    completedDate: 'Abril 2024',
-    createdAt: Date.now(),
+    completed_date: 'Abril 2024',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p8',
@@ -209,8 +216,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Microfibra premium', 'Espuma HR', 'Mecanismo reclinable nuevo'],
     client: 'Dr. Silveira',
-    completedDate: 'Mayo 2024',
-    createdAt: Date.now(),
+    completed_date: 'Mayo 2024',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'demo-p9',
@@ -220,8 +228,9 @@ const DEFAULT_PROJECTS: Project[] = [
     images: [],
     materials: ['Tela tapicera mostaza', 'Espuma blanda', 'Cinchas elasticas', 'Patas conicas laqueadas'],
     client: 'Arq. Lopez',
-    completedDate: 'Julio 2023',
-    createdAt: Date.now(),
+    completed_date: 'Julio 2023',
+    featured: false,
+    created_at: new Date().toISOString(),
   },
 ]
 
@@ -406,7 +415,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                             className="text-xs"
                             style={{ color: DESIGN_TOKENS.colors.description }}
                           >
-                            {project.completedDate}
+                            {project.completed_date}
                           </span>
                         </div>
                         <h3
@@ -556,7 +565,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       className="text-sm"
                       style={{ color: DESIGN_TOKENS.colors.description }}
                     >
-                      Completado: {selectedProject.completedDate}
+                      Completado: {selectedProject.completed_date}
                     </p>
 
                     <Button

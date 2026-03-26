@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { X, ArrowRight, Ruler, Package, Armchair } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
@@ -158,10 +157,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Chenille importado',
     color: '#8B7355',
     dimensions: '220 x 90 x 85 cm',
-    status: 'Disponible',
+    price: 'Consultar',
     images: [],
     category: 'Sofás',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-2',
@@ -170,10 +170,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Pana premium',
     color: '#4A6741',
     dimensions: '85 x 80 x 100 cm',
-    status: 'Disponible',
+    price: 'Consultar',
     images: [],
     category: 'Sillones',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-3',
@@ -182,10 +183,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Cuero sintetico',
     color: '#2C1810',
     dimensions: '45 x 50 x 92 cm',
-    status: 'Disponible',
+    price: 'Consultar',
     images: [],
     category: 'Sillas',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-4',
@@ -194,10 +196,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Tela antimanchas',
     color: '#C4A882',
     dimensions: '320 x 210 x 78 cm',
-    status: 'A pedido',
+    price: 'Consultar',
     images: [],
     category: 'Sofás',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-5',
@@ -206,10 +209,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Microfibra',
     color: '#555555',
     dimensions: '42 x 42 x 75 cm',
-    status: 'Disponible',
+    price: 'Consultar',
     images: [],
     category: 'Banquetas',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-6',
@@ -218,10 +222,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Cuero ecologico',
     color: '#6B4423',
     dimensions: '100 x 60 x 42 cm',
-    status: 'A pedido',
+    price: 'Consultar',
     images: [],
     category: 'Mesas',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-7',
@@ -230,10 +235,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Terciopelo italiano',
     color: '#5B2A3C',
     dimensions: '78 x 82 x 105 cm',
-    status: 'A pedido',
+    price: 'Consultar',
     images: [],
     category: 'Sillones',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
   {
     id: 'prod-8',
@@ -242,10 +248,11 @@ const DEFAULT_PRODUCTS: Product[] = [
     material: 'Tela mesh premium',
     color: '#333333',
     dimensions: '60 x 60 x 95 cm',
-    status: 'Disponible',
+    price: 'Consultar',
     images: [],
     category: 'Sillas',
-    createdAt: Date.now(),
+    featured: false,
+    created_at: new Date().toISOString(),
   },
 ]
 
@@ -260,17 +267,6 @@ export function Products({ onNavigate }: ProductsProps) {
     filter === 'Todos'
       ? products
       : products.filter((p) => p.category === filter)
-
-  const getStatusColor = (status: Product['status']) => {
-    switch (status) {
-      case 'Disponible':
-        return 'bg-green-500/10 text-green-700 border-green-500/20'
-      case 'A pedido':
-        return 'bg-blue-500/10 text-blue-700 border-blue-500/20'
-      case 'Agotado':
-        return 'bg-red-500/10 text-red-700 border-red-500/20'
-    }
-  }
 
   return (
     <>
@@ -446,9 +442,9 @@ export function Products({ onNavigate }: ProductsProps) {
                         )}
                       </div>
                       <div className="p-4 flex-1 flex flex-col">
-                        <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="mb-2">
                           <h3
-                            className="text-lg font-semibold line-clamp-1 flex-1"
+                            className="text-lg font-semibold line-clamp-1"
                             style={{
                               color: DESIGN_TOKENS.colors.title,
                               fontSize: DESIGN_TOKENS.typography.title.minSize,
@@ -456,12 +452,11 @@ export function Products({ onNavigate }: ProductsProps) {
                           >
                             {product.name}
                           </h3>
-                          <Badge
-                            variant="outline"
-                            className={getStatusColor(product.status)}
-                          >
-                            {product.status}
-                          </Badge>
+                          {product.price && (
+                            <p className="text-xs mt-0.5 text-muted-foreground">
+                              {product.price}
+                            </p>
+                          )}
                         </div>
                         <p
                           className="text-sm line-clamp-2 mb-2 flex-1"
@@ -544,15 +539,6 @@ export function Products({ onNavigate }: ProductsProps) {
                   </div>
 
                   <div className="space-y-4">
-                    <div>
-                      <Badge
-                        variant="outline"
-                        className={getStatusColor(selectedProduct.status)}
-                      >
-                        {selectedProduct.status}
-                      </Badge>
-                    </div>
-
                     <h3
                       id="product-dialog-title"
                       className="text-3xl font-bold"
@@ -560,6 +546,12 @@ export function Products({ onNavigate }: ProductsProps) {
                     >
                       {selectedProduct.name}
                     </h3>
+
+                    {selectedProduct.price && (
+                      <p className="text-sm text-muted-foreground">
+                        {selectedProduct.price}
+                      </p>
+                    )}
 
                     <p
                       className="leading-relaxed"
@@ -646,7 +638,6 @@ export function Products({ onNavigate }: ProductsProps) {
                         }, 200)
                       }}
                       className="w-full mt-6 group"
-                      disabled={selectedProduct.status === 'Agotado'}
                       aria-label="Solicitar este producto"
                     >
                       Solicitar este producto

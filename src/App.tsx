@@ -46,8 +46,8 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleLogin = (password: string) => {
-    const success = login(password)
+  const handleLogin = async (password: string) => {
+    const success = await login(password)
     if (success) {
       toast.success('Sesión iniciada correctamente')
       setCurrentView('admin')

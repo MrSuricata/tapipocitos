@@ -5,10 +5,11 @@ export interface Product {
   material: string
   color: string
   dimensions: string
-  status: 'Disponible' | 'A pedido' | 'Agotado'
+  price: string
   images: string[]
   category: 'Sofás' | 'Sillas' | 'Sillones' | 'Mesas' | 'Banquetas' | 'Otros'
-  createdAt: number
+  featured: boolean
+  created_at: string
 }
 
 export interface Project {
@@ -19,8 +20,9 @@ export interface Project {
   images: string[]
   materials: string[]
   client?: string
-  completedDate: string
-  createdAt: number
+  completed_date: string
+  featured: boolean
+  created_at: string
 }
 
 export interface Service {

@@ -1,99 +1,189 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import type { Product, Project, Testimonial } from './types'
+import { supabase } from './supabase'
 
-// ── Demo data ──────────────────────────────────────────────
+// ── API helpers ──────────────────────────────────────────
 
-const DEMO_PRODUCTS: Product[] = [
-  { id: 'prod-1', name: 'Sofa Montevideo 3 cuerpos', description: 'Sofa de 3 cuerpos con estructura de pino reforzado, espuma de alta densidad y tapizado en tela chenille. Patas de madera natural. Disponible en varios colores.', material: 'Chenille importado', color: '#8B7355', dimensions: '220 x 90 x 85 cm', status: 'Disponible', images: ['/fotos/sofas/sofa-esquinero-gris-taller.jpg'], category: 'Sofás', createdAt: Date.now() },
-  { id: 'prod-2', name: 'Sillon individual Carrasco', description: 'Sillon individual con respaldo alto y apoyabrazos curvos. Estructura de eucalipto, espuma soft de 30kg y tapizado en pana premium. Ideal para lectura.', material: 'Pana premium', color: '#4A6741', dimensions: '85 x 80 x 100 cm', status: 'Disponible', images: ['/fotos/sofas/sofa-dos-cuerpos-verde-base-madera.jpg'], category: 'Sillones', createdAt: Date.now() },
-  { id: 'prod-3', name: 'Silla comedor Clasica', description: 'Silla de comedor con asiento y respaldo tapizado en cuero sintetico. Estructura de madera maciza con terminacion laqueada.', material: 'Cuero sintetico', color: '#2C1810', dimensions: '45 x 50 x 92 cm', status: 'Disponible', images: ['/fotos/sofas/sofa-clasico-beige-brazos-curvos.jpg'], category: 'Sillas', createdAt: Date.now() },
-  { id: 'prod-4', name: 'Sofa esquinero Pocitos', description: 'Sofa esquinero modular de 5 modulos independientes con fundas removibles y lavables. Espuma HR de alta resiliencia.', material: 'Tela antimanchas', color: '#C4A882', dimensions: '320 x 210 x 78 cm', status: 'A pedido', images: ['/fotos/sofas/sofa-esquinero-beige-ottoman-hogar.jpg'], category: 'Sofás', createdAt: Date.now() },
-  { id: 'prod-5', name: 'Banqueta alta Nordica', description: 'Banqueta alta para barra o isla de cocina. Asiento tapizado giratorio con base de acero cromado. Altura regulable.', material: 'Microfibra', color: '#555555', dimensions: '42 x 42 x 75 cm', status: 'Disponible', images: ['/fotos/sofas/sofa-esquinero-aqua-taller.jpg'], category: 'Banquetas', createdAt: Date.now() },
-  { id: 'prod-6', name: 'Mesa ratona tapizada', description: 'Mesa ratona con tapa tapizada en cuero ecologico y base de madera paraiso. Funciona como mesa de centro y como asiento auxiliar.', material: 'Cuero ecologico', color: '#6B4423', dimensions: '100 x 60 x 42 cm', status: 'A pedido', images: ['/fotos/sofas/sofa-gris-con-ottoman-exterior.jpg'], category: 'Mesas', createdAt: Date.now() },
-  { id: 'prod-7', name: 'Sillon Bergere Frances', description: 'Sillon bergere de estilo clasico frances con capitone en respaldo y brazos. Patas torneadas en madera de roble.', material: 'Terciopelo italiano', color: '#5B2A3C', dimensions: '78 x 82 x 105 cm', status: 'A pedido', images: ['/fotos/sofas/sofa-beige-vivo-contrastante-naranja.jpg'], category: 'Sillones', createdAt: Date.now() },
-  { id: 'prod-8', name: 'Silla escritorio tapizada', description: 'Silla de escritorio con asiento y respaldo tapizado en tela mesh transpirable. Base giratoria con ruedas de goma.', material: 'Tela mesh premium', color: '#333333', dimensions: '60 x 60 x 95 cm', status: 'Disponible', images: ['/fotos/sofas/sofa-esquinero-gris-compacto.jpg'], category: 'Sillas', createdAt: Date.now() },
-]
+const API_BASE = import.meta.env.DEV ? '' : ''
 
-const DEMO_PROJECTS: Project[] = [
-  { id: 'proj-1', title: 'Sofa Chesterfield 3 cuerpos', description: 'Retapizado completo de sofa Chesterfield clasico en cuero vacuno marron oscuro. Se restauro la estructura de madera, se reemplazaron los resortes y se trabajo el capitone original a mano.', category: 'Sofás', images: ['/fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg'], materials: ['Cuero vacuno', 'Espuma alta densidad', 'Resortes zig-zag', 'Madera de eucalipto'], client: 'Familia Pereira', completedDate: 'Enero 2024', createdAt: Date.now() },
-  { id: 'proj-2', title: 'Sillas de comedor estilo nordico', description: 'Set de 6 sillas de comedor retapizadas en tela lino gris claro con patas de madera natural. Espuma de alta densidad para maxima comodidad.', category: 'Sillas', images: ['/fotos/sofas/sofa-dos-cuerpos-mostaza.jpg'], materials: ['Tela lino', 'Espuma densidad 28', 'Clavos tapiceros'], client: 'Restaurant La Pasiva', completedDate: 'Marzo 2024', createdAt: Date.now() },
-  { id: 'proj-3', title: 'Restauracion sillon bergere antiguo', description: 'Restauracion integral de sillon bergere de 1940. Se reconstruyo la estructura, se repuso el relleno de crin natural y se tapizo en terciopelo verde esmeralda.', category: 'Restauraciones', images: ['/fotos/sofas/sofa-clasico-beige-brazos-curvos.jpg'], materials: ['Terciopelo italiano', 'Crin natural', 'Muelles biconicos', 'Tachas de bronce'], client: 'Sr. Martinez', completedDate: 'Noviembre 2023', createdAt: Date.now() },
-  { id: 'proj-4', title: 'Tapizado hotel boutique Carrasco', description: 'Proyecto completo de tapizado para hotel boutique: 12 cabeceras de cama, 24 sillas de comedor, 6 sillones de recepcion y cortinados para 15 habitaciones.', category: 'Proyectos Especiales', images: ['/fotos/sofas/sofa-esquinero-oscuro-almohadones-etnicos.jpg'], materials: ['Tela antimanchas', 'Cuero sintetico premium', 'Espuma ignifuga', 'Guata de poliester'], client: 'Hotel Boutique Carrasco', completedDate: 'Septiembre 2023', createdAt: Date.now() },
-  { id: 'proj-5', title: 'Sofa esquinero a medida', description: 'Sofa esquinero de 3.20m x 2.10m fabricado a medida en tela chenille beige. Modulos independientes con fundas removibles y lavables.', category: 'Sofás', images: ['/fotos/sofas/sofa-esquinero-gris-grande-base-madera.jpg'], materials: ['Chenille importado', 'Espuma soft', 'Estructura pino reforzado', 'Patas acero inox'], client: 'Familia Gonzalez', completedDate: 'Febrero 2024', createdAt: Date.now() },
-  { id: 'proj-6', title: 'Butaca antigua: antes y despues', description: 'Transformacion completa de butaca victoriana. De un estado deplorable con tela rasgada y estructura debilitada, a una pieza restaurada con tapizado en pana bordo.', category: 'Antes y Después', images: ['/fotos/restauraciones/restauracion-chesterfield-cuero-2.jpg'], materials: ['Pana importada', 'Tachas doradas', 'Yute', 'Espuma de 30kg'], client: 'Sra. Bentancor', completedDate: 'Diciembre 2023', createdAt: Date.now() },
-  { id: 'proj-7', title: 'Banquetas bar retapizadas', description: 'Set de 8 banquetas altas para barra de bar retapizadas en cuero sintetico negro con costura decorativa en hilo dorado.', category: 'Sillas', images: ['/fotos/sofas/sofa-esquinero-azul-marino-base-madera.jpg'], materials: ['Cuero sintetico', 'Hilo encerado dorado', 'Espuma de 25kg'], client: 'Bar El Barzon', completedDate: 'Abril 2024', createdAt: Date.now() },
-  { id: 'proj-8', title: 'Sillon reclinable: antes y despues', description: 'Sillon reclinable La-Z-Boy con mecanismo danado y tapizado gastado. Se reparo el mecanismo, se cambio toda la espuma y se retapizo en microfibra gris oscuro.', category: 'Antes y Después', images: ['/fotos/sofas/sofa-gris-oscuro-almohadones-azules.jpg'], materials: ['Microfibra premium', 'Espuma HR', 'Mecanismo reclinable nuevo'], client: 'Dr. Silveira', completedDate: 'Mayo 2024', createdAt: Date.now() },
-  { id: 'proj-9', title: 'Restauracion juego de living completo', description: 'Restauracion de juego de living anos 60: sofa de 3 cuerpos y 2 sillones individuales. Se respeto el diseno mid-century con tela mostaza.', category: 'Restauraciones', images: ['/fotos/sofas/sofa-u-beige-hogar-moderno.jpg'], materials: ['Tela tapicera mostaza', 'Espuma blanda', 'Cinchas elasticas', 'Patas conicas laqueadas'], client: 'Arq. Lopez', completedDate: 'Julio 2023', createdAt: Date.now() },
-]
-
-const DEMO_TESTIMONIALS: Testimonial[] = [
-  { id: 'test-1', name: 'Maria Rodriguez', text: 'Llevamos el sofa de mi abuela que tenia mas de 40 anos. Lo devolvieron como nuevo, respetando el diseno original pero con telas modernas. Un trabajo impecable.', date: 'Enero 2024', rating: 5 },
-  { id: 'test-2', name: 'Carlos Mendez', text: 'Nos hicieron todo el tapizado del restaurante. 20 sillas y 8 banquetas en tiempo record y con una calidad espectacular. Muy profesionales.', date: 'Marzo 2024', rating: 5 },
-  { id: 'test-3', name: 'Laura Fernandez', text: 'Pedi un sillon a medida para mi living y quedo exactamente como lo imaginaba. La atencion personalizada de Leonardo hace toda la diferencia.', date: 'Noviembre 2023', rating: 5 },
-]
-
-// ── localStorage helpers ───────────────────────────────────
-
-const STORE_VERSION = 2 // bump to reset localStorage with new demo data
-
-function loadFromStorage<T>(key: string, fallback: T): T {
+async function fetchAPI<T>(endpoint: string): Promise<T | null> {
   try {
-    const storedVersion = localStorage.getItem('tapipocitos_version')
-    if (storedVersion !== String(STORE_VERSION)) {
-      localStorage.removeItem(`tapipocitos_${key}`)
-      localStorage.setItem('tapipocitos_version', String(STORE_VERSION))
-      return fallback
-    }
-    const stored = localStorage.getItem(`tapipocitos_${key}`)
-    return stored ? JSON.parse(stored) : fallback
+    const res = await fetch(`${API_BASE}/api/${endpoint}`)
+    if (!res.ok) return null
+    return await res.json()
   } catch {
-    return fallback
+    return null
   }
 }
 
-function saveToStorage<T>(key: string, value: T) {
+async function mutateAPI(endpoint: string, method: string, body?: unknown): Promise<boolean> {
   try {
-    localStorage.setItem(`tapipocitos_${key}`, JSON.stringify(value))
+    const res = await fetch(`${API_BASE}/api/${endpoint}`, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined,
+    })
+    return res.ok
   } catch {
-    // localStorage full or unavailable
+    return false
   }
 }
 
-// ── Store context ──────────────────────────────────────────
+// ── Supabase direct read (faster for public data) ────────
+
+async function fetchFromSupabase<T>(table: string): Promise<T[] | null> {
+  try {
+    const { data, error } = await supabase
+      .from(table)
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (error) throw error
+    return data as T[]
+  } catch {
+    return null
+  }
+}
+
+// ── Fallback demo data ──────────────────────────────────
+
+const FALLBACK_PRODUCTS: Product[] = [
+  { id: 'demo-1', name: 'Sofá Montevideo 3 cuerpos', description: 'Sofá de 3 cuerpos con estructura de pino reforzado, espuma de alta densidad y tapizado en tela chenille.', material: 'Chenille importado', color: 'Marrón claro', dimensions: '220 x 90 x 85 cm', price: 'Consultar', images: ['/fotos/sofas/sofa-esquinero-gris-taller.jpg'], category: 'Sofás', featured: false, created_at: '' },
+  { id: 'demo-2', name: 'Sillón individual Carrasco', description: 'Sillón individual con respaldo alto y apoyabrazos curvos. Espuma soft de 30kg.', material: 'Pana premium', color: 'Verde oscuro', dimensions: '85 x 80 x 100 cm', price: 'Consultar', images: ['/fotos/sofas/sofa-dos-cuerpos-verde-base-madera.jpg'], category: 'Sillones', featured: false, created_at: '' },
+]
+
+const FALLBACK_PROJECTS: Project[] = [
+  { id: 'demo-1', title: 'Sofá Chesterfield 3 cuerpos', description: 'Retapizado completo de sofá Chesterfield clásico en cuero vacuno marrón oscuro.', category: 'Sofás', images: ['/fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg'], materials: ['Cuero vacuno', 'Espuma alta densidad'], client: 'Familia Pereira', completed_date: 'Enero 2024', featured: false, created_at: '' },
+]
+
+const FALLBACK_TESTIMONIALS: Testimonial[] = [
+  { id: 'demo-1', name: 'María Rodríguez', text: 'Llevamos el sofá de mi abuela que tenía más de 40 años. Lo devolvieron como nuevo.', date: 'Enero 2024', rating: 5 },
+]
+
+// ── Store context ──────────────────────────────────────
 
 interface StoreContextType {
   products: Product[]
-  setProducts: (updater: Product[] | ((prev: Product[]) => Product[])) => void
   projects: Project[]
-  setProjects: (updater: Project[] | ((prev: Project[]) => Project[])) => void
   testimonials: Testimonial[]
-  setTestimonials: (updater: Testimonial[] | ((prev: Testimonial[]) => Testimonial[])) => void
+  loading: boolean
+  // CRUD operations (hit API, then refresh local state)
+  addProduct: (p: Omit<Product, 'id' | 'created_at'>) => Promise<boolean>
+  updateProduct: (id: string, p: Partial<Product>) => Promise<boolean>
+  deleteProduct: (id: string) => Promise<boolean>
+  addProject: (p: Omit<Project, 'id' | 'created_at'>) => Promise<boolean>
+  updateProject: (id: string, p: Partial<Project>) => Promise<boolean>
+  deleteProject: (id: string) => Promise<boolean>
+  addTestimonial: (t: Omit<Testimonial, 'id'>) => Promise<boolean>
+  updateTestimonial: (id: string, t: Partial<Testimonial>) => Promise<boolean>
+  deleteTestimonial: (id: string) => Promise<boolean>
+  uploadImage: (file: File) => Promise<string | null>
+  refreshAll: () => Promise<void>
 }
 
 const StoreContext = createContext<StoreContextType | null>(null)
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [products, _setProducts] = useState<Product[]>(() => loadFromStorage('products', DEMO_PRODUCTS))
-  const [projects, _setProjects] = useState<Project[]>(() => loadFromStorage('projects', DEMO_PROJECTS))
-  const [testimonials, _setTestimonials] = useState<Testimonial[]>(() => loadFromStorage('testimonials', DEMO_TESTIMONIALS))
+  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS)
+  const [projects, setProjects] = useState<Project[]>(FALLBACK_PROJECTS)
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(FALLBACK_TESTIMONIALS)
+  const [loading, setLoading] = useState(true)
 
-  // Persist to localStorage on change
-  useEffect(() => { saveToStorage('products', products) }, [products])
-  useEffect(() => { saveToStorage('projects', projects) }, [projects])
-  useEffect(() => { saveToStorage('testimonials', testimonials) }, [testimonials])
+  // Fetch all data from Supabase on mount
+  const refreshAll = useCallback(async () => {
+    setLoading(true)
+    const [prods, projs, tests] = await Promise.all([
+      fetchFromSupabase<Product>('products'),
+      fetchFromSupabase<Project>('projects'),
+      fetchFromSupabase<Testimonial>('testimonials'),
+    ])
+    if (prods && prods.length > 0) setProducts(prods)
+    if (projs && projs.length > 0) setProjects(projs)
+    if (tests && tests.length > 0) setTestimonials(tests)
+    setLoading(false)
+  }, [])
 
-  const setProducts = (updater: Product[] | ((prev: Product[]) => Product[])) => {
-    _setProducts(typeof updater === 'function' ? updater : () => updater)
+  useEffect(() => { refreshAll() }, [refreshAll])
+
+  // ── Product CRUD ──
+  const addProduct = async (p: Omit<Product, 'id' | 'created_at'>) => {
+    const ok = await mutateAPI('products', 'POST', p)
+    if (ok) await refreshAll()
+    return ok
   }
-  const setProjects = (updater: Project[] | ((prev: Project[]) => Project[])) => {
-    _setProjects(typeof updater === 'function' ? updater : () => updater)
+  const updateProduct = async (id: string, p: Partial<Product>) => {
+    const ok = await mutateAPI('products', 'PUT', { id, ...p })
+    if (ok) await refreshAll()
+    return ok
   }
-  const setTestimonials = (updater: Testimonial[] | ((prev: Testimonial[]) => Testimonial[])) => {
-    _setTestimonials(typeof updater === 'function' ? updater : () => updater)
+  const deleteProduct = async (id: string) => {
+    const ok = await mutateAPI(`products?id=${id}`, 'DELETE')
+    if (ok) await refreshAll()
+    return ok
+  }
+
+  // ── Project CRUD ──
+  const addProject = async (p: Omit<Project, 'id' | 'created_at'>) => {
+    const ok = await mutateAPI('projects', 'POST', p)
+    if (ok) await refreshAll()
+    return ok
+  }
+  const updateProject = async (id: string, p: Partial<Project>) => {
+    const ok = await mutateAPI('projects', 'PUT', { id, ...p })
+    if (ok) await refreshAll()
+    return ok
+  }
+  const deleteProject = async (id: string) => {
+    const ok = await mutateAPI(`projects?id=${id}`, 'DELETE')
+    if (ok) await refreshAll()
+    return ok
+  }
+
+  // ── Testimonial CRUD ──
+  const addTestimonial = async (t: Omit<Testimonial, 'id'>) => {
+    const ok = await mutateAPI('testimonials', 'POST', t)
+    if (ok) await refreshAll()
+    return ok
+  }
+  const updateTestimonial = async (id: string, t: Partial<Testimonial>) => {
+    const ok = await mutateAPI('testimonials', 'PUT', { id, ...t })
+    if (ok) await refreshAll()
+    return ok
+  }
+  const deleteTestimonial = async (id: string) => {
+    const ok = await mutateAPI(`testimonials?id=${id}`, 'DELETE')
+    if (ok) await refreshAll()
+    return ok
+  }
+
+  // ── Image upload ──
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      const reader = new FileReader()
+      const base64 = await new Promise<string>((resolve) => {
+        reader.onload = () => resolve(reader.result as string)
+        reader.readAsDataURL(file)
+      })
+      const res = await fetch(`${API_BASE}/api/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64, filename: file.name }),
+      })
+      if (!res.ok) return null
+      const data = await res.json()
+      return data.url
+    } catch {
+      return null
+    }
   }
 
   return (
-    <StoreContext.Provider value={{ products, setProducts, projects, setProjects, testimonials, setTestimonials }}>
+    <StoreContext.Provider value={{
+      products, projects, testimonials, loading,
+      addProduct, updateProduct, deleteProduct,
+      addProject, updateProject, deleteProject,
+      addTestimonial, updateTestimonial, deleteTestimonial,
+      uploadImage, refreshAll,
+    }}>
       {children}
     </StoreContext.Provider>
   )
