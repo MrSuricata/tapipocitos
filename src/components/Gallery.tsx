@@ -274,7 +274,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               className="text-4xl md:text-5xl font-bold mb-4"
               style={{ color: DESIGN_TOKENS.colors.title }}
             >
-              Nuestros Trabajos
+              Nuestro Catálogo
             </h2>
             <p
               className="text-lg max-w-2xl mx-auto mb-8"
@@ -284,7 +284,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                 lineHeight: DESIGN_TOKENS.typography.lineHeight,
               }}
             >
-              Cada proyecto es una transformación. Mirá lo que nuestras manos pueden hacer.
+              Retapizados, restauraciones, piezas a medida y proyectos especiales. Todo hecho a mano en nuestro taller.
             </p>
 
             <ToggleGroup

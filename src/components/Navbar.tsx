@@ -61,8 +61,7 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
     { id: 'home', label: 'Inicio' },
     { id: 'about', label: 'Nosotros' },
     { id: 'services', label: 'Servicios' },
-    { id: 'gallery', label: 'Trabajos' },
-    { id: 'products', label: 'Productos' },
+    { id: 'gallery', label: 'Catálogo' },
     { id: 'contact', label: 'Contacto' },
   ]
 

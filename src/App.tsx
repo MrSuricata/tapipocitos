@@ -6,21 +6,21 @@ import { Hero } from '@/components/Hero'
 import { Services } from '@/components/Services'
 import { About } from '@/components/About'
 import { Gallery } from '@/components/Gallery'
-import { Products } from '@/components/Products'
+// Products section removed — unified into Gallery/Catálogo
 import { Contact } from '@/components/Contact'
 import { PhotoShowcase } from '@/components/PhotoShowcase'
 import { Testimonials } from '@/components/Testimonials'
 import { AdminLogin } from '@/components/admin/AdminLogin'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { AdminDashboard } from '@/components/admin/AdminDashboard'
-import { AdminProducts } from '@/components/admin/AdminProducts'
+// AdminProducts removed — unified into AdminProjects (Catálogo)
 import { AdminProjects } from '@/components/admin/AdminProjects'
 import { AdminTestimonials } from '@/components/admin/AdminTestimonials'
 import { useAuth } from '@/lib/auth'
 import { toast } from 'sonner'
 
-type View = 'home' | 'about' | 'services' | 'gallery' | 'products' | 'contact' | 'admin'
-type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials'
+type View = 'home' | 'about' | 'services' | 'gallery' | 'contact' | 'admin'
+type AdminView = 'dashboard' | 'projects' | 'testimonials'
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home')
@@ -88,7 +88,6 @@ function App() {
           onBackToSite={() => setCurrentView('home')}
         >
           {adminView === 'dashboard' && <AdminDashboard onNavigate={(view) => setAdminView(view as AdminView)} />}
-          {adminView === 'products' && <AdminProducts />}
           {adminView === 'projects' && <AdminProjects />}
           {adminView === 'testimonials' && <AdminTestimonials />}
         </AdminLayout>
@@ -122,12 +121,6 @@ function App() {
               onNavigate={handleNavigation}
               initialFilter={galleryFilter}
             />
-          </div>
-        )}
-
-        {currentView === 'products' && (
-          <div className="pt-20">
-            <Products onNavigate={handleNavigation} />
           </div>
         )}
 

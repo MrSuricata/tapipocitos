@@ -7,19 +7,11 @@ interface AdminDashboardProps {
 }
 
 export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
-  const { products, projects, testimonials } = useStore()
+  const { projects, testimonials } = useStore()
 
   const stats = [
     {
-      title: 'Productos',
-      value: products?.length || 0,
-      icon: Package,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
-      view: 'products',
-    },
-    {
-      title: 'Trabajos',
+      title: 'Catálogo',
       value: projects?.length || 0,
       icon: Images,
       color: 'text-green-600',
@@ -45,7 +37,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {stats.map((stat) => (
           <Card
             key={stat.title}
@@ -82,26 +74,13 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
           <div className="space-y-4">
             <div
               className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => onNavigate('products')}
-            >
-              <h4 className="font-semibold text-foreground mb-2">
-                📦 Gestión de Productos
-              </h4>
-              <p className="text-sm text-foreground/70">
-                Crea, edita y elimina productos del catálogo. Asegúrate de
-                completar todos los campos para una mejor presentación.
-              </p>
-            </div>
-            <div
-              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
               onClick={() => onNavigate('projects')}
             >
               <h4 className="font-semibold text-foreground mb-2">
-                🖼️ Trabajos Realizados
+                🛋️ Catálogo de Trabajos
               </h4>
               <p className="text-sm text-foreground/70">
-                Muestra tus mejores proyectos con descripciones detalladas y
-                categorización adecuada.
+                Agrega retapizados, restauraciones, piezas a medida y proyectos especiales con fotos y descripción.
               </p>
             </div>
             <div

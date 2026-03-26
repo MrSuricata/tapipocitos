@@ -26,8 +26,7 @@ export function AdminLayout({
 }: AdminLayoutProps) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: SquaresFour },
-    { id: 'products', label: 'Productos', icon: Package },
-    { id: 'projects', label: 'Trabajos', icon: Images },
+    { id: 'projects', label: 'Catálogo', icon: Images },
     { id: 'testimonials', label: 'Testimonios', icon: Sparkle },
   ]
 
