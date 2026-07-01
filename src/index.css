@@ -472,7 +472,7 @@ html {
 .bg-orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(70px);
+  filter: blur(56px);
   pointer-events: none;
   will-change: transform;
 }

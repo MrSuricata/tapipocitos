@@ -19,7 +19,7 @@ import { DESIGN_TOKENS } from '@/lib/constants'
 const GRANDES_PROYECTOS = [
   { name: 'Torre Yoo', place: 'Punta del Este' },
   { name: 'Bodega Garzón', place: 'Maldonado' },
-  { name: 'Centro Cultural Calvin', place: 'Maldonado' },
+  { name: 'Centro Cultural Kalvian', place: 'Maldonado' },
   { name: 'Hotel del Prado', place: 'Montevideo' },
   { name: 'Hotel Anastasio', place: 'José Ignacio' },
   { name: 'Montevideo Shopping', place: 'Montevideo' },

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Buildings, Wine, Storefront, Bed, Bank, Briefcase } from '@phosphor-icons/react'
 import { DESIGN_TOKENS } from '@/lib/constants'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 
 const FEATURED_PROJECTS = [
   {
@@ -85,6 +86,7 @@ export function TrabajosDestacados() {
       className="py-20 px-6 relative overflow-hidden"
       style={{ background: 'linear-gradient(180deg, #F5F0EB 0%, #EFE7DD 100%)' }}
     >
+      <BackgroundDecor />
       {/* Subtle pattern background */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
