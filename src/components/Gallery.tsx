@@ -261,7 +261,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
 
   return (
     <>
-      <section id="gallery" className="py-20 px-6 bg-background subtle-fabric-bg relative min-h-screen">
+      <section id="gallery" className="py-24 px-6 bg-background subtle-fabric-bg warm-mesh relative min-h-screen">
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -271,10 +271,10 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
             className="text-center mb-12"
           >
             <h2
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-4xl md:text-6xl font-bold mb-4 tracking-tight"
               style={{ color: DESIGN_TOKENS.colors.title }}
             >
-              Trabajos Realizados
+              Trabajos <span className="text-gradient-warm">Realizados</span>
             </h2>
             <p
               className="text-lg max-w-2xl mx-auto mb-8"
@@ -291,7 +291,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               type="single"
               value={filter}
               onValueChange={(value) => value && setFilter(value)}
-              className="flex flex-wrap justify-center gap-2"
+              className="flex flex-wrap justify-center gap-1.5 segmented rounded-2xl p-1.5 mx-auto"
               data-wrap=""
             >
               {categories.map((category) => (
@@ -372,7 +372,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                     }}
                   >
                     <Card
-                      className="group overflow-hidden cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="group overflow-hidden cursor-pointer card-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                       style={{
                         transitionDuration: `${DESIGN_TOKENS.animations.duration.medium}ms`,
                         transitionTimingFunction: DESIGN_TOKENS.animations.easing,

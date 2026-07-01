@@ -287,7 +287,7 @@ export function Products({ onNavigate }: ProductsProps) {
 
   return (
     <>
-      <section id="products" className="py-20 px-6 bg-secondary/30 subtle-fabric-bg relative min-h-screen">
+      <section id="products" className="py-24 px-6 bg-secondary/30 subtle-fabric-bg warm-mesh relative min-h-screen">
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Custom pieces banner */}
           <motion.div
@@ -327,10 +327,10 @@ export function Products({ onNavigate }: ProductsProps) {
             className="text-center mb-12"
           >
             <h2
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-4xl md:text-6xl font-bold mb-4 tracking-tight"
               style={{ color: DESIGN_TOKENS.colors.title }}
             >
-              Nuestros Productos
+              Nuestros <span className="text-gradient-warm">Productos</span>
             </h2>
             <p
               className="text-lg max-w-2xl mx-auto mb-8"
@@ -347,7 +347,7 @@ export function Products({ onNavigate }: ProductsProps) {
               type="single"
               value={filter}
               onValueChange={(value) => value && setFilter(value)}
-              className="flex flex-wrap justify-center gap-2"
+              className="flex flex-wrap justify-center gap-1.5 segmented rounded-2xl p-1.5 mx-auto"
               data-wrap=""
             >
               {categories.map((category) => (
@@ -428,7 +428,7 @@ export function Products({ onNavigate }: ProductsProps) {
                     }}
                   >
                     <Card
-                      className="group overflow-hidden cursor-pointer transition-all h-full flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="group overflow-hidden cursor-pointer h-full flex flex-col card-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                       style={{
                         transitionDuration: `${DESIGN_TOKENS.animations.duration.medium}ms`,
                         transitionTimingFunction: DESIGN_TOKENS.animations.easing,

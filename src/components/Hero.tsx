@@ -375,6 +375,19 @@ export function Hero({ onNavigate }: HeroProps) {
       {/* Secondary subtle glow bottom */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_90%,rgba(139,115,85,0.08),transparent_50%)]" />
 
+      {/* Slow drifting warm glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(55% 45% at 50% 35%, rgba(201,122,64,0.12), transparent 70%)',
+          animation: prefersReducedMotion
+            ? 'none'
+            : 'mesh-drift 22s ease-in-out infinite alternate',
+        }}
+        aria-hidden="true"
+      />
+
       {/* -- Real sofa photo background -- */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -430,13 +443,11 @@ export function Hero({ onNavigate }: HeroProps) {
           transition={{ duration: dur(0.3), ease: 'easeOut' }}
         >
           <h1
-            className="text-4xl sm:text-5xl md:text-7xl font-bold mb-2 leading-tight tracking-tight"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-bold mb-2 leading-[1.05] tracking-tight"
             style={{ color: DESIGN_TOKENS.colors.title }}
           >
             El Arte de Tapizar,{' '}
-            <span className="italic" style={{ color: '#8B6D4B' }}>
-              una Tradición Familiar
-            </span>
+            <span className="italic text-gradient-warm">una Tradición Familiar</span>
           </h1>
         </motion.div>
 
@@ -476,7 +487,7 @@ export function Hero({ onNavigate }: HeroProps) {
           <Button
             size="lg"
             onClick={() => onNavigate('gallery')}
-            className="group text-base px-8 py-6"
+            className="group text-base px-8 py-6 rounded-full cta-primary"
             aria-label="Ver galería de trabajos realizados"
           >
             Ver Trabajos
@@ -489,7 +500,7 @@ export function Hero({ onNavigate }: HeroProps) {
             size="lg"
             variant="outline"
             onClick={() => onNavigate('contact')}
-            className="text-base px-8 py-6 bg-card/80 backdrop-blur-sm"
+            className="text-base px-8 py-6 rounded-full bg-white/70 backdrop-blur-md border-[#C97A40]/40 text-[#5A3B2E] hover:bg-white shadow-soft"
             aria-label="Solicitar presupuesto personalizado"
           >
             Solicitar Presupuesto
@@ -501,7 +512,7 @@ export function Hero({ onNavigate }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: dur(0.4), delay: del(0.4), ease: 'easeOut' }}
-          className="mt-10 mb-16 flex items-center justify-center divide-x divide-[#C97A4033]"
+          className="mt-10 mb-16 inline-flex items-center justify-center divide-x divide-[#C97A40]/25 rounded-full px-3 py-3 bg-white/50 backdrop-blur-md border border-white/60 shadow-soft"
         >
           <TrustBadge value="50+" label="Años" />
           <TrustBadge value="50.000+" label="Muebles" />

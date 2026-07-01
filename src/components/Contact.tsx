@@ -161,7 +161,7 @@ export function Contact({ prefilledData }: ContactProps) {
   }
 
   return (
-    <section id="contact" className="py-20 px-6 bg-background relative overflow-hidden">
+    <section id="contact" className="py-24 px-6 bg-background relative overflow-hidden warm-mesh">
       {/* Background decorative map */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[600px] max-w-full">
@@ -178,10 +178,10 @@ export function Contact({ prefilledData }: ContactProps) {
           className="text-center mb-16"
         >
           <h2
-            className="text-4xl md:text-5xl font-bold mb-4"
+            className="text-4xl md:text-6xl font-bold mb-4 tracking-tight"
             style={{ color: DESIGN_TOKENS.colors.title }}
           >
-            Hablemos de tu Proyecto
+            Hablemos de tu <span className="text-gradient-warm">Proyecto</span>
           </h2>
           <p
             className="text-lg max-w-2xl mx-auto"

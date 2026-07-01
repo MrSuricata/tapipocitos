@@ -195,10 +195,10 @@ export function About() {
           className="text-center mb-16"
         >
           <h2
-            className="text-4xl md:text-5xl font-bold mb-2"
+            className="text-4xl md:text-6xl font-bold mb-2 tracking-tight"
             style={{ color: DESIGN_TOKENS.colors.title }}
           >
-            Nuestra Historia
+            Nuestra <span className="text-gradient-warm">Historia</span>
           </h2>
           <NeedleThreadOrnament />
           <p
