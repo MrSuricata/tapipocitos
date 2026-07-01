@@ -30,6 +30,7 @@ export function useAuth() {
         }
         setAdminUser(user)
         localStorage.setItem('tapipocitos_admin', JSON.stringify(user))
+        localStorage.setItem('tapipocitos_pw', password)
         return true
       }
       return false
@@ -40,6 +41,7 @@ export function useAuth() {
         const user: AdminUser = { username: 'admin', token, expiresAt: Date.now() + TOKEN_DURATION }
         setAdminUser(user)
         localStorage.setItem('tapipocitos_admin', JSON.stringify(user))
+        localStorage.setItem('tapipocitos_pw', password)
         return true
       }
       return false
@@ -49,6 +51,7 @@ export function useAuth() {
   const logout = () => {
     setAdminUser(null)
     localStorage.removeItem('tapipocitos_admin')
+    localStorage.removeItem('tapipocitos_pw')
   }
 
   const isAuthenticated = (): boolean => {
@@ -93,4 +96,14 @@ export function formatDate(timestamp: number): string {
 
 export function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).substring(2)
+}
+
+// The admin password is kept in localStorage after login so the panel can read
+// the private /api/leads endpoint (which requires it as a header).
+export function getAdminPassword(): string {
+  try {
+    return localStorage.getItem('tapipocitos_pw') || ''
+  } catch {
+    return ''
+  }
 }

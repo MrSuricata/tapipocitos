@@ -45,6 +45,21 @@ create table if not exists public.testimonials (
   created_at  timestamptz default now()
 );
 
+-- ---------- CONSULTAS / LEADS (privado: solo backend con service_role) ----------
+create table if not exists public.leads (
+  id          uuid primary key default gen_random_uuid(),
+  name        text not null,
+  email       text default '',
+  phone       text default '',
+  subject     text default '',
+  message     text default '',
+  services    text[] default '{}',
+  products    text default '',
+  source      text default 'web',
+  status      text default 'nuevo',
+  created_at  timestamptz default now()
+);
+
 -- ---------- RLS: lectura pública, escritura solo service_role ----------
 -- El service_role (usado por las funciones /api) OMITE RLS, así que sólo
 -- habilitamos la LECTURA anónima. No creamos políticas de escritura pública
@@ -52,6 +67,8 @@ create table if not exists public.testimonials (
 alter table public.products     enable row level security;
 alter table public.projects     enable row level security;
 alter table public.testimonials enable row level security;
+-- leads NO tiene políticas públicas a propósito: solo el backend (service_role) puede leer/escribir.
+alter table public.leads        enable row level security;
 
 drop policy if exists "public read products" on public.products;
 create policy "public read products" on public.products for select using (true);

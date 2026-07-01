@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Phone, Envelope, MapPin, Clock, WhatsappLogo } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { sendEmail } from '@/lib/auth'
+import { submitLead } from '@/lib/leads'
 import { DESIGN_TOKENS } from '@/lib/constants'
 import { BackgroundDecor } from '@/components/BackgroundDecor'
 
@@ -118,44 +118,32 @@ export function Contact({ prefilledData }: ContactProps) {
     e.preventDefault()
 
     if (!formData.name || !formData.email || !formData.message) {
-      toast.error('Por favor completa todos los campos obligatorios')
+      toast.error('Por favor completá nombre, email y mensaje')
       return
     }
 
     setIsSubmitting(true)
 
     try {
-      const servicesText = selectedServices.length > 0
-        ? `Servicios seleccionados: ${selectedServices.join(', ')}`
-        : ''
-
-      const emailBody = [
-        `Nombre: ${formData.name}`,
-        `Email: ${formData.email}`,
-        formData.phone ? `Telefono: ${formData.phone}` : '',
-        servicesText,
-        '',
-        formData.message,
-        prefilledData?.service ? `Servicio: ${prefilledData.service}` : '',
-      ].filter(Boolean).join('\n')
-
-      const subject = encodeURIComponent(formData.subject || 'Consulta desde web TAPIPOCITOS')
-      const body = encodeURIComponent(emailBody)
-      const mailtoLink = `mailto:tapipocitos@gmail.com?subject=${subject}&body=${body}`
-
-      window.open(mailtoLink, '_blank')
-
-      toast.success('Se abrió tu cliente de correo. ¡Enviá el mensaje!')
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
+      const ok = await submitLead({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject || 'Consulta desde la web',
+        message: formData.message,
+        services: selectedServices,
+        products: prefilledData?.message || '',
       })
-      setSelectedServices([])
+
+      if (ok) {
+        toast.success('¡Recibimos tu consulta! Te contactamos a la brevedad. 🙌')
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+        setSelectedServices([])
+      } else {
+        toast.error('No pudimos enviar la consulta. Escribinos por WhatsApp y lo resolvemos.')
+      }
     } catch (error) {
-      toast.error('Error al enviar el mensaje. Intenta nuevamente.')
+      toast.error('Error al enviar. Probá por WhatsApp.')
     } finally {
       setIsSubmitting(false)
     }
@@ -540,6 +528,19 @@ export function Contact({ prefilledData }: ContactProps) {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Mapa de Google */}
+        <div className="mt-10 rounded-2xl overflow-hidden shadow-soft border border-white/50 relative z-10">
+          <iframe
+            title="Cómo llegar a TAPIPOCITOS"
+            src="https://maps.google.com/maps?q=Pedro%20Cos%C3%ADo%202430%20Montevideo%20Uruguay&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            width="100%"
+            height="340"
+            style={{ border: 0 }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
     </section>

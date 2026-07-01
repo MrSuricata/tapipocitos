@@ -42,7 +42,7 @@ function stripReadOnly(obj: Record<string, unknown>): Record<string, unknown> {
 
 export async function resourceHandler(
   env: Env,
-  table: TableName,
+  table: string,
   method: string,
   query: Record<string, string | undefined>,
   body: any
@@ -58,8 +58,8 @@ export async function resourceHandler(
     switch (method) {
       case 'GET': {
         let query = supabase.from(table).select('*')
-        // Only products/projects have a 'featured' column; testimonials do not.
-        if (table !== 'testimonials') {
+        // Only products/projects have a 'featured' column.
+        if (table === 'products' || table === 'projects') {
           query = query.order('featured', { ascending: false })
         }
         query = query.order('created_at', { ascending: false })
@@ -153,4 +153,27 @@ export function authHandler(env: Env, body: any): ApiResult {
     return { status: 200, body: { success: true } }
   }
   return { status: 401, body: { success: false } }
+}
+
+// Leads (contact/quote requests). POST is public (form submission); reading or
+// deleting requires the admin password via the x-admin-password header.
+export async function leadsHandler(
+  env: Env,
+  method: string,
+  query: Record<string, string | undefined>,
+  body: any,
+  headers: Record<string, any>
+): Promise<ApiResult> {
+  if (method === 'POST') {
+    if (!body || !body.name) {
+      return { status: 400, body: { error: 'Falta el nombre' } }
+    }
+    return resourceHandler(env, 'leads', 'POST', query, body)
+  }
+
+  const provided = headers?.['x-admin-password']
+  if (!env.ADMIN_PASSWORD || provided !== env.ADMIN_PASSWORD) {
+    return { status: 401, body: { error: 'No autorizado' } }
+  }
+  return resourceHandler(env, 'leads', method, query, body)
 }

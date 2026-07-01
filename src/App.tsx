@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
@@ -11,19 +11,22 @@ import { Contact } from '@/components/Contact'
 import { PhotoShowcase } from '@/components/PhotoShowcase'
 import { TrabajosDestacados } from '@/components/TrabajosDestacados'
 import { Testimonials } from '@/components/Testimonials'
+import { Faq } from '@/components/Faq'
 import { ScrollProgress } from '@/components/ScrollProgress'
 import { WhatsAppFab } from '@/components/WhatsAppFab'
-import { AdminLogin } from '@/components/admin/AdminLogin'
-import { AdminLayout } from '@/components/admin/AdminLayout'
-import { AdminDashboard } from '@/components/admin/AdminDashboard'
-import { AdminProducts } from '@/components/admin/AdminProducts'
-import { AdminProjects } from '@/components/admin/AdminProjects'
-import { AdminTestimonials } from '@/components/admin/AdminTestimonials'
+// Admin is code-split: visitors never download it.
+const AdminLogin = lazy(() => import('@/components/admin/AdminLogin').then((m) => ({ default: m.AdminLogin })))
+const AdminLayout = lazy(() => import('@/components/admin/AdminLayout').then((m) => ({ default: m.AdminLayout })))
+const AdminDashboard = lazy(() => import('@/components/admin/AdminDashboard').then((m) => ({ default: m.AdminDashboard })))
+const AdminProducts = lazy(() => import('@/components/admin/AdminProducts').then((m) => ({ default: m.AdminProducts })))
+const AdminProjects = lazy(() => import('@/components/admin/AdminProjects').then((m) => ({ default: m.AdminProjects })))
+const AdminTestimonials = lazy(() => import('@/components/admin/AdminTestimonials').then((m) => ({ default: m.AdminTestimonials })))
+const AdminLeads = lazy(() => import('@/components/admin/AdminLeads').then((m) => ({ default: m.AdminLeads })))
 import { useAuth } from '@/lib/auth'
 import { toast } from 'sonner'
 
 type View = 'home' | 'about' | 'services' | 'products' | 'gallery' | 'contact' | 'admin'
-type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials'
+type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials' | 'leads'
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home')
@@ -76,10 +79,17 @@ function App() {
   }, [])
 
   if (currentView === 'admin') {
+    const adminFallback = (
+      <div className="min-h-screen flex items-center justify-center bg-[#F5F0EB]">
+        <div className="w-8 h-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+      </div>
+    )
     if (!isAuthenticated()) {
       return (
         <>
-          <AdminLogin onLogin={handleLogin} />
+          <Suspense fallback={adminFallback}>
+            <AdminLogin onLogin={handleLogin} />
+          </Suspense>
           <Toaster />
         </>
       )
@@ -87,6 +97,7 @@ function App() {
 
     return (
       <>
+        <Suspense fallback={adminFallback}>
         <AdminLayout
           currentView={adminView}
           onViewChange={(view) => setAdminView(view as AdminView)}
@@ -100,7 +111,9 @@ function App() {
           {adminView === 'products' && <AdminProducts />}
           {adminView === 'projects' && <AdminProjects />}
           {adminView === 'testimonials' && <AdminTestimonials />}
+          {adminView === 'leads' && <AdminLeads />}
         </AdminLayout>
+        </Suspense>
         <Toaster />
       </>
     )
@@ -120,6 +133,7 @@ function App() {
             <About />
             <TrabajosDestacados />
             <Testimonials />
+            <Faq />
             <Contact />
           </>
         )}

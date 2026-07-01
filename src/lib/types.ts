@@ -41,6 +41,20 @@ export interface Testimonial {
   rating: number
 }
 
+export interface Lead {
+  id: string
+  name: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+  services: string[]
+  products: string
+  source: string
+  status: string
+  created_at: string
+}
+
 export interface TeamMember {
   id: string
   name: string

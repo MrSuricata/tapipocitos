@@ -6,6 +6,7 @@ import {
   Sparkle,
   SignOut,
   SquaresFour,
+  ChatCircleDots,
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { BackgroundDecor } from '@/components/BackgroundDecor'
@@ -52,6 +53,7 @@ export function AdminLayout({
     { id: 'products', label: 'Productos', icon: Package },
     { id: 'projects', label: 'Trabajos', icon: Images },
     { id: 'testimonials', label: 'Testimonios', icon: Sparkle },
+    { id: 'leads', label: 'Consultas', icon: ChatCircleDots },
   ]
 
   return (
