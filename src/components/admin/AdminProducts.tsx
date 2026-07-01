@@ -145,12 +145,14 @@ export function AdminProducts() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-foreground mb-2">Productos</h2>
+          <h2 className="text-3xl font-bold mb-2 tracking-tight">
+            <span className="text-gradient-warm">Productos</span>
+          </h2>
           <p className="text-foreground/70">
-            Gestiona el catálogo de productos
+            Gestioná el catálogo que ve el cliente
           </p>
         </div>
-        <Button onClick={() => handleOpenDialog()}>
+        <Button onClick={() => handleOpenDialog()} className="rounded-full cta-primary">
           <Plus size={20} className="mr-2" />
           Nuevo Producto
         </Button>

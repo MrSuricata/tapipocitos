@@ -39,9 +39,12 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-foreground mb-2">Dashboard</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">
+          <span className="text-foreground">Panel de </span>
+          <span className="text-gradient-warm">Gestión</span>
+        </h2>
         <p className="text-foreground/70">
-          Resumen general del contenido del sitio
+          Resumen del contenido de tu sitio. Tocá una tarjeta para editar.
         </p>
       </div>
 
@@ -49,7 +52,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         {stats.map((stat) => (
           <Card
             key={stat.title}
-            className="cursor-pointer hover:shadow-lg transition-shadow"
+            className="cursor-pointer card-lift"
             onClick={() => onNavigate(stat.view)}
           >
             <CardContent className="pt-6">
@@ -58,11 +61,11 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   <p className="text-sm text-muted-foreground mb-1">
                     {stat.title}
                   </p>
-                  <p className="text-3xl font-bold text-foreground">
+                  <p className="text-4xl font-bold text-gradient-warm">
                     {stat.value}
                   </p>
                 </div>
-                <div className={`p-4 rounded-lg ${stat.bg}`}>
+                <div className={`p-4 rounded-2xl ${stat.bg}`}>
                   <stat.icon size={32} weight="duotone" className={stat.color} />
                 </div>
               </div>
@@ -81,7 +84,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         <CardContent>
           <div className="space-y-4">
             <div
-              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              className="p-4 bg-white/60 border border-border/40 rounded-xl cursor-pointer hover:border-accent/30 hover:shadow-md transition-all"
               onClick={() => onNavigate('products')}
             >
               <h4 className="font-semibold text-foreground mb-2">
@@ -92,7 +95,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
               </p>
             </div>
             <div
-              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              className="p-4 bg-white/60 border border-border/40 rounded-xl cursor-pointer hover:border-accent/30 hover:shadow-md transition-all"
               onClick={() => onNavigate('projects')}
             >
               <h4 className="font-semibold text-foreground mb-2">
@@ -103,7 +106,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
               </p>
             </div>
             <div
-              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              className="p-4 bg-white/60 border border-border/40 rounded-xl cursor-pointer hover:border-accent/30 hover:shadow-md transition-all"
               onClick={() => onNavigate('testimonials')}
             >
               <h4 className="font-semibold text-foreground mb-2">

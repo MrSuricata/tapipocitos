@@ -163,9 +163,11 @@ export function AdminProjects() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Catálogo</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            <span className="text-gradient-warm">Trabajos</span>
+          </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            {projects.length} trabajos en el catálogo
+            {projects.length} trabajos en el portfolio
           </p>
         </div>
         <Button

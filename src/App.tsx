@@ -54,6 +54,7 @@ function App() {
     if (success) {
       toast.success('Sesión iniciada correctamente')
       setCurrentView('admin')
+      window.history.replaceState(null, '', '/admin')
     } else {
       toast.error('Contraseña incorrecta')
     }
@@ -63,11 +64,13 @@ function App() {
     logout()
     toast.success('Sesión cerrada')
     setCurrentView('home')
+    window.history.replaceState(null, '', '/')
   }
 
   useEffect(() => {
     const hash = window.location.hash.substring(1)
-    if (hash === 'admin') {
+    const path = window.location.pathname.replace(/\/+$/, '')
+    if (hash === 'admin' || path === '/admin') {
       setCurrentView('admin')
     }
   }, [])
@@ -88,7 +91,10 @@ function App() {
           currentView={adminView}
           onViewChange={(view) => setAdminView(view as AdminView)}
           onLogout={handleLogout}
-          onBackToSite={() => setCurrentView('home')}
+          onBackToSite={() => {
+            setCurrentView('home')
+            window.history.replaceState(null, '', '/')
+          }}
         >
           {adminView === 'dashboard' && <AdminDashboard onNavigate={(view) => setAdminView(view as AdminView)} />}
           {adminView === 'products' && <AdminProducts />}

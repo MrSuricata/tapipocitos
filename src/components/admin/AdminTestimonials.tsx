@@ -76,7 +76,9 @@ export function AdminTestimonials() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Testimonios</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            <span className="text-gradient-warm">Testimonios</span>
+          </h2>
           <p className="text-sm text-muted-foreground mt-1">{testimonials.length} opiniones de clientes</p>
         </div>
         <Button onClick={() => handleOpenDialog()} className="bg-[#2C1810] hover:bg-[#3D2419] text-white rounded-full px-6 gap-2 shadow-md">
