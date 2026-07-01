@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { resourceHandler } from './_lib/handlers'
+import { resourceHandler } from './_lib/handlers.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const result = await resourceHandler(

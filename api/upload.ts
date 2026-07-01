@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { uploadHandler } from './_lib/handlers'
+import { uploadHandler } from './_lib/handlers.js'
 
 export const config = {
   api: {
