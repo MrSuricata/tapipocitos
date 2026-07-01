@@ -10,6 +10,7 @@ import type { Product } from '@/lib/types'
 import { DESIGN_TOKENS } from '@/lib/constants'
 import { useCart, buildWhatsappConsultLink, type CartItem } from '@/lib/cart'
 import { toast } from 'sonner'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 
 interface ProductsProps {
   onNavigate: (view: string, data?: any) => void
@@ -288,6 +289,7 @@ export function Products({ onNavigate }: ProductsProps) {
   return (
     <>
       <section id="products" className="py-24 px-6 bg-secondary/30 subtle-fabric-bg warm-mesh relative min-h-screen">
+        <BackgroundDecor />
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Custom pieces banner */}
           <motion.div

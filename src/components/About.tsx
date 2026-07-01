@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Card } from '@/components/ui/card'
 import { SafeImage } from '@/components/SafeImage'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 import {
   CheckCircle,
   Seal,
@@ -184,6 +185,7 @@ export function About() {
     <section id="about" className="py-20 px-6 bg-secondary/30 subtle-fabric-bg relative overflow-hidden">
       {/* Background watermark of upholstery tools */}
       <UpholsteryToolsWatermark />
+      <BackgroundDecor variant="sand" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header with needle/thread ornament */}

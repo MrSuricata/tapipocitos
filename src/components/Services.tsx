@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
@@ -204,7 +205,8 @@ export function Services({ onNavigate }: ServicesProps) {
 
   return (
     <>
-      <section id="services" className="py-20 px-6 bg-background subtle-fabric-bg relative">
+      <section id="services" className="py-20 px-6 bg-background subtle-fabric-bg warm-mesh relative">
+        <BackgroundDecor variant="sand" />
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Section Header */}
           <motion.div

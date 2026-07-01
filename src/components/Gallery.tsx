@@ -8,6 +8,7 @@ import { X, ArrowRight, ImageSquare } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
 import type { Project } from '@/lib/types'
 import { DESIGN_TOKENS } from '@/lib/constants'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 
 interface GalleryProps {
   onNavigate: (view: string, data?: any) => void
@@ -262,6 +263,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
   return (
     <>
       <section id="gallery" className="py-24 px-6 bg-background subtle-fabric-bg warm-mesh relative min-h-screen">
+        <BackgroundDecor />
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

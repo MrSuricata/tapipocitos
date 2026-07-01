@@ -4,6 +4,7 @@ import { ArrowRight } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { DESIGN_TOKENS } from '@/lib/constants'
 import { SafeImage } from '@/components/SafeImage'
+import { CountUp } from '@/components/CountUp'
 
 interface HeroProps {
   onNavigate: (view: string) => void
@@ -282,7 +283,17 @@ function StitchBorder() {
 
 /* ---------- Trust badge ---------- */
 
-function TrustBadge({ value, label }: { value: string; label: string }) {
+function TrustBadge({
+  to,
+  suffix,
+  separator,
+  label,
+}: {
+  to: number
+  suffix?: string
+  separator?: string
+  label: string
+}) {
   return (
     <motion.div
       className="flex flex-col items-center px-4 md:px-6"
@@ -291,10 +302,10 @@ function TrustBadge({ value, label }: { value: string; label: string }) {
       transition={{ duration: 0.4 }}
     >
       <span
-        className="text-xl md:text-2xl font-bold tracking-tight"
+        className="text-2xl md:text-3xl font-bold tracking-tight"
         style={{ color: '#C97A40' }}
       >
-        {value}
+        <CountUp to={to} suffix={suffix} separator={separator} />
       </span>
       <span
         className="text-xs md:text-sm mt-1 tracking-wide uppercase"
@@ -514,9 +525,9 @@ export function Hero({ onNavigate }: HeroProps) {
           transition={{ duration: dur(0.4), delay: del(0.4), ease: 'easeOut' }}
           className="mt-10 mb-16 inline-flex items-center justify-center divide-x divide-[#C97A40]/25 rounded-full px-3 py-3 bg-white/50 backdrop-blur-md border border-white/60 shadow-soft"
         >
-          <TrustBadge value="50+" label="Años" />
-          <TrustBadge value="50.000+" label="Muebles" />
-          <TrustBadge value="100%" label="Artesanal" />
+          <TrustBadge to={50} suffix="+" label="Años" />
+          <TrustBadge to={50000} suffix="+" separator="." label="Muebles" />
+          <TrustBadge to={100} suffix="%" label="Artesanal" />
         </motion.div>
       </div>
 

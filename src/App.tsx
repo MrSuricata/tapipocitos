@@ -11,6 +11,8 @@ import { Contact } from '@/components/Contact'
 import { PhotoShowcase } from '@/components/PhotoShowcase'
 import { TrabajosDestacados } from '@/components/TrabajosDestacados'
 import { Testimonials } from '@/components/Testimonials'
+import { ScrollProgress } from '@/components/ScrollProgress'
+import { WhatsAppFab } from '@/components/WhatsAppFab'
 import { AdminLogin } from '@/components/admin/AdminLogin'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { AdminDashboard } from '@/components/admin/AdminDashboard'
@@ -100,6 +102,7 @@ function App() {
 
   return (
     <>
+      <ScrollProgress />
       <div className="min-h-screen">
         <Navbar currentView={currentView} onNavigate={handleNavigation} />
 
@@ -111,6 +114,7 @@ function App() {
             <About />
             <TrabajosDestacados />
             <Testimonials />
+            <Contact />
           </>
         )}
 
@@ -141,6 +145,7 @@ function App() {
 
         <Footer />
       </div>
+      <WhatsAppFab />
       <Toaster />
     </>
   )

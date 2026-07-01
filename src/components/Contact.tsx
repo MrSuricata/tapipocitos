@@ -9,6 +9,7 @@ import { Phone, Envelope, MapPin, Clock, WhatsappLogo } from '@phosphor-icons/re
 import { toast } from 'sonner'
 import { sendEmail } from '@/lib/auth'
 import { DESIGN_TOKENS } from '@/lib/constants'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 
 interface ContactProps {
   prefilledData?: {
@@ -162,6 +163,7 @@ export function Contact({ prefilledData }: ContactProps) {
 
   return (
     <section id="contact" className="py-24 px-6 bg-background relative overflow-hidden warm-mesh">
+      <BackgroundDecor />
       {/* Background decorative map */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[600px] max-w-full">

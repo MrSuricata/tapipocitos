@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
+import { BackgroundDecor } from '@/components/BackgroundDecor'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Star, Quotes } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
@@ -36,8 +37,9 @@ export function Testimonials() {
   const displayTestimonials = testimonials.slice(0, 3)
 
   return (
-    <section className="py-20 px-6 bg-secondary/20 relative">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 px-6 bg-secondary/20 relative warm-mesh">
+      <BackgroundDecor variant="sand" />
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
