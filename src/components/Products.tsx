@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { X, ArrowRight, Ruler, Package, Armchair } from '@phosphor-icons/react'
+import { X, ArrowRight, Ruler, Package, Armchair, ShoppingBag, Check, WhatsappLogo } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
 import type { Product } from '@/lib/types'
 import { DESIGN_TOKENS } from '@/lib/constants'
+import { useCart, buildWhatsappConsultLink, type CartItem } from '@/lib/cart'
+import { toast } from 'sonner'
 
 interface ProductsProps {
   onNavigate: (view: string, data?: any) => void
@@ -258,8 +260,23 @@ const DEFAULT_PRODUCTS: Product[] = [
 
 export function Products({ onNavigate }: ProductsProps) {
   const { products } = useStore()
+  const { has, toggle } = useCart()
   const [filter, setFilter] = useState<string>('Todos')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+
+  const toCartItem = (p: Product): CartItem => ({
+    id: p.id,
+    name: p.name,
+    image: p.images?.[0],
+    category: p.category,
+    price: p.price,
+  })
+
+  const handleToggleCart = (p: Product) => {
+    const inCart = has(p.id)
+    toggle(toCartItem(p))
+    toast.success(inCart ? 'Quitado de tu presupuesto' : 'Agregado a tu presupuesto')
+  }
 
   const categories = ['Todos', 'Sofás', 'Sillas', 'Sillones', 'Mesas', 'Banquetas', 'Otros']
 
@@ -313,7 +330,7 @@ export function Products({ onNavigate }: ProductsProps) {
               className="text-4xl md:text-5xl font-bold mb-4"
               style={{ color: DESIGN_TOKENS.colors.title }}
             >
-              Nuestro Catálogo
+              Nuestros Productos
             </h2>
             <p
               className="text-lg max-w-2xl mx-auto mb-8"
@@ -323,7 +340,7 @@ export function Products({ onNavigate }: ProductsProps) {
                 lineHeight: DESIGN_TOKENS.typography.lineHeight,
               }}
             >
-              Piezas artesanales que combinan diseño, comodidad y durabilidad
+              Piezas artesanales que combinan diseño, comodidad y durabilidad. Agregalas a tu presupuesto o consultanos por WhatsApp.
             </p>
 
             <ToggleGroup
@@ -483,6 +500,47 @@ export function Products({ onNavigate }: ProductsProps) {
                             </span>
                           )}
                         </div>
+
+                        {/* Cart / WhatsApp actions */}
+                        <div
+                          className="flex items-center gap-2 mt-3"
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                        >
+                          <Button
+                            size="sm"
+                            variant={has(product.id) ? 'default' : 'outline'}
+                            className="flex-1 rounded-full text-xs h-8"
+                            onClick={() => handleToggleCart(product)}
+                            aria-label={
+                              has(product.id)
+                                ? `Quitar ${product.name} del presupuesto`
+                                : `Agregar ${product.name} al presupuesto`
+                            }
+                          >
+                            {has(product.id) ? (
+                              <>
+                                <Check size={14} weight="bold" className="mr-1" />
+                                Agregado
+                              </>
+                            ) : (
+                              <>
+                                <ShoppingBag size={14} className="mr-1" />
+                                Agregar
+                              </>
+                            )}
+                          </Button>
+                          <a
+                            href={buildWhatsappConsultLink(toCartItem(product))}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-white flex-shrink-0 hover:scale-105 transition-transform"
+                            style={{ backgroundColor: '#25D366' }}
+                            aria-label={`Consultar por ${product.name} en WhatsApp`}
+                          >
+                            <WhatsappLogo size={16} weight="fill" />
+                          </a>
+                        </div>
                       </div>
                     </Card>
                   </motion.div>
@@ -627,25 +685,41 @@ export function Products({ onNavigate }: ProductsProps) {
                       )}
                     </div>
 
-                    <Button
-                      onClick={() => {
-                        setSelectedProduct(null)
-                        setTimeout(() => {
-                          onNavigate('contact', {
-                            subject: `Consulta sobre: ${selectedProduct.name}`,
-                            productId: selectedProduct.id,
-                          })
-                        }, 200)
-                      }}
-                      className="w-full mt-6 group"
-                      aria-label="Solicitar este producto"
-                    >
-                      Solicitar este producto
-                      <ArrowRight
-                        size={18}
-                        className="ml-2 transition-transform group-hover:translate-x-1"
-                      />
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                      <Button
+                        onClick={() => handleToggleCart(selectedProduct)}
+                        variant={has(selectedProduct.id) ? 'default' : 'outline'}
+                        className="flex-1"
+                        aria-label={
+                          has(selectedProduct.id)
+                            ? 'Quitar del presupuesto'
+                            : 'Agregar al presupuesto'
+                        }
+                      >
+                        {has(selectedProduct.id) ? (
+                          <>
+                            <Check size={18} weight="bold" className="mr-2" />
+                            En tu presupuesto
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingBag size={18} className="mr-2" />
+                            Agregar al presupuesto
+                          </>
+                        )}
+                      </Button>
+                      <a
+                        href={buildWhatsappConsultLink(toCartItem(selectedProduct))}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white font-medium shadow-sm hover:shadow transition-all hover:scale-[1.02]"
+                        style={{ backgroundColor: '#25D366' }}
+                        aria-label="Consultar por WhatsApp"
+                      >
+                        <WhatsappLogo size={18} weight="fill" />
+                        Consultar por WhatsApp
+                      </a>
+                    </div>
                   </div>
                 </div>
               </motion.div>

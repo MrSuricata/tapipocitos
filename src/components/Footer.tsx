@@ -49,7 +49,7 @@ export function Footer() {
             {/* Founding year badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-900/50 border border-amber-700/40 mb-4">
               <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              <span className="text-xs font-semibold text-amber-200 tracking-wide">Desde 1990</span>
+              <span className="text-xs font-semibold text-amber-200 tracking-wide">Desde 1975</span>
             </div>
 
             <p className="text-sm opacity-75 leading-relaxed">

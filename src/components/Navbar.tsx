@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, X } from '@phosphor-icons/react'
+import { List, X, ShoppingBag } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
+import { useCart, buildQuoteMessage } from '@/lib/cart'
+import { CartSheet } from '@/components/CartSheet'
 
 interface NavbarProps {
   currentView: string
-  onNavigate: (view: string) => void
+  onNavigate: (view: string, data?: any) => void
 }
 
 function SofaLogo({ className }: { className?: string }) {
@@ -45,9 +47,29 @@ function SofaLogo({ className }: { className?: string }) {
   )
 }
 
+function CartButton({ onClick }: { onClick: () => void }) {
+  const { count } = useCart()
+  return (
+    <button
+      onClick={onClick}
+      className="relative p-2 rounded-full hover:bg-accent/10 text-primary hover:text-accent transition-colors"
+      aria-label={`Abrir presupuesto (${count} ${count === 1 ? 'producto' : 'productos'})`}
+    >
+      <ShoppingBag size={22} weight="duotone" />
+      {count > 0 && (
+        <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-white text-[10px] font-bold flex items-center justify-center shadow">
+          {count}
+        </span>
+      )}
+    </button>
+  )
+}
+
 export function Navbar({ currentView, onNavigate }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [cartOpen, setCartOpen] = useState(false)
+  const { items } = useCart()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,13 +83,22 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
     { id: 'home', label: 'Inicio' },
     { id: 'about', label: 'Nosotros' },
     { id: 'services', label: 'Servicios' },
-    { id: 'gallery', label: 'Catálogo' },
+    { id: 'products', label: 'Productos' },
+    { id: 'gallery', label: 'Trabajos' },
     { id: 'contact', label: 'Contacto' },
   ]
 
   const handleNavClick = (id: string) => {
     onNavigate(id)
     setMobileOpen(false)
+  }
+
+  const handleRequestForm = () => {
+    setCartOpen(false)
+    onNavigate('contact', {
+      subject: 'Pedido de presupuesto',
+      message: buildQuoteMessage(items),
+    })
   }
 
   return (
@@ -112,45 +143,52 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
                 {item.label}
               </Button>
             ))}
+            <div className="w-px h-6 bg-border mx-1" />
+            <CartButton onClick={() => setCartOpen(true)} />
           </div>
 
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                {mobileOpen ? <X size={24} /> : <List size={24} />}
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72">
-              <div className="flex flex-col gap-2 mt-8">
-                <div className="flex items-center gap-3 mb-6 px-4">
-                  <SofaLogo className="w-8 h-6 text-primary" />
-                  <div>
-                    <p className="text-lg font-bold text-primary">TAPIPOCITOS</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                      Tapiceria Familiar
+          <div className="flex items-center gap-1 md:hidden">
+            <CartButton onClick={() => setCartOpen(true)} />
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  {mobileOpen ? <X size={24} /> : <List size={24} />}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-72">
+                <div className="flex flex-col gap-2 mt-8">
+                  <div className="flex items-center gap-3 mb-6 px-4">
+                    <SofaLogo className="w-8 h-6 text-primary" />
+                    <div>
+                      <p className="text-lg font-bold text-primary">TAPIPOCITOS</p>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                        Tapiceria Familiar
+                      </p>
+                    </div>
+                  </div>
+                  {navItems.map((item) => (
+                    <Button
+                      key={item.id}
+                      variant={currentView === item.id ? 'default' : 'ghost'}
+                      onClick={() => handleNavClick(item.id)}
+                      className="button-text uppercase text-sm tracking-wider justify-start"
+                    >
+                      {item.label}
+                    </Button>
+                  ))}
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <p className="text-xs text-muted-foreground px-4 leading-relaxed">
+                      Mas de 50 anos de tradicion tapicera en Uruguay
                     </p>
                   </div>
                 </div>
-                {navItems.map((item) => (
-                  <Button
-                    key={item.id}
-                    variant={currentView === item.id ? 'default' : 'ghost'}
-                    onClick={() => handleNavClick(item.id)}
-                    className="button-text uppercase text-sm tracking-wider justify-start"
-                  >
-                    {item.label}
-                  </Button>
-                ))}
-                <div className="mt-6 pt-6 border-t border-border">
-                  <p className="text-xs text-muted-foreground px-4 leading-relaxed">
-                    Mas de 30 anos de tradicion tapicera en Uruguay
-                  </p>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
+
+      <CartSheet open={cartOpen} onOpenChange={setCartOpen} onRequestForm={handleRequestForm} />
     </nav>
   )
 }

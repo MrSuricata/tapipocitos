@@ -6,21 +6,22 @@ import { Hero } from '@/components/Hero'
 import { Services } from '@/components/Services'
 import { About } from '@/components/About'
 import { Gallery } from '@/components/Gallery'
-// Products section removed — unified into Gallery/Catálogo
+import { Products } from '@/components/Products'
 import { Contact } from '@/components/Contact'
 import { PhotoShowcase } from '@/components/PhotoShowcase'
+import { TrabajosDestacados } from '@/components/TrabajosDestacados'
 import { Testimonials } from '@/components/Testimonials'
 import { AdminLogin } from '@/components/admin/AdminLogin'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { AdminDashboard } from '@/components/admin/AdminDashboard'
-// AdminProducts removed — unified into AdminProjects (Catálogo)
+import { AdminProducts } from '@/components/admin/AdminProducts'
 import { AdminProjects } from '@/components/admin/AdminProjects'
 import { AdminTestimonials } from '@/components/admin/AdminTestimonials'
 import { useAuth } from '@/lib/auth'
 import { toast } from 'sonner'
 
-type View = 'home' | 'about' | 'services' | 'gallery' | 'contact' | 'admin'
-type AdminView = 'dashboard' | 'projects' | 'testimonials'
+type View = 'home' | 'about' | 'services' | 'products' | 'gallery' | 'contact' | 'admin'
+type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials'
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home')
@@ -88,6 +89,7 @@ function App() {
           onBackToSite={() => setCurrentView('home')}
         >
           {adminView === 'dashboard' && <AdminDashboard onNavigate={(view) => setAdminView(view as AdminView)} />}
+          {adminView === 'products' && <AdminProducts />}
           {adminView === 'projects' && <AdminProjects />}
           {adminView === 'testimonials' && <AdminTestimonials />}
         </AdminLayout>
@@ -107,6 +109,7 @@ function App() {
             <PhotoShowcase />
             <Services onNavigate={handleNavigation} />
             <About />
+            <TrabajosDestacados />
             <Testimonials />
           </>
         )}
@@ -114,6 +117,12 @@ function App() {
         {currentView === 'about' && <About />}
 
         {currentView === 'services' && <Services onNavigate={handleNavigation} />}
+
+        {currentView === 'products' && (
+          <div className="pt-20">
+            <Products onNavigate={handleNavigation} />
+          </div>
+        )}
 
         {currentView === 'gallery' && (
           <div className="pt-20">

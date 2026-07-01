@@ -7,11 +7,19 @@ interface AdminDashboardProps {
 }
 
 export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
-  const { projects, testimonials } = useStore()
+  const { products, projects, testimonials } = useStore()
 
   const stats = [
     {
-      title: 'Catálogo',
+      title: 'Productos',
+      value: products?.length || 0,
+      icon: Package,
+      color: 'text-amber-600',
+      bg: 'bg-amber-50',
+      view: 'products',
+    },
+    {
+      title: 'Trabajos',
       value: projects?.length || 0,
       icon: Images,
       color: 'text-green-600',
@@ -37,7 +45,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat) => (
           <Card
             key={stat.title}
@@ -74,13 +82,24 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
           <div className="space-y-4">
             <div
               className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => onNavigate('products')}
+            >
+              <h4 className="font-semibold text-foreground mb-2">
+                🛒 Productos
+              </h4>
+              <p className="text-sm text-foreground/70">
+                Cargá los productos que el cliente puede agregar al carrito y pedir presupuesto: foto, nombre, precio y descripción.
+              </p>
+            </div>
+            <div
+              className="p-4 bg-secondary/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
               onClick={() => onNavigate('projects')}
             >
               <h4 className="font-semibold text-foreground mb-2">
-                🛋️ Catálogo de Trabajos
+                🛋️ Trabajos realizados
               </h4>
               <p className="text-sm text-foreground/70">
-                Agrega retapizados, restauraciones, piezas a medida y proyectos especiales con fotos y descripción.
+                Agregá fotos de retapizados, restauraciones y proyectos terminados para mostrar experiencia.
               </p>
             </div>
             <div

@@ -44,7 +44,7 @@ export const SERVICE_DETAILS = {
       'Amplia selección de telas premium importadas y nacionales',
       'Estructuras de madera maciza de primera calidad',
       'Espumas de alta densidad para máximo confort y durabilidad',
-      'Garantía de 5 años en estructura y mano de obra',
+      'Armazones garantidos de por vida — sin letra chica',
     ],
     filter: 'Sofás',
   },

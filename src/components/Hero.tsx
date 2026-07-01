@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { DESIGN_TOKENS } from '@/lib/constants'
+import { SafeImage } from '@/components/SafeImage'
 
 interface HeroProps {
   onNavigate: (view: string) => void
@@ -345,10 +346,11 @@ export function Hero({ onNavigate }: HeroProps) {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* -- Full background photo -- */}
       <div className="absolute inset-0">
-        <img
+        <SafeImage
           src="/fotos/sofas/sofa-esquinero-beige-ottoman-hogar.jpg"
           alt=""
           className="w-full h-full object-cover"
+          fallbackClassName="w-full h-full"
           aria-hidden="true"
         />
         {/* Dark overlay for text readability */}
@@ -382,7 +384,8 @@ export function Hero({ onNavigate }: HeroProps) {
             : `translate(${mousePosition.x * 0.15}px, ${mousePosition.y * 0.15}px)`,
         }}
       >
-        <img
+        <SafeImage
+          fallback={null}
           src="/fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg"
           alt=""
           className="absolute bottom-0 right-0 w-[500px] md:w-[700px] lg:w-[850px] opacity-20 object-cover select-none blur-[1px]"
@@ -458,9 +461,9 @@ export function Hero({ onNavigate }: HeroProps) {
             lineHeight: DESIGN_TOKENS.typography.lineHeight,
           }}
         >
-          Desde 1990, tres generaciones de la familia Calistro transforman telas y
+          Desde 1975, tres generaciones de la familia Calistro transforman telas y
           espumas en piezas que cuentan historias. Retapizados, restauraciones y
-          creaciones a medida en Montevideo.
+          creaciones a medida en Montevideo. Armazones garantidos de por vida.
         </motion.p>
 
         {/* CTA buttons */}
@@ -500,8 +503,8 @@ export function Hero({ onNavigate }: HeroProps) {
           transition={{ duration: dur(0.4), delay: del(0.4), ease: 'easeOut' }}
           className="mt-10 mb-16 flex items-center justify-center divide-x divide-[#C97A4033]"
         >
-          <TrustBadge value="30+" label="Años" />
-          <TrustBadge value="1000+" label="Muebles" />
+          <TrustBadge value="50+" label="Años" />
+          <TrustBadge value="50.000+" label="Muebles" />
           <TrustBadge value="100%" label="Artesanal" />
         </motion.div>
       </div>

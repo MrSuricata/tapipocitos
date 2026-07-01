@@ -274,7 +274,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               className="text-4xl md:text-5xl font-bold mb-4"
               style={{ color: DESIGN_TOKENS.colors.title }}
             >
-              Nuestro Catálogo
+              Trabajos Realizados
             </h2>
             <p
               className="text-lg max-w-2xl mx-auto mb-8"

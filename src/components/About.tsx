@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Card } from '@/components/ui/card'
+import { SafeImage } from '@/components/SafeImage'
 import {
   CheckCircle,
   Seal,
@@ -8,8 +9,22 @@ import {
   ChatCircle,
   Diamond,
   ShieldCheck,
+  Buildings,
+  Clock,
 } from '@phosphor-icons/react'
 import { DESIGN_TOKENS } from '@/lib/constants'
+
+// Proyectos y clientes destacados (trayectoria real de TAPIPOCITOS).
+const GRANDES_PROYECTOS = [
+  { name: 'Torre Yoo', place: 'Punta del Este' },
+  { name: 'Bodega Garzón', place: 'Maldonado' },
+  { name: 'Centro Cultural Calvin', place: 'Maldonado' },
+  { name: 'Hotel del Prado', place: 'Montevideo' },
+  { name: 'Hotel Anastasio', place: 'José Ignacio' },
+  { name: 'Montevideo Shopping', place: 'Montevideo' },
+  { name: 'Zonamérica', place: 'Montevideo' },
+  { name: 'Estudios de decoración y arquitectura', place: '' },
+]
 
 function NeedleThreadOrnament() {
   return (
@@ -113,7 +128,7 @@ export function About() {
     {
       icon: Users,
       title: 'Tradición de 3 generaciones',
-      description: 'Desde 1990, la familia Calistro ha transmitido el oficio de padres a hijos con orgullo.',
+      description: 'Desde 1975, la familia Calistro ha transmitido el oficio de padres a hijos con orgullo.',
     },
     {
       icon: Scissors,
@@ -132,41 +147,36 @@ export function About() {
     },
     {
       icon: ShieldCheck,
-      title: 'Garantía de satisfacción',
-      description: 'No descansamos hasta que estés 100% conforme con el resultado final de tu mueble.',
+      title: 'Armazones garantidos de por vida',
+      description: 'Confiamos tanto en nuestras estructuras de madera que las garantizamos de por vida. Sin letra chica.',
     },
   ]
 
   const timeline = [
     {
-      year: 'Orígenes',
+      year: '1975',
       event:
-        'Pablo Calistro trabaja en distintas tapicerías de Montevideo, aprendiendo el oficio desde adentro. Acumula años de experiencia antes de dar el salto.',
+        'Pablo Calistro abre el primer taller TAPIPOCITOS en Gestido y Obligado, en plena Pocitos. Empieza tapizando solo, con las técnicas aprendidas en años de oficio.',
     },
     {
       year: '1990',
       event:
-        'Pablo y su esposa Maris Ferreira abren TAPIPOCITOS. Un taller propio donde Pablo tapiza y Maris se encarga de las costuras: fundas, moldes, almohadones.',
-    },
-    {
-      year: '2000',
-      event:
-        'Rosana Calistro, hija de Pablo, se suma al taller dedicándose a trabajos en madera, lustre y artesanía manual en muebles de estilo, remodelación y reconstrucción.',
+        'Se incorpora Leonardo Marinolli al taller. Aprende junto a Pablo la tapicería y empieza a manejar la organización, los presupuestos y las visitas a clientes.',
     },
     {
       year: '2010',
       event:
-        'Leonardo Marinolli, esposo de Rosana, se incorpora trabajando junto a Pablo en la tapicería y la organización del taller. Comienza a tomar las riendas.',
+        'Se suma Rosana Calistro, hija de Pablo y esposa de Leonardo, dedicándose a trabajos en madera, lustre y restauración artesanal de muebles de estilo.',
     },
     {
-      year: '2015',
+      year: 'Mudanzas',
       event:
-        'Se suman Diego y Marcelo al taller. Mariela Calistro aporta trabajos en cuero con material reciclado de la tapicería. Johnny, Brian y Leandro también contribuyen en distintos proyectos.',
+        'Durante décadas el taller se mudó varias veces, siempre dentro de Pocitos — de ahí el nombre TAPIPOCITOS. La familia y el barrio fueron parte de la identidad.',
     },
     {
       year: 'Hoy',
       event:
-        'Leonardo dirige TAPIPOCITOS. Tres generaciones, una misma pasión. Toda la familia Calistro-Marinolli sigue dejando su marca en cada mueble que pasa por el taller.',
+        'Después de muchos años en Pocitos compraron una casa en Malvín Norte y la convirtieron en taller. Leonardo dirige TAPIPOCITOS con la misma dedicación de siempre.',
     },
   ]
 
@@ -199,7 +209,7 @@ export function About() {
               lineHeight: DESIGN_TOKENS.typography.lineHeight,
             }}
           >
-            Tres décadas de tradición familiar en el arte de la tapicería
+            Más de cinco décadas de tradición familiar en el arte de la tapicería
           </p>
         </motion.div>
 
@@ -227,24 +237,27 @@ export function About() {
               }}
             >
               <p>
-                Todo comenzó cuando Pablo Calistro, después de años trabajando en
-                distintas tapicerías de Montevideo, decidió abrir su propio taller
-                en 1990 junto a su esposa Maris Ferreira. Pablo se dedicó a lo que
-                mejor sabía hacer — tapizar — mientras Maris se encargaba de las
-                costuras: fundas, moldes, almohadones. Así nació TAPIPOCITOS.
+                Todo empezó en 1975, cuando Pablo Calistro abrió su primer taller
+                en Gestido y Obligado, en plena Pocitos. Más de 50.000 muebles
+                después, TAPIPOCITOS sigue siendo una historia de familia, oficio
+                y barrio.
               </p>
               <p>
-                Hoy el taller lo dirige Leonardo Marinolli, esposo de Rosana
-                Calistro. Leonardo corta, mide, presupuesta y visita los trabajos.
-                Pablo sigue activo, participando en lo que puede, y Maris continúa
-                con algunas costuras. El equipo lo completan Marcelo y Diego, que
-                tapizan, cortan, rellenan — hacen de todo. Los trabajos de madera
-                y armazones se delegan a un carpintero de confianza.
+                En 1990 se incorporó Leonardo Marinolli, que aprendió junto a
+                Pablo y hoy dirige el taller. En 2010 se sumó Rosana Calistro
+                — hija de Pablo y esposa de Leonardo — con su trabajo en madera,
+                lustre y restauración artesanal. Tres generaciones trabajando
+                codo a codo.
+              </p>
+              <p>
+                Después de muchos años de mudanzas siempre dentro de Pocitos,
+                compraron una casa en Malvín Norte y la convirtieron en taller.
+                Es el lugar donde funcionan hoy — más espacio, la misma esencia.
               </p>
               <p className="italic border-l-4 border-accent pl-4 py-1">
-                No somos una fábrica. Somos una familia — abuelos, hijos, yernos,
-                nietos — que tapiza con amor. Cuando traés tu mueble al taller, lo
-                tratamos como si fuera nuestro. Tres generaciones, una misma pasión.
+                No somos una fábrica. Somos una familia que tapiza con amor.
+                Cuando traés tu mueble al taller, lo tratamos como si fuera
+                nuestro. Tres generaciones, una misma pasión.
               </p>
             </div>
 
@@ -252,7 +265,7 @@ export function About() {
             <div className="grid grid-cols-2 gap-3 mt-8">
               <div className="space-y-3">
                 <div className="rounded-xl overflow-hidden shadow-md">
-                  <img
+                  <SafeImage
                     src="/fotos/familia/pablo-calistro-con-hijas.jpg"
                     alt="Pablo Calistro con sus hijas Rosana y Mariela"
                     className="w-full h-56 sm:h-64 object-cover hover:scale-105 transition-transform duration-500"
@@ -260,7 +273,7 @@ export function About() {
                   />
                 </div>
                 <div className="rounded-xl overflow-hidden shadow-md">
-                  <img
+                  <SafeImage
                     src="/fotos/familia/pablo-y-esposa-retrato.jpg"
                     alt="Pablo Calistro y Maris Ferreira, fundadores de TAPIPOCITOS"
                     className="w-full h-44 sm:h-52 object-cover hover:scale-105 transition-transform duration-500"
@@ -271,7 +284,7 @@ export function About() {
               </div>
               <div className="space-y-3">
                 <div className="rounded-xl overflow-hidden shadow-md">
-                  <img
+                  <SafeImage
                     src="/fotos/familia/leonardo-marinolli-cumpleanos.jpg"
                     alt="Leonardo Marinolli, director actual de TAPIPOCITOS"
                     className="w-full h-44 sm:h-52 object-cover hover:scale-105 transition-transform duration-500"
@@ -279,7 +292,7 @@ export function About() {
                   />
                 </div>
                 <div className="rounded-xl overflow-hidden shadow-md">
-                  <img
+                  <SafeImage
                     src="/fotos/familia/familia-grupo-jardin.jpg"
                     alt="La familia Calistro-Marinolli completa"
                     className="w-full h-56 sm:h-64 object-cover hover:scale-105 transition-transform duration-500"
@@ -347,6 +360,76 @@ export function About() {
             </div>
           </motion.div>
         </div>
+
+        {/* Grandes proyectos / clientes destacados */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3 }}
+          className="mb-20"
+        >
+          <div className="text-center mb-8">
+            <h3
+              className="text-3xl font-semibold"
+              style={{ color: DESIGN_TOKENS.colors.title }}
+            >
+              Grandes proyectos
+            </h3>
+            <p
+              className="text-base max-w-2xl mx-auto mt-3"
+              style={{
+                color: DESIGN_TOKENS.colors.description,
+                lineHeight: DESIGN_TOKENS.typography.lineHeight,
+              }}
+            >
+              Más de 50.000 muebles a lo largo de los años, incluyendo trabajos para
+              algunos de los espacios más exigentes del país.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-5xl mx-auto">
+            {GRANDES_PROYECTOS.map((p, index) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: DESIGN_TOKENS.animations.duration.fast / 1000,
+                  delay: index * 0.04,
+                }}
+                className="flex items-center gap-3 p-4 rounded-xl bg-card/70 border border-border/60 hover:border-accent/40 hover:shadow-md transition-all"
+              >
+                <Buildings size={22} weight="duotone" className="text-accent flex-shrink-0" />
+                <div className="min-w-0">
+                  <p
+                    className="text-sm font-semibold leading-tight"
+                    style={{ color: DESIGN_TOKENS.colors.title }}
+                  >
+                    {p.name}
+                  </p>
+                  {p.place && (
+                    <p className="text-xs text-muted-foreground">{p.place}</p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Puntualidad inglesa */}
+          <div className="mt-8 flex justify-center">
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-accent/10 border border-accent/20">
+              <Clock size={18} weight="duotone" className="text-accent flex-shrink-0" />
+              <span
+                className="text-sm font-medium"
+                style={{ color: DESIGN_TOKENS.colors.title }}
+              >
+                Puntualidad inglesa: la fecha que damos, la cumplimos.
+              </span>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Values grid - 3 columns */}
         <motion.div

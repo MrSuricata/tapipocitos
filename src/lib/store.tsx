@@ -47,17 +47,64 @@ async function fetchFromSupabase<T>(table: string): Promise<T[] | null> {
 // ── Fallback demo data ──────────────────────────────────
 
 const FALLBACK_PRODUCTS: Product[] = [
-  { id: 'demo-1', name: 'Sofá Montevideo 3 cuerpos', description: 'Sofá de 3 cuerpos con estructura de pino reforzado, espuma de alta densidad y tapizado en tela chenille.', material: 'Chenille importado', color: 'Marrón claro', dimensions: '220 x 90 x 85 cm', price: 'Consultar', images: ['/fotos/sofas/sofa-esquinero-gris-taller.jpg'], category: 'Sofás', featured: false, created_at: '' },
-  { id: 'demo-2', name: 'Sillón individual Carrasco', description: 'Sillón individual con respaldo alto y apoyabrazos curvos. Espuma soft de 30kg.', material: 'Pana premium', color: 'Verde oscuro', dimensions: '85 x 80 x 100 cm', price: 'Consultar', images: ['/fotos/sofas/sofa-dos-cuerpos-verde-base-madera.jpg'], category: 'Sillones', featured: false, created_at: '' },
+  { id: 'demo-1', name: 'Sofá Montevideo 3 cuerpos', description: 'Sofá de 3 cuerpos con estructura de pino reforzado, espuma de alta densidad y tapizado en tela chenille.', material: 'Chenille importado', color: 'Marrón claro', dimensions: '220 x 90 x 85 cm', price: 'Consultar', images: [], category: 'Sofás', featured: false, created_at: '' },
+  { id: 'demo-2', name: 'Sillón individual Carrasco', description: 'Sillón individual con respaldo alto y apoyabrazos curvos. Espuma soft de 30kg.', material: 'Pana premium', color: 'Verde oscuro', dimensions: '85 x 80 x 100 cm', price: 'Consultar', images: [], category: 'Sillones', featured: false, created_at: '' },
 ]
 
 const FALLBACK_PROJECTS: Project[] = [
-  { id: 'demo-1', title: 'Sofá Chesterfield 3 cuerpos', description: 'Retapizado completo de sofá Chesterfield clásico en cuero vacuno marrón oscuro.', category: 'Sofás', images: ['/fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg'], materials: ['Cuero vacuno', 'Espuma alta densidad'], client: 'Familia Pereira', completed_date: 'Enero 2024', featured: false, created_at: '' },
+  { id: 'demo-1', title: 'Sofá Chesterfield 3 cuerpos', description: 'Retapizado completo de sofá Chesterfield clásico en cuero vacuno marrón oscuro.', category: 'Sofás', images: [], materials: ['Cuero vacuno', 'Espuma alta densidad'], client: 'Familia Pereira', completed_date: 'Enero 2024', featured: false, created_at: '' },
 ]
 
 const FALLBACK_TESTIMONIALS: Testimonial[] = [
-  { id: 'demo-1', name: 'María Rodríguez', text: 'Llevamos el sofá de mi abuela que tenía más de 40 años. Lo devolvieron como nuevo.', date: 'Enero 2024', rating: 5 },
+  { id: 'demo-1', name: 'María Rodríguez', text: 'Llevamos el sofá de mi abuela que tenía más de 40 años. Lo devolvieron como nuevo, respetando el diseño original. Un trabajo impecable.', date: 'Enero 2024', rating: 5 },
+  { id: 'demo-2', name: 'Estudio de Arquitectura', text: 'Trabajamos con TAPIPOCITOS en varios proyectos hoteleros y residenciales. Tienen puntualidad inglesa — la fecha que dan, la cumplen. Eso vale oro.', date: 'Marzo 2024', rating: 5 },
+  { id: 'demo-3', name: 'Laura Fernández', text: 'Pedí un sillón a medida y quedó exactamente como lo imaginaba. La atención de Leonardo y la calidad del armazón — garantido de por vida — hacen toda la diferencia.', date: 'Noviembre 2023', rating: 5 },
 ]
+
+// ── Image optimization ──────────────────────────────────
+// Downscale + re-encode images client-side before upload so they stay well
+// under the serverless request-size limit and load fast on the site.
+
+function readAsDataURL(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
+}
+
+async function fileToOptimizedDataUrl(file: File, maxDim = 1600, quality = 0.85): Promise<string> {
+  // Leave non-raster images (e.g. SVG) untouched.
+  if (!file.type.startsWith('image/') || file.type === 'image/svg+xml') {
+    return readAsDataURL(file)
+  }
+  const dataUrl = await readAsDataURL(file)
+  try {
+    const img = await loadImage(dataUrl)
+    const scale = Math.min(1, maxDim / Math.max(img.width, img.height))
+    // Small enough already — keep original.
+    if (scale >= 1 && file.size < 1_200_000) return dataUrl
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.max(1, Math.round(img.width * scale))
+    canvas.height = Math.max(1, Math.round(img.height * scale))
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return dataUrl
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+    return canvas.toDataURL('image/jpeg', quality)
+  } catch {
+    return dataUrl
+  }
+}
 
 // ── Store context ──────────────────────────────────────
 
@@ -158,11 +205,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // ── Image upload ──
   const uploadImage = async (file: File): Promise<string | null> => {
     try {
-      const reader = new FileReader()
-      const base64 = await new Promise<string>((resolve) => {
-        reader.onload = () => resolve(reader.result as string)
-        reader.readAsDataURL(file)
-      })
+      const base64 = await fileToOptimizedDataUrl(file)
       const res = await fetch(`${API_BASE}/api/upload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -170,7 +213,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       })
       if (!res.ok) return null
       const data = await res.json()
-      return data.url
+      return data.url ?? null
     } catch {
       return null
     }

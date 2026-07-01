@@ -16,6 +16,7 @@ interface ContactProps {
     productId?: string
     projectId?: string
     service?: string
+    message?: string
   }
 }
 
@@ -89,14 +90,18 @@ export function Contact({ prefilledData }: ContactProps) {
     email: '',
     phone: '',
     subject: prefilledData?.subject || '',
-    message: '',
+    message: prefilledData?.message || '',
   })
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    if (prefilledData?.subject) {
-      setFormData((prev) => ({ ...prev, subject: prefilledData.subject || '' }))
+    if (prefilledData?.subject || prefilledData?.message) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: prefilledData.subject || prev.subject,
+        message: prefilledData.message || prev.message,
+      }))
     }
   }, [prefilledData])
 
