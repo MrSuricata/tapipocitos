@@ -55,7 +55,7 @@ export function AdminLayout({
   ]
 
   return (
-    <div className="min-h-screen relative bg-[#F5F0EB]">
+    <div className="admin-ui min-h-screen relative bg-[#F5F0EB]">
       <BackgroundDecor variant="sand" />
 
       <div className="relative z-10">

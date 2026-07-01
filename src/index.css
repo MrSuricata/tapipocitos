@@ -468,6 +468,21 @@ html {
   .cta-primary:hover { transform: none; }
 }
 
+/* Admin panel uses a modern geometric sans (Poppins) instead of the serif */
+.admin-ui {
+  font-family: 'Poppins', 'Inter', sans-serif;
+}
+.admin-ui h1,
+.admin-ui h2,
+.admin-ui h3,
+.admin-ui h4,
+.admin-ui h5,
+.admin-ui h6,
+.admin-ui button,
+.admin-ui .button-text {
+  font-family: 'Poppins', 'Inter', sans-serif;
+}
+
 /* Floating gradient orbs (soft background fillers) */
 .bg-orb {
   position: absolute;
