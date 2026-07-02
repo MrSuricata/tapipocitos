@@ -13,7 +13,13 @@ _Última actualización: 2026-07-02._
 ## PWA + Agenda (2026-07-02, segunda tanda)
 - **PWA instalable**: `public/manifest.webmanifest` (iconos en `public/icons/`, shortcut a /admin), `public/sw.js` (NUNCA cachea `/api/` ni `/_vercel/`; navegación network-first con shell offline; estáticos cache-first), registro solo en producción (guard por hostname en index.html). Iconos se regeneran con `node scripts/generate-icons.mjs` (sharp, devDep).
 - **Agenda del taller** (admin): `AdminAgenda.tsx` — calendario mensual custom (sin libs de fechas), alta rápida con tipos (llamar/retirar/entregar/cotizar/otro), vencidos en rojo, próximos, marcar hecho, links tel:/WhatsApp. Backend `api/agenda.ts` → `agendaHandler` (TODOS los métodos requieren header `x-admin-password`). Tabla `agenda` agregada a `supabase/setup.sql` (RLS sin políticas públicas).
-- Tabla `agenda` **creada por el usuario el 2026-07-02** (corrió setup.sql). CRUD completo verificado contra prod: GET 200, POST 201, PUT 200, DELETE 200. No queda nada pendiente.
+- Tabla `agenda` **creada por el usuario el 2026-07-02** (corrió setup.sql). CRUD completo verificado contra prod: GET 200, POST 201, PUT 200, DELETE 200.
+
+## Notificaciones push de la agenda (2026-07-02, tercera tanda)
+- **Arquitectura**: el admin se suscribe desde el botón "Activar avisos" en Agenda → la suscripción va a la tabla `push_subscriptions`. Las claves VAPID se **auto-generan** la primera vez que se llama GET /api/push y quedan en `push_config` (no hay env vars nuevas). Un workflow de GitHub Actions (`.github/workflows/notify.yml`, cada 10 min) llama POST /api/notify-due con header `x-admin-password`, que busca recordatorios `done=false, notified=false` vencidos según hora de Montevideo (con hora: cuando llega; sin hora: a las 08:00), manda el push a todos los dispositivos, borra suscripciones muertas (404/410) y marca `notified=true`.
+- **iOS**: requiere iOS 16.4+ y la app INSTALADA (Add to Home Screen); el botón detecta iOS sin instalar y lo explica con un toast.
+- **PENDIENTES DEL USUARIO**: (1) re-correr `supabase/setup.sql` (agrega columna `notified` + tablas push) — sin esto /api/push y /api/notify-due dan 500; (2) crear el secret **NOTIFY_ADMIN_PASSWORD** (= ADMIN_PASSWORD) en GitHub → repo tapipocitos → Settings → Secrets and variables → Actions — sin esto el cron corre pero recibe 401; (3) activar avisos desde el dispositivo (botón en Agenda).
+- El cron de GH Actions en repos con schedule se desactiva tras 60 días sin actividad del repo — con commits regulares no pasa.
 
 ## Estado actual — TODO LIVE ✅
 Sitio en producción: **https://tapipocitos.vercel.app** — admin en **/admin** (pass `tapipocitos2024`).
