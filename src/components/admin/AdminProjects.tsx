@@ -256,20 +256,25 @@ export function AdminProjects() {
                   <span className="text-xs text-muted-foreground">
                     {project.client || 'Sin cliente'}
                   </span>
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleOpenDialog(project) }}
-                      className="p-1.5 rounded-md hover:bg-muted transition-colors"
-                    >
-                      <Pencil size={14} className="text-muted-foreground" />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDelete(project.id) }}
-                      className="p-1.5 rounded-md hover:bg-red-50 transition-colors"
-                    >
-                      <Trash size={14} className="text-red-400" />
-                    </button>
-                  </div>
+                </div>
+                {/* Acciones siempre visibles en touch; en desktop aparecen al pasar el mouse */}
+                <div className="flex gap-2 mt-3 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 rounded-full h-8 text-xs gap-1.5"
+                    onClick={(e) => { e.stopPropagation(); handleOpenDialog(project) }}
+                  >
+                    <Pencil size={13} /> Editar
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full h-8 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 gap-1.5"
+                    onClick={(e) => { e.stopPropagation(); handleDelete(project.id) }}
+                  >
+                    <Trash size={13} />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -304,11 +309,11 @@ export function AdminProjects() {
             </div>
           </div>
 
-          {/* Modal body */}
+          {/* Modal body — en mobile la foto va PRIMERO (orden natural: sacás la foto y completás) */}
           <div className="overflow-y-auto max-h-[calc(95vh-130px)]">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px]">
               {/* Left: Form */}
-              <div className="p-8 space-y-6">
+              <div className="p-5 sm:p-8 space-y-6 order-2 lg:order-1">
                 {/* Título */}
                 <div>
                   <Input
@@ -445,8 +450,8 @@ export function AdminProjects() {
                 </div>
               </div>
 
-              {/* Right: Image upload */}
-              <div className="border-l bg-muted/20 p-8">
+              {/* Right: Image upload (arriba en mobile) */}
+              <div className="lg:border-l bg-muted/20 p-5 sm:p-8 order-1 lg:order-2">
                 <Label className="text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
                   <ImageIcon size={13} /> Foto del trabajo
                 </Label>
@@ -527,7 +532,7 @@ export function AdminProjects() {
             <Button
               onClick={handleSave}
               disabled={saving || uploading || !formData.title}
-              className="bg-[#2C1810] hover:bg-[#3D2419] text-white rounded-full px-8 gap-2 shadow-md min-w-[160px]"
+              className="bg-[#2C1810] hover:bg-[#3D2419] text-white rounded-full px-8 gap-2 shadow-md flex-1 sm:flex-none sm:min-w-[160px]"
             >
               {saving ? (
                 <>

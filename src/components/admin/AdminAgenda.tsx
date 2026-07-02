@@ -359,6 +359,51 @@ export function AdminAgenda() {
         </Card>
       )}
 
+      {/* Vencidos: lo urgente primero */}
+      {overdue.length > 0 && (
+        <Card className="border-red-200/70 bg-red-50/50">
+          <CardContent className="pt-4 pb-4 space-y-2">
+            <p className="text-sm font-semibold text-red-700 flex items-center gap-1.5">
+              <Warning size={16} weight="fill" /> Vencidos
+            </p>
+            {overdue.map((item) => (
+              <div key={item.id}>
+                <p className="text-[11px] text-red-600/80 font-medium mb-1">{formatKey(item.date)}</p>
+                <AgendaRow item={item} onToggle={handleToggle} onDelete={handleDelete} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* El día, primero: lo que hay que hacer HOY (o el día elegido en el calendario) */}
+      <Card className="glass border-white/50">
+        <CardContent className="pt-5 pb-5">
+          <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-2">
+            <CalendarBlank size={16} />
+            {selectedKey === today ? 'Hoy' : formatKey(selectedKey)}
+            {dayItems.length > 0 && (
+              <span className="ml-1 text-[11px] font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-full">
+                {dayItems.filter((i) => !i.done).length} pendiente{dayItems.filter((i) => !i.done).length !== 1 ? 's' : ''}
+              </span>
+            )}
+          </h3>
+          {loading ? (
+            <p className="text-sm text-muted-foreground">Cargando…</p>
+          ) : dayItems.length === 0 ? (
+            <p className="text-sm text-muted-foreground/70">
+              Nada agendado para este día. Agregá algo abajo. 👇
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {dayItems.map((item) => (
+                <AgendaRow key={item.id} item={item} onToggle={handleToggle} onDelete={handleDelete} />
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Alta rápida */}
       <Card className="glass border-white/50">
         <CardContent className="pt-5 pb-5 space-y-3">
@@ -431,24 +476,7 @@ export function AdminAgenda() {
         </CardContent>
       </Card>
 
-      {/* Vencidos */}
-      {overdue.length > 0 && (
-        <Card className="border-red-200/70 bg-red-50/50">
-          <CardContent className="pt-4 pb-4 space-y-2">
-            <p className="text-sm font-semibold text-red-700 flex items-center gap-1.5">
-              <Warning size={16} weight="fill" /> Vencidos
-            </p>
-            {overdue.map((item) => (
-              <div key={item.id}>
-                <p className="text-[11px] text-red-600/80 font-medium mb-1">{formatKey(item.date)}</p>
-                <AgendaRow item={item} onToggle={handleToggle} onDelete={handleDelete} />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Calendario + día seleccionado */}
+      {/* Calendario + próximos */}
       <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5 items-start">
         <Card className="glass border-white/50">
           <CardContent className="pt-5 pb-5">
@@ -530,27 +558,6 @@ export function AdminAgenda() {
         </Card>
 
         <div className="space-y-5">
-          {/* Día seleccionado */}
-          <Card className="glass border-white/50">
-            <CardContent className="pt-5 pb-5">
-              <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-2">
-                <CalendarBlank size={16} />
-                {selectedKey === today ? 'Hoy' : formatKey(selectedKey)}
-              </h3>
-              {loading ? (
-                <p className="text-sm text-muted-foreground">Cargando…</p>
-              ) : dayItems.length === 0 ? (
-                <p className="text-sm text-muted-foreground/70">Nada agendado para este día.</p>
-              ) : (
-                <div className="space-y-2">
-                  {dayItems.map((item) => (
-                    <AgendaRow key={item.id} item={item} onToggle={handleToggle} onDelete={handleDelete} />
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
           {/* Próximos */}
           <Card className="glass border-white/50">
             <CardContent className="pt-5 pb-5">

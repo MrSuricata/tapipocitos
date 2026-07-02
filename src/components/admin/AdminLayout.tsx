@@ -50,12 +50,12 @@ export function AdminLayout({
   onBackToSite,
 }: AdminLayoutProps) {
   const menuItems = [
+    { id: 'agenda', label: 'Agenda', icon: CalendarDots },
     { id: 'dashboard', label: 'Dashboard', icon: SquaresFour },
     { id: 'products', label: 'Productos', icon: Package },
     { id: 'projects', label: 'Trabajos', icon: Images },
     { id: 'testimonials', label: 'Testimonios', icon: Sparkle },
     { id: 'leads', label: 'Consultas', icon: ChatCircleDots },
-    { id: 'agenda', label: 'Agenda', icon: CalendarDots },
   ]
 
   return (

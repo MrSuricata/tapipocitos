@@ -32,7 +32,8 @@ type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials' | 'leads
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home')
-  const [adminView, setAdminView] = useState<AdminView>('dashboard')
+  // La agenda es la pantalla de entrada del admin: el día organizado de una.
+  const [adminView, setAdminView] = useState<AdminView>('agenda')
   const [galleryFilter, setGalleryFilter] = useState<string | undefined>()
   const [contactData, setContactData] = useState<any>()
   const { login, logout, isAuthenticated } = useAuth()
