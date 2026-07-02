@@ -1,6 +1,14 @@
 # Handoff — Tapipocitos (para próxima sesión)
 
-_Última actualización: 2026-07-01._
+_Última actualización: 2026-07-02._
+
+## Rediseño atelier cinematográfico (2026-07-02)
+- **Hero nuevo**: foto real del Chesterfield en retapizado a pantalla completa, gradientes espresso, viñeta, grano de película (`.film-grain`), Ken Burns (`.hero-kenburns`), tipografía editorial alineada a la izquierda (Playfair 800), etiqueta lateral vertical, stats sobre línea inferior. Sin tijeras/agujas flotantes.
+- **Navbar adaptativo**: claro (crema) sobre el hero oscuro de la home, glass blanco al scrollear (flag `onDark` en Navbar.tsx).
+- **Marquee** (`src/components/Marquee.tsx`): cinta tipográfica serif infinita entre PhotoShowcase y Services.
+- **Testimonios**: sección oscura inmersiva con `leather-texture.jpg` de fondo, cards `glass-dark`, citas en serif crema.
+- **Fix importante**: `.warm-mesh` ahora tiene `overflow:hidden` — su `::before` (inset -25%) causaba overflow horizontal y zoom-out en mobile (bug que estaba en prod).
+- Consulta de prueba "PRUEBA (borrala)" **ya borrada** de prod vía DELETE /api/leads.
 
 ## Estado actual — TODO LIVE ✅
 Sitio en producción: **https://tapipocitos.vercel.app** — admin en **/admin** (pass `tapipocitos2024`).
