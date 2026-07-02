@@ -13,7 +13,7 @@ _Última actualización: 2026-07-02._
 ## PWA + Agenda (2026-07-02, segunda tanda)
 - **PWA instalable**: `public/manifest.webmanifest` (iconos en `public/icons/`, shortcut a /admin), `public/sw.js` (NUNCA cachea `/api/` ni `/_vercel/`; navegación network-first con shell offline; estáticos cache-first), registro solo en producción (guard por hostname en index.html). Iconos se regeneran con `node scripts/generate-icons.mjs` (sharp, devDep).
 - **Agenda del taller** (admin): `AdminAgenda.tsx` — calendario mensual custom (sin libs de fechas), alta rápida con tipos (llamar/retirar/entregar/cotizar/otro), vencidos en rojo, próximos, marcar hecho, links tel:/WhatsApp. Backend `api/agenda.ts` → `agendaHandler` (TODOS los métodos requieren header `x-admin-password`). Tabla `agenda` agregada a `supabase/setup.sql` (RLS sin políticas públicas).
-- **PENDIENTE DEL USUARIO**: re-correr `supabase/setup.sql` (idempotente) en el SQL Editor del dashboard para crear la tabla `agenda`. Hasta entonces la sección Agenda muestra una tarjeta de error con esa instrucción.
+- Tabla `agenda` **creada por el usuario el 2026-07-02** (corrió setup.sql). CRUD completo verificado contra prod: GET 200, POST 201, PUT 200, DELETE 200. No queda nada pendiente.
 
 ## Estado actual — TODO LIVE ✅
 Sitio en producción: **https://tapipocitos.vercel.app** — admin en **/admin** (pass `tapipocitos2024`).
