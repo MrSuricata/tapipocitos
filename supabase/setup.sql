@@ -74,6 +74,24 @@ create table if not exists public.agenda (
   created_at  timestamptz default now()
 );
 
+-- ---------- NOTIFICACIONES PUSH (privado: suscripciones + claves VAPID) ----------
+alter table public.agenda add column if not exists notified boolean default false;
+
+create table if not exists public.push_subscriptions (
+  id            uuid primary key default gen_random_uuid(),
+  endpoint      text unique not null,
+  subscription  jsonb not null,
+  created_at    timestamptz default now()
+);
+
+-- Claves VAPID auto-generadas por /api/push la primera vez (fila única id=1).
+create table if not exists public.push_config (
+  id             int primary key default 1,
+  vapid_public   text not null,
+  vapid_private  text not null,
+  created_at     timestamptz default now()
+);
+
 -- ---------- RLS: lectura pública, escritura solo service_role ----------
 -- El service_role (usado por las funciones /api) OMITE RLS, así que sólo
 -- habilitamos la LECTURA anónima. No creamos políticas de escritura pública
@@ -84,6 +102,8 @@ alter table public.testimonials enable row level security;
 -- leads y agenda NO tienen políticas públicas a propósito: solo el backend (service_role) puede leer/escribir.
 alter table public.leads        enable row level security;
 alter table public.agenda      enable row level security;
+alter table public.push_subscriptions enable row level security;
+alter table public.push_config       enable row level security;
 
 drop policy if exists "public read products" on public.products;
 create policy "public read products" on public.products for select using (true);

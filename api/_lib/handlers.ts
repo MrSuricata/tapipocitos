@@ -17,7 +17,7 @@ export function isValidTable(name: string): name is TableName {
 
 let cachedClient: SupabaseClient | null = null
 
-function getAdminClient(env: Env): SupabaseClient {
+export function getAdminClient(env: Env): SupabaseClient {
   const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL
   const key = env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) {

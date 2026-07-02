@@ -18,6 +18,8 @@ import {
   CalendarBlank,
   CheckCircle,
   Circle,
+  Bell,
+  BellRinging,
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -27,6 +29,7 @@ import {
   updateAgendaItem,
   deleteAgendaItem,
 } from '@/lib/agenda'
+import { pushSupport, getPushSubscription, enablePush, disablePush } from '@/lib/push'
 import type { AgendaItem, AgendaType } from '@/lib/types'
 
 /* ---------- Tipos de recordatorio ---------- */
@@ -160,6 +163,7 @@ export function AdminAgenda() {
   const [loadError, setLoadError] = useState(false)
   const [cursor, setCursor] = useState(() => new Date())
   const [selectedKey, setSelectedKey] = useState(todayKey)
+  const [pushState, setPushState] = useState<'unsupported' | 'ios-needs-install' | 'off' | 'on' | 'working'>('off')
 
   // Alta rápida
   const [title, setTitle] = useState('')
@@ -185,7 +189,41 @@ export function AdminAgenda() {
 
   useEffect(() => {
     load()
+    // Estado inicial del botón de notificaciones.
+    const support = pushSupport()
+    if (support !== 'off') {
+      setPushState(support)
+    } else {
+      getPushSubscription().then((sub) => setPushState(sub ? 'on' : 'off'))
+    }
   }, [])
+
+  const handlePushToggle = async () => {
+    if (pushState === 'ios-needs-install') {
+      toast.info('En iPhone: primero instalá la app (Compartir → Agregar a pantalla de inicio) y activá las notificaciones desde la app instalada.')
+      return
+    }
+    if (pushState === 'unsupported') {
+      toast.error('Este navegador no soporta notificaciones push.')
+      return
+    }
+    if (pushState === 'on') {
+      setPushState('working')
+      await disablePush()
+      setPushState('off')
+      toast.success('Notificaciones desactivadas en este dispositivo')
+      return
+    }
+    setPushState('working')
+    const result = await enablePush()
+    if (result.ok) {
+      setPushState('on')
+      toast.success('¡Notificaciones activadas! Los recordatorios van a llegar a este dispositivo.')
+    } else {
+      setPushState('off')
+      toast.error(`No se pudo activar: ${result.reason}`)
+    }
+  }
 
   const sortKey = (i: AgendaItem) => `${i.date} ${i.time || '99:99'}`
   const byDay = useMemo(() => {
@@ -276,10 +314,33 @@ export function AdminAgenda() {
             )}
           </p>
         </div>
-        <Button variant="outline" onClick={load} className="rounded-full bg-white/60 backdrop-blur-md">
-          <ArrowClockwise size={16} className="mr-2" />
-          Actualizar
-        </Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button
+            variant={pushState === 'on' ? 'default' : 'outline'}
+            onClick={handlePushToggle}
+            disabled={pushState === 'working'}
+            className={cn(
+              'rounded-full',
+              pushState !== 'on' && 'bg-white/60 backdrop-blur-md'
+            )}
+            title={
+              pushState === 'on'
+                ? 'Este dispositivo recibe avisos de la agenda'
+                : 'Activar avisos de la agenda en este dispositivo'
+            }
+          >
+            {pushState === 'on' ? (
+              <BellRinging size={16} weight="fill" className="mr-2" />
+            ) : (
+              <Bell size={16} className="mr-2" />
+            )}
+            {pushState === 'on' ? 'Avisos activados' : pushState === 'working' ? 'Un momento…' : 'Activar avisos'}
+          </Button>
+          <Button variant="outline" onClick={load} className="rounded-full bg-white/60 backdrop-blur-md">
+            <ArrowClockwise size={16} className="mr-2" />
+            Actualizar
+          </Button>
+        </div>
       </div>
 
       {loadError && (

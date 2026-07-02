@@ -1,0 +1,22 @@
+# Dispara los avisos push de la agenda: cada ~10 minutos le pega a
+# /api/notify-due, que manda notificaciones de los recordatorios vencidos
+# a los dispositivos suscriptos y los marca como notificados.
+#
+# Requiere el secret NOTIFY_ADMIN_PASSWORD (= ADMIN_PASSWORD de Vercel):
+# GitHub → Settings → Secrets and variables → Actions → New repository secret.
+name: Avisos de agenda
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar avisos vencidos
+        run: |
+          curl -s -X POST https://tapipocitos.vercel.app/api/notify-due \
+            -H "x-admin-password: ${{ secrets.NOTIFY_ADMIN_PASSWORD }}" \
+            -w "\nHTTP %{http_code}\n"

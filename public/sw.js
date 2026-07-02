@@ -2,7 +2,7 @@
 // - Nunca toca /api/ ni /_vercel/ (datos siempre frescos, analytics intacto).
 // - Navegaciones: red primero, con fallback al shell cacheado (abre offline).
 // - Estáticos (assets hasheados, fotos, íconos): cache primero.
-const CACHE = 'tapipocitos-v1'
+const CACHE = 'tapipocitos-v2'
 const SHELL = '/__shell'
 
 self.addEventListener('install', () => {
@@ -15,6 +15,40 @@ self.addEventListener('activate', (event) => {
       .keys()
       .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
+  )
+})
+
+// Notificaciones push de la agenda (payload JSON: { title, body, url }).
+self.addEventListener('push', (event) => {
+  let data = {}
+  try {
+    data = event.data ? event.data.json() : {}
+  } catch {
+    data = { title: 'Tapipocitos', body: event.data ? event.data.text() : '' }
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Agenda Tapipocitos', {
+      body: data.body || '',
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      data: { url: data.url || '/admin' },
+    })
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  const url = (event.notification.data && event.notification.data.url) || '/admin'
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      for (const client of list) {
+        if ('focus' in client) {
+          client.navigate(url)
+          return client.focus()
+        }
+      }
+      return clients.openWindow(url)
+    })
   )
 })
 

@@ -11,6 +11,7 @@ import {
   isValidTable,
   type Env,
 } from './api/_lib/handlers'
+import { pushHandler, notifyDueHandler } from './api/_lib/push'
 
 const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
@@ -58,6 +59,10 @@ function devApiPlugin(env: Env): Plugin {
             result = await leadsHandler(env, method, query, body, req.headers as any)
           } else if (resource === 'agenda') {
             result = await agendaHandler(env, method, query, body, req.headers as any)
+          } else if (resource === 'push') {
+            result = await pushHandler(env, method, body, req.headers as any)
+          } else if (resource === 'notify-due') {
+            result = await notifyDueHandler(env, req.headers as any)
           } else if (isValidTable(resource)) {
             result = await resourceHandler(env, resource, method, query, body)
           } else {
