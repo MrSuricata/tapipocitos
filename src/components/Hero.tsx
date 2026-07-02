@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowRight } from '@phosphor-icons/react'
+import { ArrowRight, ArrowDown } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
-import { DESIGN_TOKENS } from '@/lib/constants'
 import { SafeImage } from '@/components/SafeImage'
 import { CountUp } from '@/components/CountUp'
 
@@ -10,307 +9,65 @@ interface HeroProps {
   onNavigate: (view: string) => void
 }
 
-/* ---------- Inline SVG sub-components ---------- */
-
-function ChesterfieldSofa({ className }: { className?: string }) {
+/* Hilo de costura animado bajo el título — la firma del oficio. */
+function ThreadUnderline() {
   return (
     <svg
-      viewBox="0 0 800 400"
+      viewBox="0 0 340 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className="w-56 md:w-80 h-6 mt-2"
       aria-hidden="true"
     >
-      {/* Sofa base / seat */}
-      <path
-        d="M120 280 C120 260, 140 240, 160 240 L640 240 C660 240, 680 260, 680 280 L680 320 C680 330, 670 340, 660 340 L140 340 C130 340, 120 330, 120 320 Z"
-        fill="currentColor"
-        opacity="0.15"
-      />
-      {/* Back rest - large curved */}
-      <path
-        d="M140 240 C140 140, 180 90, 240 80 L560 80 C620 90, 660 140, 660 240"
-        stroke="currentColor"
-        strokeWidth="3"
-        fill="currentColor"
-        opacity="0.08"
-      />
-      {/* Left arm */}
-      <path
-        d="M120 280 C80 280, 60 250, 60 220 L60 180 C60 150, 80 130, 110 130 L140 130 L140 280 Z"
-        fill="currentColor"
-        opacity="0.12"
-      />
-      {/* Right arm */}
-      <path
-        d="M680 280 C720 280, 740 250, 740 220 L740 180 C740 150, 720 130, 690 130 L660 130 L660 280 Z"
-        fill="currentColor"
-        opacity="0.12"
-      />
-      {/* Tufting details - diamond pattern on backrest */}
-      {[0, 1, 2, 3, 4].map((col) => {
-        const cx = 260 + col * 80
-        return [0, 1, 2].map((row) => {
-          const cy = 120 + row * 42
-          return (
-            <g key={`tuft-${col}-${row}`}>
-              <circle cx={cx} cy={cy} r="3" fill="currentColor" opacity="0.18" />
-              {/* Diamond lines connecting tufts */}
-              {col < 4 && (
-                <line
-                  x1={cx + 4}
-                  y1={cy}
-                  x2={cx + 76}
-                  y2={cy}
-                  stroke="currentColor"
-                  strokeWidth="0.5"
-                  opacity="0.1"
-                />
-              )}
-              {row < 2 && (
-                <line
-                  x1={cx}
-                  y1={cy + 4}
-                  x2={cx}
-                  y2={cy + 38}
-                  stroke="currentColor"
-                  strokeWidth="0.5"
-                  opacity="0.1"
-                />
-              )}
-            </g>
-          )
-        })
-      })}
-      {/* Seat cushion line */}
-      <path
-        d="M170 260 Q400 250, 630 260"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        opacity="0.12"
-        fill="none"
-      />
-      {/* Legs */}
-      <rect x="155" y="340" width="12" height="25" rx="3" fill="currentColor" opacity="0.15" />
-      <rect x="633" y="340" width="12" height="25" rx="3" fill="currentColor" opacity="0.15" />
-      {/* Scroll arm detail - left */}
-      <path
-        d="M75 155 C65 155, 58 165, 62 175"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        opacity="0.12"
-        fill="none"
-      />
-      {/* Scroll arm detail - right */}
-      <path
-        d="M725 155 C735 155, 742 165, 738 175"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        opacity="0.12"
-        fill="none"
-      />
-    </svg>
-  )
-}
-
-function NeedleThreadDivider() {
-  return (
-    <svg
-      viewBox="0 0 300 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-48 md:w-64 h-8 mx-auto my-4"
-      aria-hidden="true"
-    >
-      {/* Thread line - wavy stitch */}
       <motion.path
-        d="M20 20 Q45 8, 70 20 Q95 32, 120 20 Q145 8, 170 20 Q195 32, 220 20 Q245 8, 260 20"
+        d="M4 12 Q34 4, 64 12 Q94 20, 124 12 Q154 4, 184 12 Q214 20, 244 12 Q274 4, 304 12"
         stroke="#C97A40"
-        strokeWidth="1.5"
+        strokeWidth="1.6"
         fill="none"
         strokeLinecap="round"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ duration: 2, ease: 'easeInOut', delay: 0.5 }}
+        transition={{ duration: 1.8, ease: 'easeInOut', delay: 0.9 }}
       />
-      {/* Needle */}
       <motion.g
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 2.2, duration: 0.4 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 0.5 }}
       >
-        <ellipse cx="272" cy="20" rx="2" ry="5" fill="#8B7355" opacity="0.9" />
-        <line x1="272" y1="15" x2="280" y2="10" stroke="#8B7355" strokeWidth="1.5" strokeLinecap="round" />
-        {/* Needle eye */}
-        <circle cx="272" cy="18" r="1" fill="none" stroke="#8B7355" strokeWidth="0.5" />
+        <ellipse cx="318" cy="12" rx="2" ry="5" fill="#E8B380" opacity="0.9" />
+        <line x1="318" y1="7" x2="327" y2="2" stroke="#E8B380" strokeWidth="1.4" strokeLinecap="round" />
       </motion.g>
-      {/* Small decorative dots at ends */}
-      <circle cx="12" cy="20" r="2.5" fill="#C97A40" opacity="0.5" />
-      <circle cx="8" cy="20" r="1.5" fill="#C97A40" opacity="0.3" />
     </svg>
   )
 }
 
-/* ---------- Floating decorative elements ---------- */
-
-function FloatingScissors({ style }: { style?: React.CSSProperties }) {
-  return (
-    <motion.svg
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="absolute w-6 h-6 md:w-8 md:h-8 hidden md:block"
-      style={style}
-      aria-hidden="true"
-      animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      <circle cx="14" cy="36" r="6" stroke="#C97A40" strokeWidth="1.5" fill="none" opacity="0.3" />
-      <circle cx="34" cy="36" r="6" stroke="#C97A40" strokeWidth="1.5" fill="none" opacity="0.3" />
-      <line x1="14" y1="30" x2="28" y2="8" stroke="#C97A40" strokeWidth="1.5" opacity="0.3" />
-      <line x1="34" y1="30" x2="20" y2="8" stroke="#C97A40" strokeWidth="1.5" opacity="0.3" />
-    </motion.svg>
-  )
-}
-
-function FloatingNeedle({ style, delay = 0 }: { style?: React.CSSProperties; delay?: number }) {
-  return (
-    <motion.svg
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="absolute w-5 h-5 md:w-7 md:h-7 hidden md:block"
-      style={style}
-      aria-hidden="true"
-      animate={{ y: [0, -12, 0], rotate: [0, 15, -10, 0] }}
-      transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay }}
-    >
-      {/* Needle body */}
-      <line x1="8" y1="32" x2="32" y2="8" stroke="#8B7355" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
-      {/* Needle eye */}
-      <circle cx="30" cy="10" r="2" fill="none" stroke="#8B7355" strokeWidth="1" opacity="0.3" />
-      {/* Thread trailing */}
-      <path d="M8 32 Q4 36, 6 38 Q8 40, 12 38" stroke="#C97A40" strokeWidth="1" fill="none" opacity="0.25" />
-    </motion.svg>
-  )
-}
-
-function FloatingFabricSwatch({ style, delay = 0 }: { style?: React.CSSProperties; delay?: number }) {
-  return (
-    <motion.svg
-      viewBox="0 0 44 44"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="absolute w-5 h-5 md:w-7 md:h-7 hidden md:block"
-      style={style}
-      aria-hidden="true"
-      animate={{ y: [0, -6, 0], rotate: [0, -8, 4, 0] }}
-      transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay }}
-    >
-      <rect x="6" y="6" width="28" height="28" rx="3" stroke="#C97A40" strokeWidth="1.2" fill="none" opacity="0.25" />
-      {/* Fabric weave pattern */}
-      <line x1="10" y1="12" x2="30" y2="12" stroke="#C97A40" strokeWidth="0.6" opacity="0.15" />
-      <line x1="10" y1="18" x2="30" y2="18" stroke="#C97A40" strokeWidth="0.6" opacity="0.15" />
-      <line x1="10" y1="24" x2="30" y2="24" stroke="#C97A40" strokeWidth="0.6" opacity="0.15" />
-      <line x1="10" y1="30" x2="30" y2="30" stroke="#C97A40" strokeWidth="0.6" opacity="0.15" />
-      <line x1="14" y1="8" x2="14" y2="32" stroke="#C97A40" strokeWidth="0.6" opacity="0.12" />
-      <line x1="22" y1="8" x2="22" y2="32" stroke="#C97A40" strokeWidth="0.6" opacity="0.12" />
-      {/* Folded corner */}
-      <path d="M30 6 L34 6 L34 10 Z" fill="#C97A40" opacity="0.15" />
-    </motion.svg>
-  )
-}
-
-/* ---------- Stitch border ---------- */
-
-function StitchBorder() {
-  return (
-    <div className="absolute bottom-0 left-0 right-0 h-6 overflow-hidden" aria-hidden="true">
-      <svg
-        viewBox="0 0 1200 24"
-        preserveAspectRatio="none"
-        className="w-full h-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Stitch pattern - dashes with cross-stitches */}
-        {Array.from({ length: 40 }).map((_, i) => {
-          const x = i * 30 + 5
-          return (
-            <g key={`stitch-${i}`}>
-              <motion.line
-                x1={x}
-                y1="10"
-                x2={x + 20}
-                y2="10"
-                stroke="#C97A40"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                opacity="0.25"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 0.3, delay: i * 0.03 }}
-              />
-              {/* Cross-stitch marks */}
-              {i % 3 === 0 && (
-                <>
-                  <line
-                    x1={x + 10 - 2}
-                    y1="7"
-                    x2={x + 10 + 2}
-                    y2="13"
-                    stroke="#C97A40"
-                    strokeWidth="0.8"
-                    opacity="0.2"
-                  />
-                  <line
-                    x1={x + 10 + 2}
-                    y1="7"
-                    x2={x + 10 - 2}
-                    y2="13"
-                    stroke="#C97A40"
-                    strokeWidth="0.8"
-                    opacity="0.2"
-                  />
-                </>
-              )}
-            </g>
-          )
-        })}
-      </svg>
-    </div>
-  )
-}
-
-/* ---------- Trust badge ---------- */
-
-function TrustBadge({
+function HeroStat({
   to,
   suffix,
   separator,
   label,
+  delay,
 }: {
   to: number
   suffix?: string
   separator?: string
   label: string
+  delay: number
 }) {
   return (
     <motion.div
-      className="flex flex-col items-center px-4 md:px-6"
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col"
     >
       <span
-        className="text-2xl md:text-3xl font-bold tracking-tight"
-        style={{ color: '#C97A40' }}
+        className="text-2xl md:text-[2rem] font-bold tracking-tight text-[#E8B380]"
+        style={{ fontFamily: "'Playfair Display', serif" }}
       >
         <CountUp to={to} suffix={suffix} separator={separator} />
       </span>
-      <span
-        className="text-xs md:text-sm mt-1 tracking-wide uppercase"
-        style={{ color: `${DESIGN_TOKENS.colors.description}99` }}
-      >
+      <span className="text-[0.65rem] md:text-xs mt-1 tracking-[0.25em] uppercase text-[#C4A882]">
         {label}
       </span>
     </motion.div>
@@ -318,239 +75,186 @@ function TrustBadge({
 }
 
 /* ================================================
-   Main Hero Component
+   Hero — atelier cinematográfico
+   Foto real del taller a pantalla completa, tratada
+   como fotograma: gradiente espresso, viñeta y grano.
    ================================================ */
 
 export function Hero({ onNavigate }: HeroProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const [reduced, setReduced] = useState(false)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReduced(mq.matches)
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
   }, [])
 
   useEffect(() => {
-    if (prefersReducedMotion) return
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
+    if (reduced) return
+    const onMove = (e: MouseEvent) => {
+      setMouse({
+        x: (e.clientX / window.innerWidth - 0.5) * 14,
+        y: (e.clientY / window.innerHeight - 0.5) * 10,
       })
     }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [prefersReducedMotion])
+    window.addEventListener('mousemove', onMove)
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [reduced])
 
-  const dur = (v: number) => (prefersReducedMotion ? 0 : v)
-  const del = (v: number) => (prefersReducedMotion ? 0 : v)
+  const dur = (v: number) => (reduced ? 0 : v)
+  const del = (v: number) => (reduced ? 0 : v)
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* -- Full background photo -- */}
-      <div className="absolute inset-0">
+    <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#1A0F08] film-grain">
+      {/* -- Fotograma: cuero Chesterfield en pleno retapizado -- */}
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          transform: reduced ? 'none' : `translate(${mouse.x * 0.4}px, ${mouse.y * 0.4}px) scale(1.03)`,
+          transition: 'transform 0.3s ease-out',
+        }}
+      >
         <SafeImage
-          src="/fotos/sofas/sofa-esquinero-beige-ottoman-hogar.jpg"
+          src="/fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg"
           alt=""
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover ${reduced ? '' : 'hero-kenburns'}`}
+          style={{ objectPosition: 'center 62%' }}
           fallbackClassName="w-full h-full"
           aria-hidden="true"
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F5F0EB]/85 via-[#F5F0EB]/75 to-[#F5F0EB]/90" />
       </div>
 
-      {/* -- Warm leather/wood gradient on top -- */}
-      <div
-        className="absolute inset-0 parallax-bg"
-        style={{
-          background:
-            'linear-gradient(135deg, rgba(139,115,85,0.12) 0%, rgba(201,122,64,0.08) 25%, transparent 50%, rgba(160,100,55,0.10) 75%, rgba(101,67,33,0.12) 100%)',
-          transform: prefersReducedMotion
-            ? 'none'
-            : `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
-        }}
-      />
-
-      {/* Warm radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(201,122,64,0.10),transparent_60%)]" />
-
-      {/* Secondary subtle glow bottom */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_90%,rgba(139,115,85,0.08),transparent_50%)]" />
-
-      {/* Slow drifting warm glow */}
+      {/* -- Tratamiento de color: espresso + ámbar, legibilidad editorial -- */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1A0F08]/95 via-[#1A0F08]/70 to-[#1A0F08]/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1A0F08]/80 via-transparent to-[#1A0F08]/90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_28%_45%,rgba(201,122,64,0.14),transparent_55%)]" />
+      {/* Viñeta */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(55% 45% at 50% 35%, rgba(201,122,64,0.12), transparent 70%)',
-          animation: prefersReducedMotion
-            ? 'none'
-            : 'mesh-drift 22s ease-in-out infinite alternate',
-        }}
-        aria-hidden="true"
+        style={{ boxShadow: 'inset 0 0 220px 60px rgba(12, 7, 3, 0.75)' }}
       />
 
-      {/* -- Real sofa photo background -- */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          transform: prefersReducedMotion
-            ? 'none'
-            : `translate(${mousePosition.x * 0.15}px, ${mousePosition.y * 0.15}px)`,
-        }}
-      >
-        <SafeImage
-          fallback={null}
-          src="/fotos/restauraciones/restauracion-chesterfield-cuero-1.jpg"
-          alt=""
-          className="absolute bottom-0 right-0 w-[500px] md:w-[700px] lg:w-[850px] opacity-20 object-cover select-none blur-[1px]"
-          style={{ maskImage: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 80%)' }}
-          aria-hidden="true"
-        />
+      {/* -- Etiqueta lateral vertical, guiño editorial -- */}
+      <div className="absolute right-5 md:right-8 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-6 z-10">
+        <span className="w-px h-16 bg-gradient-to-b from-transparent to-[#C4A882]/50" />
+        <span className="side-label text-[#C4A882]/80 select-none">
+          Montevideo · Desde 1975
+        </span>
+        <span className="w-px h-16 bg-gradient-to-t from-transparent to-[#C4A882]/50" />
       </div>
 
-      {/* -- Floating decorative elements -- */}
-      {!prefersReducedMotion && (
-        <>
-          <FloatingScissors style={{ top: '12%', left: '8%' }} />
-          <FloatingNeedle style={{ top: '20%', right: '10%' }} delay={1.5} />
-          <FloatingFabricSwatch style={{ bottom: '22%', left: '12%' }} delay={2} />
-          <FloatingNeedle style={{ bottom: '30%', right: '8%' }} delay={3} />
-          <FloatingFabricSwatch style={{ top: '15%', right: '22%' }} delay={0.8} />
-          <FloatingScissors style={{ bottom: '18%', right: '18%' }} />
-        </>
-      )}
+      {/* -- Contenido editorial, alineado a la izquierda -- */}
+      <div className="relative z-10 flex-1 flex items-center w-full">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 w-full pt-28 pb-10">
+          <div className="max-w-3xl">
+            {/* Overline */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: dur(0.7), ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-4 mb-7"
+            >
+              <span className="block w-12 h-px bg-[#C97A40]" />
+              <span className="text-[0.7rem] md:text-xs tracking-[0.35em] uppercase text-[#C4A882] font-medium">
+                Tapicería familiar · Tres generaciones
+              </span>
+            </motion.div>
 
-      {/* -- Main content -- */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        {/* Decorative ornament above title */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: dur(0.5), ease: 'easeOut' }}
-          className="flex items-center justify-center gap-3 mb-5"
-          aria-hidden="true"
-        >
-          <span className="block w-8 h-px bg-[#C97A40] opacity-50" />
-          <svg viewBox="0 0 20 20" className="w-4 h-4 text-[#C97A40] opacity-60" fill="currentColor">
-            <path d="M10 2 L12 8 L18 10 L12 12 L10 18 L8 12 L2 10 L8 8 Z" />
-          </svg>
-          <span className="block w-8 h-px bg-[#C97A40] opacity-50" />
-        </motion.div>
+            {/* Título display */}
+            <motion.h1
+              initial={{ opacity: 0, y: 34 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: dur(0.8), delay: del(0.1), ease: [0.16, 1, 0.3, 1] }}
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.02] tracking-tight text-[#F5EDE2]"
+            >
+              El arte de
+              <br />
+              tapizar,{' '}
+              <span className="italic font-semibold text-gradient-amber">
+                hecho a mano
+              </span>
+            </motion.h1>
 
-        {/* Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: dur(0.3), ease: 'easeOut' }}
-        >
-          <h1
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-bold mb-2 leading-[1.05] tracking-tight"
-            style={{ color: DESIGN_TOKENS.colors.title }}
-          >
-            El Arte de Tapizar,{' '}
-            <span className="italic text-gradient-warm">una Tradición Familiar</span>
-          </h1>
-        </motion.div>
+            <ThreadUnderline />
 
-        {/* Needle & thread divider */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: dur(0.4), delay: del(0.2) }}
-        >
-          <NeedleThreadDivider />
-        </motion.div>
+            {/* Bajada */}
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: dur(0.8), delay: del(0.25), ease: [0.16, 1, 0.3, 1] }}
+              className="mt-6 mb-10 text-base md:text-lg leading-relaxed text-[#D9C9B4] max-w-xl"
+            >
+              Desde 1975, la familia Calistro transforma telas, cueros y espumas en
+              piezas que cuentan historias. Retapizados, restauraciones y muebles a
+              medida en Montevideo — con armazones garantidos de por vida.
+            </motion.p>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: dur(0.3), delay: del(0.1), ease: 'easeOut' }}
-          className="text-base sm:text-lg md:text-xl mb-10 leading-relaxed max-w-2xl mx-auto"
-          style={{
-            color: DESIGN_TOKENS.colors.description,
-            fontSize: DESIGN_TOKENS.typography.description.maxSize,
-            lineHeight: DESIGN_TOKENS.typography.lineHeight,
-          }}
-        >
-          Desde 1975, tres generaciones de la familia Calistro transforman telas y
-          espumas en piezas que cuentan historias. Retapizados, restauraciones y
-          creaciones a medida en Montevideo. Armazones garantidos de por vida.
-        </motion.p>
-
-        {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: dur(0.3), delay: del(0.2), ease: 'easeOut' }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <Button
-            size="lg"
-            onClick={() => onNavigate('gallery')}
-            className="group text-base px-8 py-6 rounded-full cta-primary"
-            aria-label="Ver galería de trabajos realizados"
-          >
-            Ver Trabajos
-            <ArrowRight
-              size={20}
-              className="ml-2 transition-transform group-hover:translate-x-1"
-            />
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={() => onNavigate('contact')}
-            className="text-base px-8 py-6 rounded-full bg-white/70 backdrop-blur-md border-[#C97A40]/40 text-[#5A3B2E] hover:bg-white shadow-soft"
-            aria-label="Solicitar presupuesto personalizado"
-          >
-            Solicitar Presupuesto
-          </Button>
-        </motion.div>
-
-        {/* Trust badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: dur(0.4), delay: del(0.4), ease: 'easeOut' }}
-          className="mt-10 mb-16 inline-flex items-center justify-center divide-x divide-[#C97A40]/25 rounded-full px-3 py-3 bg-white/50 backdrop-blur-md border border-white/60 shadow-soft"
-        >
-          <TrustBadge to={50} suffix="+" label="Años" />
-          <TrustBadge to={50000} suffix="+" separator="." label="Muebles" />
-          <TrustBadge to={100} suffix="%" label="Artesanal" />
-        </motion.div>
-      </div>
-
-      {/* -- Scroll indicator -- */}
-      <motion.div
-        className="absolute bottom-4 left-1/2 -translate-x-1/2"
-        animate={prefersReducedMotion ? {} : { y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <div
-          className="w-6 h-10 border-2 rounded-full flex items-start justify-center p-2"
-          style={{ borderColor: `${DESIGN_TOKENS.colors.description}50` }}
-          aria-label="Desplazar hacia abajo"
-        >
-          <div
-            className="w-1 h-2 rounded-full"
-            style={{ backgroundColor: `${DESIGN_TOKENS.colors.description}50` }}
-          />
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: dur(0.8), delay: del(0.4), ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <Button
+                size="lg"
+                onClick={() => onNavigate('gallery')}
+                className="group text-base px-8 py-6 rounded-full cta-primary bg-[#C97A40] hover:bg-[#B56A33] text-[#FFF8F0] border-0"
+                aria-label="Ver galería de trabajos realizados"
+              >
+                Ver trabajos
+                <ArrowRight
+                  size={20}
+                  className="ml-2 transition-transform group-hover:translate-x-1"
+                />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => onNavigate('contact')}
+                className="text-base px-8 py-6 rounded-full bg-transparent border-[#C4A882]/50 text-[#F5EDE2] hover:bg-[#F5EDE2]/10 hover:text-[#F5EDE2] hover:border-[#C4A882] backdrop-blur-sm"
+                aria-label="Solicitar presupuesto personalizado"
+              >
+                Solicitar presupuesto
+              </Button>
+            </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* -- Animated stitch border at bottom -- */}
-      <StitchBorder />
+      {/* -- Barra editorial inferior: números + indicador de scroll -- */}
+      <div className="relative z-10 w-full">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 pb-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: dur(0.8), delay: del(0.55) }}
+            className="border-t border-[#C4A882]/20 pt-6 flex items-end justify-between gap-6"
+          >
+            <div className="flex gap-8 md:gap-14">
+              <HeroStat to={50} suffix="+" label="Años de oficio" delay={del(0.65)} />
+              <HeroStat to={50000} suffix="+" separator="." label="Muebles tapizados" delay={del(0.75)} />
+              <HeroStat to={100} suffix="%" label="Artesanal" delay={del(0.85)} />
+            </div>
+
+            <motion.button
+              onClick={() => {
+                window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+              }}
+              className="hidden md:flex items-center gap-3 text-[#C4A882] hover:text-[#E8B380] transition-colors group"
+              animate={reduced ? {} : { y: [0, 6, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+              aria-label="Desplazar hacia abajo"
+            >
+              <span className="text-[0.65rem] tracking-[0.3em] uppercase">Descubrir</span>
+              <ArrowDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+            </motion.button>
+          </motion.div>
+        </div>
+      </div>
     </section>
   )
 }

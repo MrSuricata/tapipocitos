@@ -47,12 +47,17 @@ function SofaLogo({ className }: { className?: string }) {
   )
 }
 
-function CartButton({ onClick }: { onClick: () => void }) {
+function CartButton({ onClick, onDark }: { onClick: () => void; onDark?: boolean }) {
   const { count } = useCart()
   return (
     <button
       onClick={onClick}
-      className="relative p-2 rounded-full hover:bg-accent/10 text-primary hover:text-accent transition-colors"
+      className={cn(
+        'relative p-2 rounded-full transition-colors',
+        onDark
+          ? 'text-[#F5EDE2] hover:bg-white/10 hover:text-[#E8B380]'
+          : 'hover:bg-accent/10 text-primary hover:text-accent'
+      )}
       aria-label={`Abrir presupuesto (${count} ${count === 1 ? 'producto' : 'productos'})`}
     >
       <ShoppingBag size={22} weight="duotone" />
@@ -101,6 +106,9 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
     })
   }
 
+  // Sobre el hero oscuro de la home el navbar vive en claro; al scrollear pasa a glass.
+  const onDark = currentView === 'home' && !scrolled
+
   return (
     <nav
       className={cn(
@@ -116,12 +124,27 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
             onClick={() => onNavigate('home')}
             className="flex items-center gap-3 group"
           >
-            <SofaLogo className="w-10 h-8 text-primary group-hover:text-accent transition-colors duration-300" />
+            <SofaLogo
+              className={cn(
+                'w-10 h-8 transition-colors duration-300',
+                onDark ? 'text-[#F5EDE2] group-hover:text-[#E8B380]' : 'text-primary group-hover:text-accent'
+              )}
+            />
             <div className="text-left">
-              <h1 className="text-xl font-bold text-primary tracking-tight leading-none">
+              <h1
+                className={cn(
+                  'text-xl font-bold tracking-tight leading-none transition-colors duration-300',
+                  onDark ? 'text-[#F5EDE2]' : 'text-primary'
+                )}
+              >
                 TAPIPOCITOS
               </h1>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mt-0.5">
+              <p
+                className={cn(
+                  'text-[10px] uppercase tracking-[0.2em] mt-0.5 transition-colors duration-300',
+                  onDark ? 'text-[#C4A882]' : 'text-muted-foreground'
+                )}
+              >
                 Tapiceria Familiar
               </p>
             </div>
@@ -136,22 +159,30 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
                 className={cn(
                   'button-text uppercase text-xs tracking-wider px-4',
                   currentView === item.id
-                    ? ''
-                    : 'hover:bg-accent/10 hover:text-accent'
+                    ? onDark
+                      ? 'bg-[#C97A40] hover:bg-[#B56A33] text-[#FFF8F0]'
+                      : ''
+                    : onDark
+                      ? 'text-[#F5EDE2] hover:bg-white/10 hover:text-[#E8B380]'
+                      : 'hover:bg-accent/10 hover:text-accent'
                 )}
               >
                 {item.label}
               </Button>
             ))}
-            <div className="w-px h-6 bg-border mx-1" />
-            <CartButton onClick={() => setCartOpen(true)} />
+            <div className={cn('w-px h-6 mx-1', onDark ? 'bg-[#C4A882]/30' : 'bg-border')} />
+            <CartButton onClick={() => setCartOpen(true)} onDark={onDark} />
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
-            <CartButton onClick={() => setCartOpen(true)} />
+            <CartButton onClick={() => setCartOpen(true)} onDark={onDark} />
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(onDark && 'text-[#F5EDE2] hover:bg-white/10 hover:text-[#E8B380]')}
+                >
                   {mobileOpen ? <X size={24} /> : <List size={24} />}
                 </Button>
               </SheetTrigger>

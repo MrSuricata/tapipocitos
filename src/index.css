@@ -395,6 +395,10 @@ html {
 }
 
 /* Animated warm mesh background (for section depth) */
+.warm-mesh {
+  /* El ::before se extiende inset -25%: sin clip genera scroll horizontal en mobile. */
+  overflow: hidden;
+}
 .warm-mesh::before {
   content: '';
   position: absolute;
@@ -509,4 +513,101 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   .orb-1, .orb-2, .orb-3 { animation: none !important; }
+}
+
+/* ============================================================
+   Atelier cinematográfico — hero oscuro, grano, marquee
+   ============================================================ */
+
+::selection {
+  background: #C97A40;
+  color: #FFF8F0;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Thin warm scrollbar (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F0EB;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4A882;
+  border-radius: 5px;
+  border: 2px solid #F5F0EB;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C97A40;
+}
+
+/* Film grain overlay — subtle analog warmth on dark sections */
+.film-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+
+/* Slow cinematic zoom for hero photography */
+@keyframes kenburns {
+  0% { transform: scale(1.02) translate3d(0, 0, 0); }
+  100% { transform: scale(1.12) translate3d(-1.5%, 1%, 0); }
+}
+.hero-kenburns {
+  animation: kenburns 34s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Editorial word marquee */
+@keyframes marquee-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x 48s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Outline serif type (marquee alternating words) */
+.text-outline-warm {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(107, 68, 35, 0.4);
+}
+.text-outline-cream {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245, 237, 226, 0.35);
+}
+
+/* Amber gradient text for dark backgrounds */
+.text-gradient-amber {
+  background: linear-gradient(115deg, #E8B380 0%, #C97A40 55%, #A0642F 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Vertical editorial side label */
+.side-label {
+  writing-mode: vertical-rl;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns { animation: none !important; }
+  .marquee-track { animation: none !important; }
+  .film-grain::after { display: none; }
 }

@@ -9,6 +9,7 @@ import { Gallery } from '@/components/Gallery'
 import { Products } from '@/components/Products'
 import { Contact } from '@/components/Contact'
 import { PhotoShowcase } from '@/components/PhotoShowcase'
+import { Marquee } from '@/components/Marquee'
 import { TrabajosDestacados } from '@/components/TrabajosDestacados'
 import { Testimonials } from '@/components/Testimonials'
 import { Faq } from '@/components/Faq'
@@ -129,6 +130,7 @@ function App() {
           <>
             <Hero onNavigate={handleNavigation} />
             <PhotoShowcase />
+            <Marquee />
             <Services onNavigate={handleNavigation} />
             <About />
             <TrabajosDestacados />
