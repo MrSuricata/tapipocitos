@@ -7,6 +7,7 @@ import {
   uploadHandler,
   authHandler,
   leadsHandler,
+  agendaHandler,
   isValidTable,
   type Env,
 } from './api/_lib/handlers'
@@ -55,6 +56,8 @@ function devApiPlugin(env: Env): Plugin {
             result = authHandler(env, body)
           } else if (resource === 'leads') {
             result = await leadsHandler(env, method, query, body, req.headers as any)
+          } else if (resource === 'agenda') {
+            result = await agendaHandler(env, method, query, body, req.headers as any)
           } else if (isValidTable(resource)) {
             result = await resourceHandler(env, resource, method, query, body)
           } else {

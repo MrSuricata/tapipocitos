@@ -60,6 +60,20 @@ create table if not exists public.leads (
   created_at  timestamptz default now()
 );
 
+-- ---------- AGENDA (privado: recordatorios/entregas del taller) ----------
+create table if not exists public.agenda (
+  id          uuid primary key default gen_random_uuid(),
+  title       text not null,
+  type        text default 'otro',   -- llamar | retirar | entregar | cotizar | otro
+  date        date not null,
+  time        text default '',       -- 'HH:MM' opcional
+  client      text default '',
+  phone       text default '',
+  notes       text default '',
+  done        boolean default false,
+  created_at  timestamptz default now()
+);
+
 -- ---------- RLS: lectura pública, escritura solo service_role ----------
 -- El service_role (usado por las funciones /api) OMITE RLS, así que sólo
 -- habilitamos la LECTURA anónima. No creamos políticas de escritura pública
@@ -67,8 +81,9 @@ create table if not exists public.leads (
 alter table public.products     enable row level security;
 alter table public.projects     enable row level security;
 alter table public.testimonials enable row level security;
--- leads NO tiene políticas públicas a propósito: solo el backend (service_role) puede leer/escribir.
+-- leads y agenda NO tienen políticas públicas a propósito: solo el backend (service_role) puede leer/escribir.
 alter table public.leads        enable row level security;
+alter table public.agenda      enable row level security;
 
 drop policy if exists "public read products" on public.products;
 create policy "public read products" on public.products for select using (true);

@@ -55,6 +55,21 @@ export interface Lead {
   created_at: string
 }
 
+export type AgendaType = 'llamar' | 'retirar' | 'entregar' | 'cotizar' | 'otro'
+
+export interface AgendaItem {
+  id: string
+  title: string
+  type: AgendaType
+  date: string // YYYY-MM-DD
+  time: string // 'HH:MM' u ''
+  client: string
+  phone: string
+  notes: string
+  done: boolean
+  created_at: string
+}
+
 export interface TeamMember {
   id: string
   name: string

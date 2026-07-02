@@ -7,6 +7,7 @@ import {
   SignOut,
   SquaresFour,
   ChatCircleDots,
+  CalendarDots,
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { BackgroundDecor } from '@/components/BackgroundDecor'
@@ -54,6 +55,7 @@ export function AdminLayout({
     { id: 'projects', label: 'Trabajos', icon: Images },
     { id: 'testimonials', label: 'Testimonios', icon: Sparkle },
     { id: 'leads', label: 'Consultas', icon: ChatCircleDots },
+    { id: 'agenda', label: 'Agenda', icon: CalendarDots },
   ]
 
   return (

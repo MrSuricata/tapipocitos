@@ -155,6 +155,25 @@ export function authHandler(env: Env, body: any): ApiResult {
   return { status: 401, body: { success: false } }
 }
 
+// Agenda (recordatorios/entregas del taller). TODO requiere la contraseña de
+// admin vía header x-admin-password: es una herramienta interna, nada es público.
+export async function agendaHandler(
+  env: Env,
+  method: string,
+  query: Record<string, string | undefined>,
+  body: any,
+  headers: Record<string, any>
+): Promise<ApiResult> {
+  const provided = headers?.['x-admin-password']
+  if (!env.ADMIN_PASSWORD || provided !== env.ADMIN_PASSWORD) {
+    return { status: 401, body: { error: 'No autorizado' } }
+  }
+  if (method === 'POST' && (!body || !body.title || !body.date)) {
+    return { status: 400, body: { error: 'Faltan título o fecha' } }
+  }
+  return resourceHandler(env, 'agenda', method, query, body)
+}
+
 // Leads (contact/quote requests). POST is public (form submission); reading or
 // deleting requires the admin password via the x-admin-password header.
 export async function leadsHandler(
