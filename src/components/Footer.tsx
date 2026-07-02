@@ -1,5 +1,29 @@
 import { Armchair, Phone, Envelope, MapPin, WhatsappLogo, InstagramLogo, FacebookLogo } from '@phosphor-icons/react'
 
+interface FooterProps {
+  onNavigate?: (view: string) => void
+}
+
+/* Link del footer que navega entre vistas de la SPA (los href="#" no navegan). */
+function FooterNavLink({
+  view,
+  label,
+  onNavigate,
+}: {
+  view: string
+  label: string
+  onNavigate?: (view: string) => void
+}) {
+  return (
+    <button
+      onClick={() => onNavigate?.(view)}
+      className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all text-left"
+    >
+      {label}
+    </button>
+  )
+}
+
 function StitchBorder() {
   return (
     <svg
@@ -26,7 +50,7 @@ function StitchBorder() {
   )
 }
 
-export function Footer() {
+export function Footer({ onNavigate }: FooterProps) {
   return (
     <footer style={{ backgroundColor: '#2C1810' }}>
       {/* Decorative stitch border */}
@@ -61,26 +85,10 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-amber-200">Servicios</h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#services" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Retapizados
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Restauraciones
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Muebles a Medida
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Proyectos Comerciales
-                </a>
-              </li>
+              <li><FooterNavLink view="services" label="Retapizados" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="services" label="Restauraciones" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="services" label="Muebles a Medida" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="services" label="Proyectos Comerciales" onNavigate={onNavigate} /></li>
             </ul>
           </div>
 
@@ -88,26 +96,11 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-amber-200">Enlaces</h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#home" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Inicio
-                </a>
-              </li>
-              <li>
-                <a href="#gallery" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Galeria
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Nosotros
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="opacity-75 hover:opacity-100 hover:text-amber-300 transition-all">
-                  Contacto
-                </a>
-              </li>
+              <li><FooterNavLink view="home" label="Inicio" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="gallery" label="Trabajos" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="products" label="Productos" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="about" label="Nosotros" onNavigate={onNavigate} /></li>
+              <li><FooterNavLink view="contact" label="Contacto" onNavigate={onNavigate} /></li>
             </ul>
           </div>
 

@@ -126,6 +126,34 @@ const TYPE_EMOJI: Record<string, string> = {
   otro: '📌',
 }
 
+// Aviso inmediato cuando entra una consulta desde la web pública.
+// Fire-and-forget lógico: nunca rompe el alta del lead.
+export async function notifyNewLead(env: Env, lead: any): Promise<void> {
+  try {
+    const supabase = getAdminClient(env)
+    const { data: subs } = await supabase.from('push_subscriptions').select('*')
+    if (!subs || subs.length === 0) return
+    const keys = await ensureVapidKeys(supabase)
+    const vapidDetails = { subject: VAPID_SUBJECT, publicKey: keys.publicKey, privateKey: keys.privateKey }
+    const payload = JSON.stringify({
+      title: '📩 Nueva consulta en la web',
+      body: [lead?.name, lead?.subject].filter(Boolean).join(' · ') || 'Entró una consulta nueva',
+      url: '/admin',
+    })
+    for (const sub of subs) {
+      try {
+        await webpush.sendNotification(sub.subscription, payload, { vapidDetails })
+      } catch (e: any) {
+        if (e?.statusCode === 404 || e?.statusCode === 410) {
+          await supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)
+        }
+      }
+    }
+  } catch {
+    // Nunca interferir con la creación del lead.
+  }
+}
+
 export async function notifyDueHandler(
   env: Env,
   headers: Record<string, any>

@@ -23,7 +23,7 @@ _Última actualización: 2026-07-02._
 - **Diagnóstico 2026-07-02 (tarde)**: el circuito push funciona E2E (verificado: welcome push a iPhone real con `welcomed:true`; suscripción Apple activa; SQL corrido; secret de GH puesto). El problema era el **delay real de GH Actions: ~35-40 min entre corridas** aunque el cron diga */10. Mitigaciones: (1) welcome push al suscribir; (2) `flushDueNotifications()` al abrir la agenda; (3) workflow con `--fail-with-body`; (4) **pg_cron desde Supabase cada 5 min** — SQL personalizado (con password embebida, gitignored) en `supabase/cron-avisos.local.sql`, el usuario debe pegarlo en el SQL Editor. Con eso el aviso llega dentro de ~5 min de la hora fijada. Regenerar ese archivo si cambia ADMIN_PASSWORD.
 
 ## Estado actual — TODO LIVE ✅
-Sitio en producción: **https://tapipocitos.vercel.app** — admin en **/admin** (pass `tapipocitos2024`).
+Sitio en producción: **https://tapipocitos.vercel.app** — admin en **/admin** (pass = env `ADMIN_PASSWORD` en Vercel; nunca escribirla en este repo público).
 Repo GitHub: `MrSuricata/tapipocitos` (rama `main`). Deploy: **push a `main` → Vercel auto-deploya prod**.
 
 Funciona y verificado en producción:

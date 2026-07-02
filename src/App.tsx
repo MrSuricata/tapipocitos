@@ -168,7 +168,7 @@ function App() {
           </div>
         )}
 
-        <Footer />
+        <Footer onNavigate={handleNavigation} />
       </div>
       <WhatsAppFab />
       <Toaster />
