@@ -1,5 +1,12 @@
 # Handoff — Tapipocitos (para próxima sesión)
 
+## ⚠️ CHECKLIST DE ENTREGA (2026-07-03)
+1. **Rotar ADMIN_PASSWORD en Vercel** (la vieja quedó en el historial público de git). Cascada al rotarla: secret `NOTIFY_ADMIN_PASSWORD` en GitHub → job pg_cron en Supabase (regenerar `cron-avisos.local.sql`) → `.env.local` → re-loguear dispositivos.
+2. Pegar `supabase/cron-avisos.local.sql` en el SQL Editor (avisos cada 5 min).
+3. Reemplazar los 3 testimonios demo (nombres inventados) por reales, desde Admin → Testimonios.
+4. Revisar textos/fotos de Trabajos y Productos (hay contenido seed).
+5. Opcional: dominio propio — tapipocitos.com libre a USD 11.25/año en Vercel; si se compra, actualizar canonical/og/sitemap/robots/JSON-LD en index.html y public/.
+
 _Última actualización: 2026-07-02._
 
 ## Rediseño atelier cinematográfico (2026-07-02)
