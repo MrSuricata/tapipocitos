@@ -153,9 +153,19 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-amber-800/50 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm opacity-60">
-            &copy; {new Date().getFullYear()} TAPIPOCITOS. Todos los derechos reservados.
-          </p>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            <p className="text-sm opacity-60">
+              &copy; {new Date().getFullYear()} TAPIPOCITOS. Todos los derechos reservados.
+            </p>
+            {/* Acceso discreto al panel: necesario en la PWA instalada (sin barra de direcciones).
+                Va a la izquierda para que el FAB de WhatsApp no lo tape. */}
+            <a
+              href="/admin"
+              className="text-xs opacity-30 hover:opacity-80 transition-opacity underline-offset-2 hover:underline"
+            >
+              Admin
+            </a>
+          </div>
           <p className="text-xs opacity-40 italic">
             Hecho con dedicacion en Montevideo, Uruguay
           </p>
