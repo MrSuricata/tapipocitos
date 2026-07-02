@@ -63,7 +63,25 @@ export async function pushHandler(
           .from('push_subscriptions')
           .upsert({ endpoint: sub.endpoint, subscription: sub }, { onConflict: 'endpoint' })
         if (error) throw error
-        return { status: 201, body: { success: true } }
+        // Notificación de bienvenida inmediata: confirma en el momento que
+        // el dispositivo recibe pushes de verdad.
+        let welcomed = false
+        try {
+          const keys = await ensureVapidKeys(supabase)
+          await webpush.sendNotification(
+            sub,
+            JSON.stringify({
+              title: '🔔 Avisos activados',
+              body: 'Así vas a ver los recordatorios de la agenda en este dispositivo.',
+              url: '/admin',
+            }),
+            { vapidDetails: { subject: VAPID_SUBJECT, publicKey: keys.publicKey, privateKey: keys.privateKey } }
+          )
+          welcomed = true
+        } catch {
+          // Si la bienvenida falla la suscripción igual queda guardada.
+        }
+        return { status: 201, body: { success: true, welcomed } }
       }
       case 'DELETE': {
         const endpoint = body?.endpoint

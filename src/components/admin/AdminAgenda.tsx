@@ -28,6 +28,7 @@ import {
   createAgendaItem,
   updateAgendaItem,
   deleteAgendaItem,
+  flushDueNotifications,
 } from '@/lib/agenda'
 import { pushSupport, getPushSubscription, enablePush, disablePush } from '@/lib/push'
 import type { AgendaItem, AgendaType } from '@/lib/types'
@@ -189,6 +190,7 @@ export function AdminAgenda() {
 
   useEffect(() => {
     load()
+    flushDueNotifications()
     // Estado inicial del botón de notificaciones.
     const support = pushSupport()
     if (support !== 'off') {

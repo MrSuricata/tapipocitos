@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Disparar avisos vencidos
         run: |
-          curl -s -X POST https://tapipocitos.vercel.app/api/notify-due \
+          # --fail-with-body: si la API devuelve 401/500 el run queda en rojo
+          # (antes un 401 por secret faltante parecía "success").
+          curl -s --fail-with-body -X POST https://tapipocitos.vercel.app/api/notify-due \
             -H "x-admin-password: ${{ secrets.NOTIFY_ADMIN_PASSWORD }}" \
             -w "\nHTTP %{http_code}\n"

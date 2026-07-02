@@ -71,3 +71,9 @@ export async function deleteAgendaItem(id: string): Promise<boolean> {
     return false
   }
 }
+
+// Dispara el chequeo de avisos vencidos sin esperar al cron (fire-and-forget).
+// Se llama al abrir la agenda: si hay algo vencido sin notificar, sale ya.
+export function flushDueNotifications(): void {
+  fetch('/api/notify-due', { method: 'POST', headers: authHeaders() }).catch(() => {})
+}
