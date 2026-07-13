@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Package, Images, Sparkle, ChartBar } from '@phosphor-icons/react'
+import { Package, Images, Sparkle, ChartBar, CalendarDots, ChatCircleDots } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
+import { fetchAgenda } from '@/lib/agenda'
+import { fetchLeads } from '@/lib/leads'
 
 interface AdminDashboardProps {
   onNavigate: (view: string) => void
@@ -8,8 +11,51 @@ interface AdminDashboardProps {
 
 export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const { products, projects, testimonials } = useStore()
+  const [agendaToday, setAgendaToday] = useState<{ pending: number; overdue: number } | null>(null)
+  const [leadCount, setLeadCount] = useState<number | null>(null)
 
-  const stats = [
+  useEffect(() => {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const d = new Date()
+    const today = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+    fetchAgenda().then((items) => {
+      if (!items) return
+      setAgendaToday({
+        pending: items.filter((i) => !i.done && i.date === today).length,
+        overdue: items.filter((i) => !i.done && i.date < today).length,
+      })
+    })
+    fetchLeads().then((leads) => {
+      if (leads) setLeadCount(leads.length)
+    })
+  }, [])
+
+  const stats: Array<{
+    title: string
+    value: number | string
+    hint?: string
+    icon: typeof Package
+    color: string
+    bg: string
+    view: string
+  }> = [
+    {
+      title: 'Hoy en la agenda',
+      value: agendaToday === null ? '—' : agendaToday.pending,
+      hint: agendaToday && agendaToday.overdue > 0 ? `${agendaToday.overdue} vencidos` : undefined,
+      icon: CalendarDots,
+      color: 'text-rose-600',
+      bg: 'bg-rose-50',
+      view: 'agenda',
+    },
+    {
+      title: 'Consultas',
+      value: leadCount === null ? '—' : leadCount,
+      icon: ChatCircleDots,
+      color: 'text-blue-600',
+      bg: 'bg-blue-50',
+      view: 'leads',
+    },
     {
       title: 'Productos',
       value: products?.length || 0,
@@ -48,25 +94,28 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
         {stats.map((stat) => (
           <Card
             key={stat.title}
             className="cursor-pointer card-lift"
             onClick={() => onNavigate(stat.view)}
           >
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground mb-1 truncate">
                     {stat.title}
                   </p>
-                  <p className="text-4xl font-bold text-gradient-warm">
+                  <p className="text-3xl font-bold text-gradient-warm">
                     {stat.value}
                   </p>
+                  {stat.hint && (
+                    <p className="text-[11px] font-medium text-red-600 mt-0.5">{stat.hint}</p>
+                  )}
                 </div>
-                <div className={`p-4 rounded-2xl ${stat.bg}`}>
-                  <stat.icon size={32} weight="duotone" className={stat.color} />
+                <div className={`p-2.5 rounded-xl shrink-0 ${stat.bg}`}>
+                  <stat.icon size={22} weight="duotone" className={stat.color} />
                 </div>
               </div>
             </CardContent>

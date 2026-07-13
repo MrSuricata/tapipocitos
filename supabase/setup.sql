@@ -76,6 +76,8 @@ create table if not exists public.agenda (
 
 -- ---------- NOTIFICACIONES PUSH (privado: suscripciones + claves VAPID) ----------
 alter table public.agenda add column if not exists notified boolean default false;
+-- Registro de completados: cuándo se marcó como hecho (la UI degrada sin la columna).
+alter table public.agenda add column if not exists completed_at timestamptz;
 
 create table if not exists public.push_subscriptions (
   id            uuid primary key default gen_random_uuid(),

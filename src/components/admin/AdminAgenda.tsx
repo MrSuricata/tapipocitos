@@ -20,6 +20,9 @@ import {
   Circle,
   Bell,
   BellRinging,
+  ArrowCounterClockwise,
+  CaretDown,
+  ClockCounterClockwise,
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -165,6 +168,7 @@ export function AdminAgenda() {
   const [cursor, setCursor] = useState(() => new Date())
   const [selectedKey, setSelectedKey] = useState(todayKey)
   const [pushState, setPushState] = useState<'unsupported' | 'ios-needs-install' | 'off' | 'on' | 'working'>('off')
+  const [showCompleted, setShowCompleted] = useState(false)
 
   // Alta rápida
   const [title, setTitle] = useState('')
@@ -250,6 +254,15 @@ export function AdminAgenda() {
   )
   const pendingCount = items.filter((i) => !i.done).length
   const dayItems = byDay.get(selectedKey) || []
+  // Registro de completados, lo más reciente primero (por completed_at si existe).
+  const completed = useMemo(
+    () =>
+      items
+        .filter((i) => i.done)
+        .sort((a, b) => (b.completed_at || b.date).localeCompare(a.completed_at || a.date))
+        .slice(0, 30),
+    [items]
+  )
 
   const handleAdd = async () => {
     if (!title.trim()) {
@@ -280,10 +293,21 @@ export function AdminAgenda() {
   }
 
   const handleToggle = async (item: AgendaItem) => {
-    setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, done: !i.done } : i)))
-    const updated = await updateAgendaItem({ id: item.id, done: !item.done })
+    const nowIso = new Date().toISOString()
+    const completedAt = item.done ? null : nowIso
+    setItems((prev) =>
+      prev.map((i) => (i.id === item.id ? { ...i, done: !i.done, completed_at: completedAt } : i))
+    )
+    // Con registro de cuándo se completó; si la columna aún no existe en la DB,
+    // reintenta sin ella para no romper el toggle.
+    let updated = await updateAgendaItem({ id: item.id, done: !item.done, completed_at: completedAt })
     if (!updated) {
-      setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, done: item.done } : i)))
+      updated = await updateAgendaItem({ id: item.id, done: !item.done })
+    }
+    if (!updated) {
+      setItems((prev) =>
+        prev.map((i) => (i.id === item.id ? { ...i, done: item.done, completed_at: item.completed_at } : i))
+      )
       toast.error('No se pudo actualizar')
     }
   }
@@ -313,6 +337,9 @@ export function AdminAgenda() {
             {pendingCount} {pendingCount === 1 ? 'pendiente' : 'pendientes'}
             {overdue.length > 0 && (
               <span className="text-red-600 font-medium"> · {overdue.length} vencido{overdue.length > 1 ? 's' : ''}</span>
+            )}
+            {completed.length > 0 && (
+              <span className="text-green-700"> · {completed.length} completado{completed.length > 1 ? 's' : ''}</span>
             )}
           </p>
         </div>
@@ -590,6 +617,77 @@ export function AdminAgenda() {
           </Card>
         </div>
       </div>
+
+      {/* Registro de completados (colapsable) */}
+      {completed.length > 0 && (
+        <Card className="glass border-white/50">
+          <CardContent className="pt-4 pb-4">
+            <button
+              onClick={() => setShowCompleted((v) => !v)}
+              className="w-full flex items-center justify-between gap-2 text-left"
+              aria-expanded={showCompleted}
+            >
+              <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground flex items-center gap-2">
+                <ClockCounterClockwise size={16} />
+                Completados
+                <span className="text-[11px] font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full normal-case tracking-normal">
+                  {completed.length}
+                </span>
+              </h3>
+              <CaretDown
+                size={16}
+                className={cn('text-muted-foreground transition-transform', showCompleted && 'rotate-180')}
+              />
+            </button>
+
+            {showCompleted && (
+              <div className="mt-4 space-y-1.5">
+                {completed.map((item) => {
+                  const cfg = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.otro
+                  const doneLabel = item.completed_at
+                    ? `hecho el ${formatKey(item.completed_at.slice(0, 10))}`
+                    : `agendado para el ${formatKey(item.date)}`
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 bg-white/40"
+                    >
+                      <CheckCircle size={18} weight="fill" className="text-green-600 shrink-0" />
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ background: cfg.color }}
+                        aria-hidden="true"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm line-through text-foreground/60 truncate">{item.title}</p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {doneLabel}
+                          {item.client ? ` · ${item.client}` : ''}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleToggle(item)}
+                        className="shrink-0 p-1.5 rounded-full text-muted-foreground/60 hover:text-accent hover:bg-accent/10 transition-colors"
+                        aria-label="Volver a pendiente"
+                        title="Volver a pendiente"
+                      >
+                        <ArrowCounterClockwise size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="shrink-0 p-1.5 rounded-full text-muted-foreground/40 hover:text-destructive hover:bg-red-50 transition-colors"
+                        aria-label="Eliminar del registro"
+                      >
+                        <Trash size={15} />
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

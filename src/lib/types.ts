@@ -67,6 +67,8 @@ export interface AgendaItem {
   phone: string
   notes: string
   done: boolean
+  /** Cuándo se marcó como hecho (puede faltar si la columna aún no existe). */
+  completed_at?: string | null
   created_at: string
 }
 

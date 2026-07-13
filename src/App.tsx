@@ -24,11 +24,12 @@ const AdminProjects = lazy(() => import('@/components/admin/AdminProjects').then
 const AdminTestimonials = lazy(() => import('@/components/admin/AdminTestimonials').then((m) => ({ default: m.AdminTestimonials })))
 const AdminLeads = lazy(() => import('@/components/admin/AdminLeads').then((m) => ({ default: m.AdminLeads })))
 const AdminAgenda = lazy(() => import('@/components/admin/AdminAgenda').then((m) => ({ default: m.AdminAgenda })))
+const AdminInvoice = lazy(() => import('@/components/admin/AdminInvoice').then((m) => ({ default: m.AdminInvoice })))
 import { useAuth } from '@/lib/auth'
 import { toast } from 'sonner'
 
 type View = 'home' | 'about' | 'services' | 'products' | 'gallery' | 'contact' | 'admin'
-type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials' | 'leads' | 'agenda'
+type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials' | 'leads' | 'agenda' | 'invoice'
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home')
@@ -116,6 +117,7 @@ function App() {
           {adminView === 'testimonials' && <AdminTestimonials />}
           {adminView === 'leads' && <AdminLeads />}
           {adminView === 'agenda' && <AdminAgenda />}
+          {adminView === 'invoice' && <AdminInvoice />}
         </AdminLayout>
         </Suspense>
         <Toaster />
