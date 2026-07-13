@@ -6,6 +6,12 @@
     @apply border-border
   }
 
+  html, body {
+    /* Crema cálido de la marca: sin esto, cualquier hueco entre vistas
+       (chunks lazy, scroll bounce) parpadea en blanco navegador. */
+    background-color: #F5F0EB;
+  }
+
   body {
     font-family: 'Open Sans', sans-serif;
     -webkit-font-smoothing: antialiased;

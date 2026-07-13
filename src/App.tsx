@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { useState, useEffect, lazy, Suspense, startTransition } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
@@ -40,20 +40,26 @@ function App() {
   const { login, logout, isAuthenticated } = useAuth()
 
   const handleNavigation = (view: string, data?: any) => {
-    if (view === 'gallery' && data) {
-      setGalleryFilter(data)
-    } else {
-      setGalleryFilter(undefined)
-    }
+    // startTransition: React mantiene la vista actual montada mientras
+    // prepara la nueva — sin parpadeo blanco entre pestañas.
+    startTransition(() => {
+      if (view === 'gallery' && data) {
+        setGalleryFilter(data)
+      } else {
+        setGalleryFilter(undefined)
+      }
 
-    if (view === 'contact' && data) {
-      setContactData(data)
-    } else {
-      setContactData(undefined)
-    }
+      if (view === 'contact' && data) {
+        setContactData(data)
+      } else {
+        setContactData(undefined)
+      }
 
-    setCurrentView(view as View)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+      setCurrentView(view as View)
+    })
+    // Scroll instantáneo: el suave animaba por encima de la vista nueva
+    // y se percibía como salto/parpadeo.
+    window.scrollTo({ top: 0 })
   }
 
   const handleLogin = async (password: string) => {
@@ -99,25 +105,39 @@ function App() {
       )
     }
 
+    // Cambiar de sección dentro de una transición: React deja la sección
+    // vieja visible mientras baja el chunk lazy de la nueva (sin parpadeo).
+    const handleAdminViewChange = (view: string) =>
+      startTransition(() => setAdminView(view as AdminView))
+
+    // Fallback chico SOLO para la zona de contenido: el sidebar no se desmonta.
+    const sectionFallback = (
+      <div className="flex items-center justify-center py-24">
+        <div className="w-8 h-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+      </div>
+    )
+
     return (
       <>
         <Suspense fallback={adminFallback}>
         <AdminLayout
           currentView={adminView}
-          onViewChange={(view) => setAdminView(view as AdminView)}
+          onViewChange={handleAdminViewChange}
           onLogout={handleLogout}
           onBackToSite={() => {
             setCurrentView('home')
             window.history.replaceState(null, '', '/')
           }}
         >
-          {adminView === 'dashboard' && <AdminDashboard onNavigate={(view) => setAdminView(view as AdminView)} />}
-          {adminView === 'products' && <AdminProducts />}
-          {adminView === 'projects' && <AdminProjects />}
-          {adminView === 'testimonials' && <AdminTestimonials />}
-          {adminView === 'leads' && <AdminLeads />}
-          {adminView === 'agenda' && <AdminAgenda />}
-          {adminView === 'invoice' && <AdminInvoice />}
+          <Suspense fallback={sectionFallback}>
+            {adminView === 'dashboard' && <AdminDashboard onNavigate={handleAdminViewChange} />}
+            {adminView === 'products' && <AdminProducts />}
+            {adminView === 'projects' && <AdminProjects />}
+            {adminView === 'testimonials' && <AdminTestimonials />}
+            {adminView === 'leads' && <AdminLeads />}
+            {adminView === 'agenda' && <AdminAgenda />}
+            {adminView === 'invoice' && <AdminInvoice />}
+          </Suspense>
         </AdminLayout>
         </Suspense>
         <Toaster />
