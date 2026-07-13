@@ -1,5 +1,10 @@
 # Handoff — Tapipocitos (para próxima sesión)
 
+## Agenda completados + Facturar (2026-07-13)
+- **Completados**: sección colapsable al pie de la Agenda con restaurar/eliminar; guarda `completed_at` (columna nueva en setup.sql — **re-correrlo**; la UI degrada sin ella reintentando el update sin el campo).
+- **Dashboard**: tarjetas en vivo "Hoy en la agenda" (con vencidos en rojo) y "Consultas" + las 3 de contenido; grilla 2 col en mobile.
+- **Facturar** (`AdminInvoice.tsx`, view `invoice`): presupuesto/factura/orden de entrega → PDF A4 con membrete (jsPDF, import dinámico). Numeración por tipo en localStorage (`tapipocitos_doc_counters`). Verificar layout con `node scripts/preview-invoice.mjs`. No es CFE/e-Factura DGI.
+
 ## ⚠️ CHECKLIST DE ENTREGA (2026-07-03)
 1. **Rotar ADMIN_PASSWORD en Vercel** (la vieja quedó en el historial público de git). Cascada al rotarla: secret `NOTIFY_ADMIN_PASSWORD` en GitHub → job pg_cron en Supabase (regenerar `cron-avisos.local.sql`) → `.env.local` → re-loguear dispositivos.
 2. Pegar `supabase/cron-avisos.local.sql` en el SQL Editor (avisos cada 5 min).
