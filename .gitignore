@@ -33,3 +33,4 @@ pids
 
 .spark-workbench-id
 supabase/cron-avisos.local.sql
+*.local.*
