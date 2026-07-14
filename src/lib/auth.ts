@@ -1,13 +1,24 @@
 import { useState } from 'react'
 import type { AdminUser } from './types'
 
-const TOKEN_DURATION = 24 * 60 * 60 * 1000
+// Sesión persistente: queda logueado en el dispositivo hasta que toque "Salir".
+// (La contraseña ya vive en localStorage para los headers del API, así que un
+// vencimiento corto no agregaba seguridad real — solo molestaba.)
+const TOKEN_DURATION = 10 * 365 * 24 * 60 * 60 * 1000
 
 export function useAuth() {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(() => {
     try {
       const stored = localStorage.getItem('tapipocitos_admin')
-      return stored ? JSON.parse(stored) : null
+      if (!stored) return null
+      const user: AdminUser = JSON.parse(stored)
+      // Renovación deslizante al cargar: cada visita extiende la sesión
+      // (las sesiones viejas de 24 h pasan a persistentes sin re-loguear).
+      if (user && Date.now() < user.expiresAt) {
+        user.expiresAt = Date.now() + TOKEN_DURATION
+        localStorage.setItem('tapipocitos_admin', JSON.stringify(user))
+      }
+      return user
     } catch {
       return null
     }
