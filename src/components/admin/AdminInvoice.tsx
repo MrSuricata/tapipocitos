@@ -13,6 +13,7 @@ import {
   Calculator,
   User,
   NotePencil,
+  WhatsappLogo,
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -124,19 +125,21 @@ export function AdminInvoice() {
     setItems((prev) => (prev.length > 1 ? prev.filter((_, i) => i !== index) : prev))
   }
 
-  const handleExport = async () => {
+  const validateDoc = (): LineItem[] | null => {
     const validItems = items.filter((it) => it.description.trim())
     if (!clientName.trim()) {
       toast.error('Poné el nombre del cliente')
-      return
+      return null
     }
     if (validItems.length === 0) {
       toast.error('Agregá al menos un ítem con descripción')
-      return
+      return null
     }
+    return validItems
+  }
 
-    setExporting(true)
-    try {
+  // Construye el PDF completo; el llamador decide si descargarlo o compartirlo.
+  const buildPdf = async (validItems: LineItem[]) => {
       const { jsPDF } = await import('jspdf')
       const doc = new jsPDF({ unit: 'mm', format: 'a4' })
       const pageW = 210
@@ -283,12 +286,53 @@ export function AdminInvoice() {
       )
 
       const slugClient = clientName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'cliente'
-      doc.save(`${docType}-${docNumber.padStart(4, '0')}-${slugClient}.pdf`)
+      return { doc, filename: `${docType}-${docNumber.padStart(4, '0')}-${slugClient}.pdf` }
+  }
 
+  const handleExport = async () => {
+    const validItems = validateDoc()
+    if (!validItems) return
+    setExporting(true)
+    try {
+      const { doc, filename } = await buildPdf(validItems)
+      doc.save(filename)
       commitDocNumber(docType, parseInt(docNumber, 10) || 1)
       toast.success('PDF exportado')
     } catch (e: any) {
       toast.error(`No se pudo generar el PDF: ${e?.message || 'error'}`)
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  // Compartir directo (WhatsApp, etc.) con la Web Share API; en navegadores
+  // sin soporte de archivos (desktop) cae a la descarga normal.
+  const handleShare = async () => {
+    const validItems = validateDoc()
+    if (!validItems) return
+    setExporting(true)
+    try {
+      const { doc, filename } = await buildPdf(validItems)
+      const blob = doc.output('blob')
+      const file = new File([blob], filename, { type: 'application/pdf' })
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: `${DOC_TYPES[docType].label} Tapipocitos`,
+          text: `${DOC_TYPES[docType].label} N° ${docNumber.padStart(4, '0')} — ${clientName.trim()}`,
+        })
+        commitDocNumber(docType, parseInt(docNumber, 10) || 1)
+        toast.success('Listo para enviar')
+      } else {
+        doc.save(filename)
+        commitDocNumber(docType, parseInt(docNumber, 10) || 1)
+        toast.info('Este navegador no comparte archivos: se descargó el PDF. Desde el celular sale directo a WhatsApp.')
+      }
+    } catch (e: any) {
+      // Si el usuario cierra el panel de compartir, no es un error.
+      if (e?.name !== 'AbortError') {
+        toast.error(`No se pudo compartir: ${e?.message || 'error'}`)
+      }
     } finally {
       setExporting(false)
     }
@@ -483,23 +527,34 @@ export function AdminInvoice() {
             />
           </div>
 
-          <Button
-            onClick={handleExport}
-            disabled={exporting}
-            className="w-full sm:w-auto bg-[#2C1810] hover:bg-[#3D2419] text-white rounded-full px-8 py-6 text-base gap-2 shadow-md"
-          >
-            {exporting ? (
-              <>
-                <div className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                Generando…
-              </>
-            ) : (
-              <>
-                <FilePdf size={20} weight="fill" />
-                Exportar PDF
-              </>
-            )}
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={handleShare}
+              disabled={exporting}
+              className="w-full sm:w-auto bg-[#1FAF5A] hover:bg-[#189A4E] text-white rounded-full px-8 py-6 text-base gap-2 shadow-md"
+            >
+              {exporting ? (
+                <>
+                  <div className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                  Generando…
+                </>
+              ) : (
+                <>
+                  <WhatsappLogo size={20} weight="fill" />
+                  Enviar por WhatsApp
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleExport}
+              disabled={exporting}
+              variant="outline"
+              className="w-full sm:w-auto rounded-full px-8 py-6 text-base gap-2 border-[#2C1810]/30 text-[#2C1810] hover:bg-[#2C1810]/5"
+            >
+              <FilePdf size={20} weight="fill" />
+              Exportar PDF
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
