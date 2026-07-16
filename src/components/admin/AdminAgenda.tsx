@@ -34,6 +34,7 @@ import {
   flushDueNotifications,
 } from '@/lib/agenda'
 import { pushSupport, getPushSubscription, enablePush, disablePush } from '@/lib/push'
+import { deleteWithUndo } from '@/lib/undo'
 import type { AgendaItem, AgendaType } from '@/lib/types'
 
 /* ---------- Tipos de recordatorio ---------- */
@@ -312,15 +313,21 @@ export function AdminAgenda() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('¿Eliminar este recordatorio?')) return
-    const ok = await deleteAgendaItem(id)
-    if (ok) {
-      setItems((prev) => prev.filter((i) => i.id !== id))
-      toast.success('Recordatorio eliminado')
-    } else {
-      toast.error('Error al eliminar')
-    }
+  const handleDelete = (id: string) => {
+    const item = items.find((i) => i.id === id)
+    if (!item) return
+    setItems((prev) => prev.filter((i) => i.id !== id))
+    deleteWithUndo({
+      label: `"${item.title}" eliminado`,
+      onRestore: () => setItems((prev) => [...prev, item]),
+      onConfirm: async () => {
+        const ok = await deleteAgendaItem(id)
+        if (!ok) {
+          toast.error('No se pudo eliminar; el recordatorio sigue guardado')
+          setItems((prev) => [...prev, item])
+        }
+      },
+    })
   }
 
   const cells = monthCells(cursor)

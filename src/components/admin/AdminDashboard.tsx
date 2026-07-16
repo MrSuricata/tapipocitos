@@ -12,7 +12,7 @@ interface AdminDashboardProps {
 export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const { products, projects, testimonials } = useStore()
   const [agendaToday, setAgendaToday] = useState<{ pending: number; overdue: number } | null>(null)
-  const [leadCount, setLeadCount] = useState<number | null>(null)
+  const [leadsPending, setLeadsPending] = useState<number | null>(null)
 
   useEffect(() => {
     const pad = (n: number) => String(n).padStart(2, '0')
@@ -26,7 +26,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       })
     })
     fetchLeads().then((leads) => {
-      if (leads) setLeadCount(leads.length)
+      if (leads) setLeadsPending(leads.filter((l) => l.status !== 'respondida').length)
     })
   }, [])
 
@@ -34,6 +34,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     title: string
     value: number | string
     hint?: string
+    hintClass?: string
     icon: typeof Package
     color: string
     bg: string
@@ -49,8 +50,10 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       view: 'agenda',
     },
     {
-      title: 'Consultas',
-      value: leadCount === null ? '—' : leadCount,
+      title: 'Consultas sin responder',
+      value: leadsPending === null ? '—' : leadsPending,
+      hint: leadsPending && leadsPending > 0 ? 'tocá para responder' : undefined,
+      hintClass: 'text-blue-600',
       icon: ChatCircleDots,
       color: 'text-blue-600',
       bg: 'bg-blue-50',
@@ -94,6 +97,31 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
         </p>
       </div>
 
+      {/* Acciones rápidas: las tres tareas de todos los días, a un toque */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <button
+          onClick={() => onNavigate('agenda')}
+          className="flex items-center gap-3 p-4 rounded-2xl bg-[#2C1810] text-white shadow-md hover:bg-[#3D2419] transition-colors text-left"
+        >
+          <span className="text-2xl" aria-hidden="true">📅</span>
+          <span className="font-semibold">Anotar en la agenda</span>
+        </button>
+        <button
+          onClick={() => onNavigate('invoice')}
+          className="flex items-center gap-3 p-4 rounded-2xl bg-accent text-white shadow-md hover:opacity-90 transition-opacity text-left"
+        >
+          <span className="text-2xl" aria-hidden="true">🧾</span>
+          <span className="font-semibold">Hacer un presupuesto</span>
+        </button>
+        <button
+          onClick={() => onNavigate('leads')}
+          className="flex items-center gap-3 p-4 rounded-2xl bg-white/70 border border-border shadow-soft hover:border-accent/40 transition-colors text-left"
+        >
+          <span className="text-2xl" aria-hidden="true">💬</span>
+          <span className="font-semibold text-foreground">Ver consultas</span>
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
         {stats.map((stat) => (
           <Card
@@ -111,7 +139,9 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     {stat.value}
                   </p>
                   {stat.hint && (
-                    <p className="text-[11px] font-medium text-red-600 mt-0.5">{stat.hint}</p>
+                    <p className={`text-[11px] font-medium mt-0.5 ${stat.hintClass || 'text-red-600'}`}>
+                      {stat.hint}
+                    </p>
                   )}
                 </div>
                 <div className={`p-2.5 rounded-xl shrink-0 ${stat.bg}`}>

@@ -88,6 +88,12 @@ function App() {
     }
   }, [])
 
+  // Modo cómodo: el admin se muestra con escala +12% (ver html.admin-zoom).
+  useEffect(() => {
+    document.documentElement.classList.toggle('admin-zoom', currentView === 'admin')
+    return () => document.documentElement.classList.remove('admin-zoom')
+  }, [currentView])
+
   if (currentView === 'admin') {
     const adminFallback = (
       <div className="min-h-screen flex items-center justify-center bg-[#F5F0EB]">

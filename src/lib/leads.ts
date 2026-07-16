@@ -40,6 +40,32 @@ export async function fetchLeads(): Promise<Lead[] | null> {
   }
 }
 
+// Admin-only: actualizar una consulta (p. ej. marcarla respondida).
+export async function updateLead(patch: Partial<Lead> & { id: string }): Promise<Lead | null> {
+  try {
+    const res = await fetch('/api/leads', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-password': getAdminPassword(),
+      },
+      body: JSON.stringify(patch),
+    })
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null
+  }
+}
+
+// Teléfono UY → formato wa.me (09x xxx xxx → 5989xxxxxxx).
+export function waNumber(phone: string): string {
+  const digits = phone.replace(/[^0-9]/g, '')
+  if (digits.startsWith('598')) return digits
+  if (digits.startsWith('09')) return '598' + digits.slice(1)
+  return digits
+}
+
 // Admin-only: delete a lead.
 export async function deleteLead(id: string): Promise<boolean> {
   try {

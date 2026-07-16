@@ -12,6 +12,13 @@
     background-color: #F5F0EB;
   }
 
+  /* Modo cómodo del admin: +12% de escala global (tipografía, botones y
+     espaciados escalan juntos porque Tailwind usa rem). Pensado para que
+     los dueños del taller lean y toquen sin esfuerzo. */
+  html.admin-zoom {
+    font-size: 18px;
+  }
+
   body {
     font-family: 'Open Sans', sans-serif;
     -webkit-font-smoothing: antialiased;

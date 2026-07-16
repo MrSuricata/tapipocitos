@@ -53,7 +53,7 @@ export function AdminLayout({
   const menuItems = [
     { id: 'agenda', label: 'Agenda', icon: CalendarDots },
     { id: 'invoice', label: 'Facturar', icon: Receipt },
-    { id: 'dashboard', label: 'Dashboard', icon: SquaresFour },
+    { id: 'dashboard', label: 'Inicio', icon: SquaresFour },
     { id: 'products', label: 'Productos', icon: Package },
     { id: 'projects', label: 'Trabajos', icon: Images },
     { id: 'testimonials', label: 'Testimonios', icon: Sparkle },
