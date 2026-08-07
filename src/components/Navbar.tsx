@@ -55,7 +55,7 @@ function CartButton({ onClick, onDark }: { onClick: () => void; onDark?: boolean
       className={cn(
         'relative p-2 rounded-full transition-colors',
         onDark
-          ? 'text-[#F5EDE2] hover:bg-white/10 hover:text-[#E8B380]'
+          ? 'text-[#F5EDE2] hover:bg-white/10 hover:text-[var(--brand-accent-soft)]'
           : 'hover:bg-accent/10 text-primary hover:text-accent'
       )}
       aria-label={`Abrir presupuesto (${count} ${count === 1 ? 'producto' : 'productos'})`}
@@ -127,7 +127,7 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
             <SofaLogo
               className={cn(
                 'w-10 h-8 transition-colors duration-300',
-                onDark ? 'text-[#F5EDE2] group-hover:text-[#E8B380]' : 'text-primary group-hover:text-accent'
+                onDark ? 'text-[#F5EDE2] group-hover:text-[var(--brand-accent-soft)]' : 'text-primary group-hover:text-accent'
               )}
             />
             <div className="text-left">
@@ -160,10 +160,10 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
                   'button-text uppercase text-xs tracking-wider px-4',
                   currentView === item.id
                     ? onDark
-                      ? 'bg-[#C97A40] hover:bg-[#B56A33] text-[#FFF8F0]'
+                      ? 'bg-[var(--brand-accent)] hover:bg-[var(--brand-accent-strong)] text-[#FFF8F0]'
                       : ''
                     : onDark
-                      ? 'text-[#F5EDE2] hover:bg-white/10 hover:text-[#E8B380]'
+                      ? 'text-[#F5EDE2] hover:bg-white/10 hover:text-[var(--brand-accent-soft)]'
                       : 'hover:bg-accent/10 hover:text-accent'
                 )}
               >
@@ -181,7 +181,7 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={cn(onDark && 'text-[#F5EDE2] hover:bg-white/10 hover:text-[#E8B380]')}
+                  className={cn(onDark && 'text-[#F5EDE2] hover:bg-white/10 hover:text-[var(--brand-accent-soft)]')}
                 >
                   {mobileOpen ? <X size={24} /> : <List size={24} />}
                 </Button>

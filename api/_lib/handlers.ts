@@ -155,6 +155,70 @@ export function authHandler(env: Env, body: any): ApiResult {
   return { status: 401, body: { success: false } }
 }
 
+// Personalización del sitio (tema + textos del hero). GET es público (el sitio
+// lo lee al cargar); PUT requiere la contraseña de admin. Si la tabla no existe
+// todavía, GET devuelve los valores por defecto y el sitio sigue andando igual.
+const SETTINGS_DEFAULTS = {
+  theme: 'cuero',
+  hero_title: 'El arte de tapizar,',
+  hero_accent: 'hecho a mano',
+  hero_subtitle:
+    'Desde 1975, la familia Calistro transforma telas, cueros y espumas en piezas que cuentan historias. Retapizados, restauraciones y muebles a medida en Montevideo — con armazones garantidos de por vida.',
+}
+
+export async function settingsHandler(
+  env: Env,
+  method: string,
+  body: any,
+  headers: Record<string, any>
+): Promise<ApiResult> {
+  if (method === 'GET') {
+    try {
+      const supabase = getAdminClient(env)
+      const { data } = await supabase.from('settings').select('*').eq('id', 1).maybeSingle()
+      if (data) {
+        return {
+          status: 200,
+          body: {
+            theme: data.theme || SETTINGS_DEFAULTS.theme,
+            hero_title: data.hero_title || SETTINGS_DEFAULTS.hero_title,
+            hero_accent: data.hero_accent || SETTINGS_DEFAULTS.hero_accent,
+            hero_subtitle: data.hero_subtitle || SETTINGS_DEFAULTS.hero_subtitle,
+          },
+        }
+      }
+    } catch {
+      // sin tabla o sin conexión: defaults
+    }
+    return { status: 200, body: SETTINGS_DEFAULTS }
+  }
+
+  if (method === 'PUT') {
+    const provided = headers?.['x-admin-password']
+    if (!env.ADMIN_PASSWORD || provided !== env.ADMIN_PASSWORD) {
+      return { status: 401, body: { error: 'No autorizado' } }
+    }
+    try {
+      const supabase = getAdminClient(env)
+      const patch = {
+        id: 1,
+        theme: typeof body?.theme === 'string' ? body.theme : SETTINGS_DEFAULTS.theme,
+        hero_title: typeof body?.hero_title === 'string' ? body.hero_title : '',
+        hero_accent: typeof body?.hero_accent === 'string' ? body.hero_accent : '',
+        hero_subtitle: typeof body?.hero_subtitle === 'string' ? body.hero_subtitle : '',
+        updated_at: new Date().toISOString(),
+      }
+      const { data, error } = await supabase.from('settings').upsert(patch).select().single()
+      if (error) throw error
+      return { status: 200, body: data }
+    } catch (e: any) {
+      return { status: 500, body: { error: e?.message || 'Error del servidor' } }
+    }
+  }
+
+  return { status: 405, body: { error: 'Método no permitido' } }
+}
+
 // Agenda (recordatorios/entregas del taller). TODO requiere la contraseña de
 // admin vía header x-admin-password: es una herramienta interna, nada es público.
 export async function agendaHandler(

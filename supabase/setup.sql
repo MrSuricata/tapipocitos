@@ -94,6 +94,16 @@ create table if not exists public.push_config (
   created_at     timestamptz default now()
 );
 
+-- ---------- PERSONALIZACIÓN (tema + textos del hero; fila única id=1) ----------
+create table if not exists public.settings (
+  id             int primary key default 1,
+  theme          text default 'cuero',
+  hero_title     text default '',
+  hero_accent    text default '',
+  hero_subtitle  text default '',
+  updated_at     timestamptz default now()
+);
+
 -- ---------- RLS: lectura pública, escritura solo service_role ----------
 -- El service_role (usado por las funciones /api) OMITE RLS, así que sólo
 -- habilitamos la LECTURA anónima. No creamos políticas de escritura pública
@@ -106,6 +116,8 @@ alter table public.leads        enable row level security;
 alter table public.agenda      enable row level security;
 alter table public.push_subscriptions enable row level security;
 alter table public.push_config       enable row level security;
+alter table public.settings          enable row level security;
+-- settings se lee vía /api/settings (service_role); no necesita política pública.
 
 drop policy if exists "public read products" on public.products;
 create policy "public read products" on public.products for select using (true);

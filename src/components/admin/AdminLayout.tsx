@@ -9,6 +9,7 @@ import {
   ChatCircleDots,
   CalendarDots,
   Receipt,
+  PaintBrushBroad,
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { BackgroundDecor } from '@/components/BackgroundDecor'
@@ -58,6 +59,7 @@ export function AdminLayout({
     { id: 'projects', label: 'Trabajos', icon: Images },
     { id: 'testimonials', label: 'Testimonios', icon: Sparkle },
     { id: 'leads', label: 'Consultas', icon: ChatCircleDots },
+    { id: 'settings', label: 'Personalizar', icon: PaintBrushBroad },
   ]
 
   return (

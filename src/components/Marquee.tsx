@@ -33,7 +33,7 @@ export function Marquee() {
             >
               {word}
             </span>
-            <span className="text-[#C97A40]/50 text-2xl md:text-3xl" aria-hidden="true">
+            <span className="text-[var(--brand-accent)]/50 text-2xl md:text-3xl" aria-hidden="true">
               ✦
             </span>
           </span>

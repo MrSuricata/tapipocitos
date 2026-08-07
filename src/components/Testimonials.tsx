@@ -20,7 +20,7 @@ function TestimonialCard({
       transition={{ duration: 0.7, delay: index * 0.12, ease: APPLE_EASE }}
       className="relative flex flex-col h-full rounded-2xl p-8 glass-dark shadow-float"
     >
-      <Quotes size={40} weight="fill" className="text-[#C97A40] mb-5" aria-hidden="true" />
+      <Quotes size={40} weight="fill" className="text-[var(--brand-accent)] mb-5" aria-hidden="true" />
       <blockquote
         className="flex-1 text-lg leading-relaxed text-[#EDE2D2] italic"
         style={{ fontFamily: "'Playfair Display', serif" }}
@@ -39,7 +39,7 @@ function TestimonialCard({
           aria-label={`Calificacion: ${testimonial.rating} de 5 estrellas`}
         >
           {Array.from({ length: testimonial.rating }).map((_, i) => (
-            <Star key={i} size={13} weight="fill" className="text-[#E8B380]" />
+            <Star key={i} size={13} weight="fill" className="text-[var(--brand-accent-soft)]" />
           ))}
         </div>
       </figcaption>
@@ -69,7 +69,7 @@ export function Testimonials() {
       />
       {/* Comilla gigante de fondo */}
       <div
-        className="absolute -top-10 left-1/2 -translate-x-1/2 text-[26rem] leading-none text-[#C97A40]/[0.06] pointer-events-none select-none hidden md:block"
+        className="absolute -top-10 left-1/2 -translate-x-1/2 text-[26rem] leading-none text-[var(--brand-accent)]/[0.06] pointer-events-none select-none hidden md:block"
         style={{ fontFamily: "'Playfair Display', serif" }}
         aria-hidden="true"
       >
@@ -85,7 +85,7 @@ export function Testimonials() {
           className="mb-16 max-w-2xl"
         >
           <div className="flex items-center gap-4 mb-6">
-            <span className="block w-12 h-px bg-[#C97A40]" />
+            <span className="block w-12 h-px bg-[var(--brand-accent)]" />
             <span className="text-[0.7rem] md:text-xs tracking-[0.35em] uppercase text-[#C4A882] font-medium">
               Testimonios
             </span>

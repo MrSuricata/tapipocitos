@@ -4,6 +4,7 @@ import { ArrowRight, ArrowDown } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { SafeImage } from '@/components/SafeImage'
 import { CountUp } from '@/components/CountUp'
+import { useSiteSettings } from '@/lib/settings'
 
 interface HeroProps {
   onNavigate: (view: string) => void
@@ -21,7 +22,7 @@ function ThreadUnderline() {
     >
       <motion.path
         d="M4 12 Q34 4, 64 12 Q94 20, 124 12 Q154 4, 184 12 Q214 20, 244 12 Q274 4, 304 12"
-        stroke="#C97A40"
+        style={{ stroke: 'var(--brand-accent)' }}
         strokeWidth="1.6"
         fill="none"
         strokeLinecap="round"
@@ -34,8 +35,8 @@ function ThreadUnderline() {
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 0.5 }}
       >
-        <ellipse cx="318" cy="12" rx="2" ry="5" fill="#E8B380" opacity="0.9" />
-        <line x1="318" y1="7" x2="327" y2="2" stroke="#E8B380" strokeWidth="1.4" strokeLinecap="round" />
+        <ellipse cx="318" cy="12" rx="2" ry="5" style={{ fill: 'var(--brand-accent-soft)' }} opacity="0.9" />
+        <line x1="318" y1="7" x2="327" y2="2" style={{ stroke: 'var(--brand-accent-soft)' }} strokeWidth="1.4" strokeLinecap="round" />
       </motion.g>
     </svg>
   )
@@ -62,7 +63,7 @@ function HeroStat({
       className="flex flex-col"
     >
       <span
-        className="text-2xl md:text-[2rem] font-bold tracking-tight text-[#E8B380]"
+        className="text-2xl md:text-[2rem] font-bold tracking-tight text-[var(--brand-accent-soft)]"
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
         <CountUp to={to} suffix={suffix} separator={separator} />
@@ -83,6 +84,7 @@ function HeroStat({
 export function Hero({ onNavigate }: HeroProps) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
   const [reduced, setReduced] = useState(false)
+  const settings = useSiteSettings()
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -157,7 +159,7 @@ export function Hero({ onNavigate }: HeroProps) {
               transition={{ duration: dur(0.7), ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-4 mb-7"
             >
-              <span className="block w-12 h-px bg-[#C97A40]" />
+              <span className="block w-12 h-px bg-[var(--brand-accent)]" />
               <span className="text-[0.7rem] md:text-xs tracking-[0.35em] uppercase text-[#C4A882] font-medium">
                 Tapicería familiar · Tres generaciones
               </span>
@@ -170,11 +172,9 @@ export function Hero({ onNavigate }: HeroProps) {
               transition={{ duration: dur(0.8), delay: del(0.1), ease: [0.16, 1, 0.3, 1] }}
               className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.02] tracking-tight text-[#F5EDE2]"
             >
-              El arte de
-              <br />
-              tapizar,{' '}
+              {settings.hero_title}{' '}
               <span className="italic font-semibold text-gradient-amber">
-                hecho a mano
+                {settings.hero_accent}
               </span>
             </motion.h1>
 
@@ -187,9 +187,7 @@ export function Hero({ onNavigate }: HeroProps) {
               transition={{ duration: dur(0.8), delay: del(0.25), ease: [0.16, 1, 0.3, 1] }}
               className="mt-6 mb-10 text-base md:text-lg leading-relaxed text-[#D9C9B4] max-w-xl"
             >
-              Desde 1975, la familia Calistro transforma telas, cueros y espumas en
-              piezas que cuentan historias. Retapizados, restauraciones y muebles a
-              medida en Montevideo — con armazones garantidos de por vida.
+              {settings.hero_subtitle}
             </motion.p>
 
             {/* CTAs */}
@@ -202,7 +200,7 @@ export function Hero({ onNavigate }: HeroProps) {
               <Button
                 size="lg"
                 onClick={() => onNavigate('gallery')}
-                className="group text-base px-8 py-6 rounded-full cta-primary bg-[#C97A40] hover:bg-[#B56A33] text-[#FFF8F0] border-0"
+                className="group text-base px-8 py-6 rounded-full cta-primary bg-[var(--brand-accent)] hover:bg-[var(--brand-accent-strong)] text-[#FFF8F0] border-0"
                 aria-label="Ver galería de trabajos realizados"
               >
                 Ver trabajos
@@ -244,7 +242,7 @@ export function Hero({ onNavigate }: HeroProps) {
               onClick={() => {
                 window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
               }}
-              className="hidden md:flex items-center gap-3 text-[#C4A882] hover:text-[#E8B380] transition-colors group"
+              className="hidden md:flex items-center gap-3 text-[#C4A882] hover:text-[var(--brand-accent-soft)] transition-colors group"
               animate={reduced ? {} : { y: [0, 6, 0] }}
               transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
               aria-label="Desplazar hacia abajo"

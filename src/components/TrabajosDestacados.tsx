@@ -67,14 +67,14 @@ function ThreadOrnament() {
     >
       <path
         d="M10 10 Q45 2, 90 10 T170 10"
-        stroke="#C97A40"
+        style={{ stroke: 'var(--brand-accent)' }}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeDasharray="4 3"
         opacity="0.7"
         fill="none"
       />
-      <circle cx="90" cy="10" r="2.5" fill="#C97A40" opacity="0.8" />
+      <circle cx="90" cy="10" r="2.5" style={{ fill: 'var(--brand-accent)' }} opacity="0.8" />
     </svg>
   )
 }
@@ -108,7 +108,7 @@ export function TrabajosDestacados() {
         >
           <p
             className="text-sm uppercase tracking-[0.25em] font-semibold mb-3"
-            style={{ color: '#C97A40' }}
+            style={{ color: 'var(--brand-accent)' }}
           >
             Han confiado en nosotros
           </p>
@@ -169,7 +169,7 @@ export function TrabajosDestacados() {
                   </p>
                   <p
                     className="text-[11px] md:text-xs uppercase tracking-wider font-medium"
-                    style={{ color: '#C97A40' }}
+                    style={{ color: 'var(--brand-accent)' }}
                   >
                     {project.type}
                   </p>

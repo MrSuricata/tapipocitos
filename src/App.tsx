@@ -25,11 +25,13 @@ const AdminTestimonials = lazy(() => import('@/components/admin/AdminTestimonial
 const AdminLeads = lazy(() => import('@/components/admin/AdminLeads').then((m) => ({ default: m.AdminLeads })))
 const AdminAgenda = lazy(() => import('@/components/admin/AdminAgenda').then((m) => ({ default: m.AdminAgenda })))
 const AdminInvoice = lazy(() => import('@/components/admin/AdminInvoice').then((m) => ({ default: m.AdminInvoice })))
+const AdminSettings = lazy(() => import('@/components/admin/AdminSettings').then((m) => ({ default: m.AdminSettings })))
 import { useAuth } from '@/lib/auth'
+import { getSettings, applyTheme } from '@/lib/settings'
 import { toast } from 'sonner'
 
 type View = 'home' | 'about' | 'services' | 'products' | 'gallery' | 'contact' | 'admin'
-type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials' | 'leads' | 'agenda' | 'invoice'
+type AdminView = 'dashboard' | 'products' | 'projects' | 'testimonials' | 'leads' | 'agenda' | 'invoice' | 'settings'
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home')
@@ -94,6 +96,11 @@ function App() {
     return () => document.documentElement.classList.remove('admin-zoom')
   }, [currentView])
 
+  // Personalización: aplicar el tema elegido apenas carga la app.
+  useEffect(() => {
+    getSettings().then((s) => applyTheme(s.theme))
+  }, [])
+
   if (currentView === 'admin') {
     const adminFallback = (
       <div className="min-h-screen flex items-center justify-center bg-[#F5F0EB]">
@@ -143,6 +150,7 @@ function App() {
             {adminView === 'leads' && <AdminLeads />}
             {adminView === 'agenda' && <AdminAgenda />}
             {adminView === 'invoice' && <AdminInvoice />}
+            {adminView === 'settings' && <AdminSettings />}
           </Suspense>
         </AdminLayout>
         </Suspense>

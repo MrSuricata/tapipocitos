@@ -8,6 +8,7 @@ import {
   authHandler,
   leadsHandler,
   agendaHandler,
+  settingsHandler,
   isValidTable,
   type Env,
 } from './api/_lib/handlers'
@@ -62,6 +63,8 @@ function devApiPlugin(env: Env): Plugin {
             }
           } else if (resource === 'agenda') {
             result = await agendaHandler(env, method, query, body, req.headers as any)
+          } else if (resource === 'settings') {
+            result = await settingsHandler(env, method, body, req.headers as any)
           } else if (resource === 'push') {
             result = await pushHandler(env, method, body, req.headers as any)
           } else if (resource === 'notify-due') {
