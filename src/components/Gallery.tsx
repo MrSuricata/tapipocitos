@@ -35,6 +35,11 @@ const zoomVariants = {
   }),
 }
 
+/* Ritmo de proporciones del masonry: reserva altura (las cortinas no se
+   disparan antes de que carguen las fotos, y no hay saltos de layout) y
+   da variedad visual aunque todas las fotos vengan 4:3 de la cámara. */
+const MASONRY_ASPECTS = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/2]']
+
 const captionVariants = {
   hidden: { opacity: 0, y: 12 },
   show: (i: number) => ({
@@ -412,21 +417,23 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       role="button"
                       aria-label={`Ver detalles del proyecto ${project.title}`}
                     >
-                      {project.images.length > 0 && project.images[0] ? (
-                        <motion.img
-                          variants={zoomVariants}
-                          whileHover={reduced ? undefined : { scale: 1.04 }}
-                          src={project.images[0]}
-                          alt={project.title}
-                          className="w-full h-auto block"
-                          style={{ filter: 'saturate(1.06) contrast(1.04)' }}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <motion.div variants={zoomVariants} className="aspect-[4/3]">
+                      <motion.div
+                        variants={zoomVariants}
+                        whileHover={reduced ? undefined : { scale: 1.04 }}
+                        className={`${MASONRY_ASPECTS[index % MASONRY_ASPECTS.length]} w-full`}
+                      >
+                        {project.images.length > 0 && project.images[0] ? (
+                          <img
+                            src={project.images[0]}
+                            alt={project.title}
+                            className="w-full h-full object-cover block"
+                            style={{ filter: 'saturate(1.06) contrast(1.04)' }}
+                            loading="lazy"
+                          />
+                        ) : (
                           <ProjectPlaceholder category={project.category} />
-                        </motion.div>
-                      )}
+                        )}
+                      </motion.div>
 
                       {/* Velo con el relato — solo en pantallas grandes,
                           donde la foto tiene altura para bancárselo */}
