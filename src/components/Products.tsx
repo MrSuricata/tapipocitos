@@ -77,21 +77,25 @@ const sideTextVariants = {
   show: (dir: number) => ({
     opacity: 1,
     x: 0,
-    transition: { duration: 0.6, ease: SOFT_EASE, delay: 0.18, custom: dir },
+    transition: { duration: 0.8, ease: SOFT_EASE, delay: 0.4 },
   }),
 }
 
 const rowCurtainVariants = {
-  hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
+  // Cortina lateral: se abre desde el lado donde vive la foto
+  // (dir 1 = foto a la izquierda -> barre hacia la derecha).
+  hidden: (dir: number) => ({
+    clipPath: dir === 1 ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)',
+  }),
   show: {
     clipPath: 'inset(0% 0% 0% 0%)',
-    transition: { duration: 0.7, ease: CURTAIN_EASE },
+    transition: { duration: 1.15, ease: CURTAIN_EASE },
   },
 }
 
 const rowZoomVariants = {
-  hidden: { scale: 1.14 },
-  show: { scale: 1, transition: { duration: 1.1, ease: ZOOM_EASE } },
+  hidden: { scale: 1.12 },
+  show: { scale: 1, transition: { duration: 1.7, ease: ZOOM_EASE } },
 }
 
 // "2000" → "$U 2.000"; texto libre queda tal cual; vacío → Consultar.
@@ -501,7 +505,7 @@ export function Products({ onNavigate }: ProductsProps) {
                       key={product.id}
                       initial={reduced ? false : 'hidden'}
                       whileInView="show"
-                      viewport={{ once: true, amount: 0.25, margin: '0px 0px -40px 0px' }}
+                      viewport={{ once: true, amount: 0.3 }}
                       custom={dir}
                       className="grid md:grid-cols-12 gap-5 md:gap-12 items-center group"
                     >
