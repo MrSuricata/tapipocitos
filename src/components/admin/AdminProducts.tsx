@@ -132,7 +132,7 @@ export function AdminProducts() {
             <span className="text-gradient-warm">Productos</span>
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            {(products || []).length} en el catálogo que ve el cliente
+            <strong className="text-foreground/80">Lo que está en venta:</strong> piezas con precio que el cliente puede encargar · {(products || []).length} en el catálogo
           </p>
         </div>
         <Button

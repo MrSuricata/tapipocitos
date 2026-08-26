@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { X, ArrowRight, Ruler, Package, Armchair, ShoppingBag, Check, WhatsappLogo } from '@phosphor-icons/react'
@@ -377,7 +376,7 @@ export function Products({ onNavigate }: ProductsProps) {
               transition={{
                 duration: DESIGN_TOKENS.animations.duration.slow / 1000,
               }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5"
             >
               {filteredProducts.length === 0 ? (
                 <motion.div
@@ -429,12 +428,11 @@ export function Products({ onNavigate }: ProductsProps) {
                       delay: index * 0.05,
                     }}
                   >
-                    <Card
-                      className="group overflow-hidden cursor-pointer h-full flex flex-col card-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      style={{
-                        transitionDuration: `${DESIGN_TOKENS.animations.duration.medium}ms`,
-                        transitionTimingFunction: DESIGN_TOKENS.animations.easing,
-                      }}
+                    {/* Ficha editorial: la foto ES la tarjeta; la información
+                        vive sobre un degradado espresso, como catálogo de
+                        mobiliario premium — nada de caja blanca. */}
+                    <article
+                      className="group relative aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                       onClick={() => setSelectedProduct(product)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -446,105 +444,99 @@ export function Products({ onNavigate }: ProductsProps) {
                       role="button"
                       aria-label={`Ver detalles de ${product.name}`}
                     >
-                      <div className="aspect-square overflow-hidden bg-secondary card-image-container">
+                      {/* Fotografía a sangre completa */}
+                      <div className="absolute inset-0">
                         {product.images.length > 0 && product.images[0] ? (
                           <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="w-full h-full object-cover card-image-zoom"
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-full card-image-zoom">
+                          <div className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-105">
                             <ProductPlaceholder category={product.category} />
                           </div>
                         )}
                       </div>
-                      <div className="p-4 flex-1 flex flex-col">
-                        <div className="mb-2">
-                          <h3
-                            className="text-lg font-semibold line-clamp-1"
-                            style={{
-                              color: DESIGN_TOKENS.colors.title,
-                              fontSize: DESIGN_TOKENS.typography.title.minSize,
-                            }}
-                          >
-                            {product.name}
-                          </h3>
-                          {product.price && (
-                            <p className="text-xs mt-0.5 text-muted-foreground">
-                              {product.price}
-                            </p>
-                          )}
-                        </div>
-                        <p
-                          className="text-sm line-clamp-2 mb-2 flex-1"
-                          style={{
-                            color: DESIGN_TOKENS.colors.description,
-                            fontSize: '14px',
-                            lineHeight: DESIGN_TOKENS.typography.lineHeight,
-                          }}
-                        >
-                          {product.description}
-                        </p>
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground mt-auto">
-                          <span className="flex items-center gap-1">
-                            <Package size={14} />
-                            {product.material}
-                          </span>
-                          {product.color && (
-                            <span className="flex items-center gap-1">
-                              <div
-                                className="w-3 h-3 rounded-full border"
-                                style={{ backgroundColor: product.color }}
-                                aria-label={`Color: ${product.color}`}
-                              />
-                            </span>
-                          )}
-                        </div>
 
-                        {/* Cart / WhatsApp actions */}
-                        <div
-                          className="flex items-center gap-2 mt-3"
-                          onClick={(e) => e.stopPropagation()}
-                          onKeyDown={(e) => e.stopPropagation()}
+                      {/* Degradado espresso para legibilidad */}
+                      <div
+                        className="absolute inset-0 bg-gradient-to-t from-[#1A0F08]/95 via-[#1A0F08]/35 to-transparent transition-opacity duration-300"
+                        aria-hidden="true"
+                      />
+
+                      {/* Categoría (arriba a la izquierda) + destacado */}
+                      <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
+                        <span className="text-[0.62rem] font-semibold tracking-[0.22em] uppercase text-[#F5EDE2]/90 bg-[#1A0F08]/45 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                          {product.category}
+                        </span>
+                        {product.featured && (
+                          <span
+                            className="text-[0.62rem] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full text-[#1A0F08]"
+                            style={{ background: 'var(--brand-accent-soft)' }}
+                          >
+                            Destacado
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Información sobre la foto */}
+                      <div className="absolute inset-x-0 bottom-0 p-4">
+                        <h3
+                          className="text-base sm:text-lg leading-snug font-bold text-[#F5EDE2] line-clamp-2"
+                          style={{ fontFamily: "'Playfair Display', serif" }}
                         >
-                          <Button
-                            size="sm"
-                            variant={has(product.id) ? 'default' : 'outline'}
-                            className="flex-1 rounded-full text-xs h-8"
-                            onClick={() => handleToggleCart(product)}
-                            aria-label={
-                              has(product.id)
-                                ? `Quitar ${product.name} del presupuesto`
-                                : `Agregar ${product.name} al presupuesto`
-                            }
+                          {product.name}
+                        </h3>
+                        <p className="text-[0.72rem] text-[#C4A882] mt-0.5 line-clamp-1">
+                          {product.material}
+                        </p>
+                        <div className="flex items-end justify-between gap-2 mt-2.5">
+                          <span
+                            className="text-xs sm:text-sm font-bold text-[var(--brand-accent-soft)] line-clamp-1"
+                            style={{ fontVariantNumeric: 'tabular-nums' }}
                           >
-                            {has(product.id) ? (
-                              <>
-                                <Check size={14} weight="bold" className="mr-1" />
-                                Agregado
-                              </>
-                            ) : (
-                              <>
-                                <ShoppingBag size={14} className="mr-1" />
-                                Agregar
-                              </>
-                            )}
-                          </Button>
-                          <a
-                            href={buildWhatsappConsultLink(toCartItem(product))}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-full text-white flex-shrink-0 hover:scale-105 transition-transform"
-                            style={{ backgroundColor: '#25D366' }}
-                            aria-label={`Consultar por ${product.name} en WhatsApp`}
+                            {product.price || 'Consultar'}
+                          </span>
+                          <div
+                            className="flex items-center gap-1.5"
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => e.stopPropagation()}
                           >
-                            <WhatsappLogo size={16} weight="fill" />
-                          </a>
+                            <button
+                              onClick={() => handleToggleCart(product)}
+                              className={`inline-flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-md border transition-all ${
+                                has(product.id)
+                                  ? 'bg-[var(--brand-accent)] border-[var(--brand-accent)] text-white'
+                                  : 'bg-white/15 border-white/30 text-[#F5EDE2] hover:bg-white/30'
+                              }`}
+                              aria-label={
+                                has(product.id)
+                                  ? `Quitar ${product.name} del presupuesto`
+                                  : `Agregar ${product.name} al presupuesto`
+                              }
+                            >
+                              {has(product.id) ? (
+                                <Check size={16} weight="bold" />
+                              ) : (
+                                <ShoppingBag size={16} />
+                              )}
+                            </button>
+                            <a
+                              href={buildWhatsappConsultLink(toCartItem(product))}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center w-10 h-10 rounded-full text-white backdrop-blur-md hover:scale-105 transition-transform"
+                              style={{ backgroundColor: 'rgba(31,175,90,0.92)' }}
+                              aria-label={`Consultar por ${product.name} en WhatsApp`}
+                            >
+                              <WhatsappLogo size={16} weight="fill" />
+                            </a>
+                          </div>
                         </div>
                       </div>
-                    </Card>
+                    </article>
                   </motion.div>
                 ))
               )}

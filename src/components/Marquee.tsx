@@ -19,7 +19,7 @@ export function Marquee() {
 
   return (
     <section
-      className="relative py-8 md:py-10 bg-[#F5F0EB] overflow-hidden border-y border-[#6B4423]/10 select-none"
+      className="relative py-8 md:py-10 bg-[var(--brand-ground)] overflow-hidden border-y border-[#6B4423]/10 select-none"
       aria-hidden="true"
     >
       <div className="marquee-track items-baseline gap-10 md:gap-16 px-5">

@@ -73,10 +73,9 @@ export function AdminSettings() {
                   onClick={() => pickTheme(key)}
                   className={cn(
                     'flex flex-col items-center gap-2.5 rounded-2xl p-4 border-2 transition-all',
-                    active
-                      ? 'border-[var(--brand-accent)] bg-white/70 shadow-md'
-                      : 'border-transparent bg-white/40 hover:bg-white/60'
+                    active ? 'border-[var(--brand-accent)] shadow-md' : 'border-black/5 hover:shadow'
                   )}
+                  style={{ background: theme.ground }}
                   aria-pressed={active}
                 >
                   <span className="flex -space-x-1.5">
@@ -94,7 +93,7 @@ export function AdminSettings() {
           </div>
           <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
             <Eye size={14} />
-            Al tocar un color, este panel se pinta de muestra. Se aplica al sitio al Guardar.
+            Cada tema cambia el color de acento Y el tono del fondo del sitio. Al tocar uno, este panel se pinta de muestra; se aplica al sitio al Guardar.
           </p>
         </CardContent>
       </Card>

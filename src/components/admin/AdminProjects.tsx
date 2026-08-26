@@ -167,7 +167,7 @@ export function AdminProjects() {
             <span className="text-gradient-warm">Trabajos</span>
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            {projects.length} trabajos en el portfolio
+            <strong className="text-foreground/80">Su vidriera:</strong> trabajos ya entregados, para mostrar experiencia (sin precio) · {projects.length} en el portfolio
           </p>
         </div>
         <Button

@@ -7,9 +7,9 @@
   }
 
   html, body {
-    /* Crema cálido de la marca: sin esto, cualquier hueco entre vistas
-       (chunks lazy, scroll bounce) parpadea en blanco navegador. */
-    background-color: #F5F0EB;
+    /* Fondo de marca (cambia con el tema elegido en Personalizar). Sin esto,
+       cualquier hueco entre vistas parpadea en blanco navegador. */
+    background-color: var(--brand-ground, #F5F0EB);
   }
 
   /* Modo cómodo del admin: +12% de escala global (tipografía, botones y
@@ -69,6 +69,7 @@
   --brand-accent: #C97A40;
   --brand-accent-soft: #E8B380;
   --brand-accent-strong: #B56A33;
+  --brand-ground: #F5F0EB;
 
   --accent: var(--brand-accent);
   --accent-foreground: oklch(1 0 0);

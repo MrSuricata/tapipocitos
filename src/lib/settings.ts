@@ -22,12 +22,14 @@ export const SETTINGS_DEFAULTS: SiteSettings = {
 
 export const THEMES: Record<
   string,
-  { label: string; accent: string; soft: string; strong: string }
+  { label: string; accent: string; soft: string; strong: string; ground: string }
 > = {
-  cuero: { label: 'Cuero', accent: '#C97A40', soft: '#E8B380', strong: '#B56A33' },
-  oliva: { label: 'Oliva', accent: '#7C8B4D', soft: '#AEBE7E', strong: '#647240' },
-  vino: { label: 'Vino', accent: '#9A4A50', soft: '#C68F93', strong: '#7E3A3F' },
-  petroleo: { label: 'Petróleo', accent: '#40756B', soft: '#82ACA3', strong: '#335E56' },
+  // ground: el "papel" del sitio vira sutil hacia el tono elegido;
+  // las secciones espresso oscuras quedan fijas como constante de marca.
+  cuero: { label: 'Cuero', accent: '#C97A40', soft: '#E8B380', strong: '#B56A33', ground: '#F5F0EB' },
+  oliva: { label: 'Oliva', accent: '#7C8B4D', soft: '#AEBE7E', strong: '#647240', ground: '#F1F2E7' },
+  vino: { label: 'Vino', accent: '#9A4A50', soft: '#C68F93', strong: '#7E3A3F', ground: '#F7EEEC' },
+  petroleo: { label: 'Petróleo', accent: '#40756B', soft: '#82ACA3', strong: '#335E56', ground: '#EDF2F0' },
 }
 
 /** Aplica el tema pintando las variables de marca en :root. */
@@ -37,6 +39,9 @@ export function applyTheme(themeKey: string) {
   root.setProperty('--brand-accent', theme.accent)
   root.setProperty('--brand-accent-soft', theme.soft)
   root.setProperty('--brand-accent-strong', theme.strong)
+  root.setProperty('--brand-ground', theme.ground)
+  // --background alimenta las clases bg-background de Tailwind.
+  root.setProperty('--background', theme.ground)
 }
 
 let cached: SiteSettings | null = null
