@@ -514,6 +514,7 @@ export function Products({ onNavigate }: ProductsProps) {
                           entra desde su propio lado. */}
                       <motion.div
                         variants={rowCurtainVariants}
+                        custom={dir}
                         role="button"
                         tabIndex={0}
                         aria-label={`Ver detalles de ${product.name}`}
@@ -562,6 +563,7 @@ export function Products({ onNavigate }: ProductsProps) {
                       {/* Relato del producto */}
                       <motion.div
                         variants={sideTextVariants}
+                        custom={dir}
                         className={`md:col-span-5 px-1 ${photoLeft ? '' : 'md:order-1'}`}
                       >
                         <span className="text-[0.62rem] font-semibold tracking-[0.26em] uppercase text-[var(--brand-accent)]">

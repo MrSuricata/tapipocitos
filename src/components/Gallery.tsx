@@ -427,6 +427,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                           el relato del trabajo entra desde su lado. */}
                       <motion.div
                         variants={rowCurtainVariants}
+                        custom={dir}
                         role="button"
                         tabIndex={0}
                         aria-label={`Ver detalles del proyecto ${project.title}`}
@@ -463,6 +464,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       {/* Relato del trabajo */}
                       <motion.div
                         variants={sideTextVariants}
+                        custom={dir}
                         className={`md:col-span-5 px-1 ${photoLeft ? '' : 'md:order-1'}`}
                       >
                         <span className="text-[0.62rem] font-semibold tracking-[0.26em] uppercase text-[var(--brand-accent)]">
