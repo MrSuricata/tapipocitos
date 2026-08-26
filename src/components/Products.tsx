@@ -73,29 +73,38 @@ const zoomVariants = {
 /* En filas editoriales el texto entra desde su propio lado
    (dir: 1 = texto a la derecha, -1 = a la izquierda). */
 const sideTextVariants = {
-  hidden: (dir: number) => ({ opacity: 0, x: 26 * dir }),
+  hidden: (dir: number) => ({ opacity: 0, x: 26 * dir, filter: 'blur(6px)' }),
   show: (dir: number) => ({
     opacity: 1,
     x: 0,
+    filter: 'blur(0px)',
     transition: { duration: 0.8, ease: SOFT_EASE, delay: 0.4 },
   }),
 }
 
+// El contenedor ya no recorta: el revelado vive en la foto (blur-focus).
 const rowCurtainVariants = {
-  // Cortina lateral: se abre desde el lado donde vive la foto
-  // (dir 1 = foto a la izquierda -> barre hacia la derecha).
-  hidden: (dir: number) => ({
-    clipPath: dir === 1 ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)',
-  }),
-  show: {
-    clipPath: 'inset(0% 0% 0% 0%)',
-    transition: { duration: 1.15, ease: CURTAIN_EASE },
-  },
+  hidden: {},
+  show: {},
 }
 
+/* Revelado difuminado: la foto entra fuera de foco, deslizándose suave
+   desde su lado, y se enfoca al asentarse. El scale inicial sobra el marco
+   para que el blur no muestre halos en los bordes. */
 const rowZoomVariants = {
-  hidden: { scale: 1.12 },
-  show: { scale: 1, transition: { duration: 1.7, ease: ZOOM_EASE } },
+  hidden: (dir: number) => ({
+    opacity: 0,
+    x: 30 * dir,
+    scale: 1.1,
+    filter: 'blur(18px) saturate(1.06) contrast(1.04)',
+  }),
+  show: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    filter: 'blur(0px) saturate(1.06) contrast(1.04)',
+    transition: { duration: 1.35, ease: ZOOM_EASE },
+  },
 }
 
 // "2000" → "$U 2.000"; texto libre queda tal cual; vacío → Consultar.
@@ -538,15 +547,15 @@ export function Products({ onNavigate }: ProductsProps) {
                         {product.images.length > 0 && product.images[0] ? (
                           <motion.img
                             variants={rowZoomVariants}
+                            custom={dir}
                             whileHover={reduced ? undefined : { scale: 1.04 }}
                             src={product.images[0]}
                             alt={product.name}
                             className="w-full h-full object-cover"
-                            style={{ filter: 'saturate(1.06) contrast(1.04)' }}
                             loading="lazy"
                           />
                         ) : (
-                          <motion.div variants={rowZoomVariants} className="w-full h-full">
+                          <motion.div variants={rowZoomVariants} custom={dir} className="w-full h-full">
                             <ProductPlaceholder category={product.category} />
                           </motion.div>
                         )}

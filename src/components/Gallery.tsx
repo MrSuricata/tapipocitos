@@ -41,29 +41,38 @@ const zoomVariants = {
 const MASONRY_ASPECTS = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/2]']
 
 const sideTextVariants = {
-  hidden: (dir: number) => ({ opacity: 0, x: 26 * dir }),
+  hidden: (dir: number) => ({ opacity: 0, x: 26 * dir, filter: 'blur(6px)' }),
   show: () => ({
     opacity: 1,
     x: 0,
+    filter: 'blur(0px)',
     transition: { duration: 0.8, ease: SOFT_EASE, delay: 0.4 },
   }),
 }
 
+// El contenedor ya no recorta: el revelado vive en la foto (blur-focus).
 const rowCurtainVariants = {
-  // Cortina lateral: se abre desde el lado donde vive la foto
-  // (dir 1 = foto a la izquierda -> barre hacia la derecha).
-  hidden: (dir: number) => ({
-    clipPath: dir === 1 ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)',
-  }),
-  show: {
-    clipPath: 'inset(0% 0% 0% 0%)',
-    transition: { duration: 1.15, ease: CURTAIN_EASE },
-  },
+  hidden: {},
+  show: {},
 }
 
+/* Revelado difuminado: la foto entra fuera de foco, deslizándose suave
+   desde su lado, y se enfoca al asentarse. El scale inicial sobra el marco
+   para que el blur no muestre halos en los bordes. */
 const rowZoomVariants = {
-  hidden: { scale: 1.12 },
-  show: { scale: 1, transition: { duration: 1.7, ease: ZOOM_EASE } },
+  hidden: (dir: number) => ({
+    opacity: 0,
+    x: 30 * dir,
+    scale: 1.1,
+    filter: 'blur(18px) saturate(1.06) contrast(1.04)',
+  }),
+  show: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    filter: 'blur(0px) saturate(1.06) contrast(1.04)',
+    transition: { duration: 1.35, ease: ZOOM_EASE },
+  },
 }
 
 const categoryStyles: Record<string, { gradient: string; accent: string; overlay: string }> = {
@@ -444,6 +453,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       >
                         <motion.div
                           variants={rowZoomVariants}
+                          custom={dir}
                           whileHover={reduced ? undefined : { scale: 1.04 }}
                           className="w-full h-full"
                         >
