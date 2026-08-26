@@ -40,13 +40,26 @@ const zoomVariants = {
    da variedad visual aunque todas las fotos vengan 4:3 de la cámara. */
 const MASONRY_ASPECTS = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/2]']
 
-const captionVariants = {
-  hidden: { opacity: 0, y: 12 },
-  show: (i: number) => ({
+const sideTextVariants = {
+  hidden: (dir: number) => ({ opacity: 0, x: 26 * dir }),
+  show: () => ({
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: SOFT_EASE, delay: 0.12 + i * 0.09 },
+    x: 0,
+    transition: { duration: 0.6, ease: SOFT_EASE, delay: 0.18 },
   }),
+}
+
+const rowCurtainVariants = {
+  hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
+  show: {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    transition: { duration: 0.7, ease: CURTAIN_EASE },
+  },
+}
+
+const rowZoomVariants = {
+  hidden: { scale: 1.14 },
+  show: { scale: 1, transition: { duration: 1.1, ease: ZOOM_EASE } },
 }
 
 const categoryStyles: Record<string, { gradient: string; accent: string; overlay: string }> = {
@@ -352,7 +365,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               transition={{
                 duration: DESIGN_TOKENS.animations.duration.slow / 1000,
               }}
-              className="columns-2 md:columns-3 gap-3 sm:gap-5 [&>*]:mb-3 sm:[&>*]:mb-5"
+              className="max-w-6xl mx-auto space-y-14 sm:space-y-24"
             >
               {filteredProjects.length === 0 ? (
                 <motion.div
@@ -394,86 +407,99 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                   </div>
                 </motion.div>
               ) : (
-                filteredProjects.map((project, index) => (
-                  <motion.div
-                    key={project.id}
-                    initial={reduced ? false : 'hidden'}
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.2, margin: '0px 0px -60px 0px' }}
-                    custom={index % 3}
-                    className="break-inside-avoid"
-                  >
-                    {/* Pieza de galería con revelado cortina: masonry de
-                        alturas naturales, la foto se descubre al scrollear. */}
+                filteredProjects.map((project, index) => {
+                  const photoLeft = index % 2 === 0
+                  const dir = photoLeft ? 1 : -1
+                  return (
                     <motion.article
-                      variants={curtainVariants}
-                      className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-[#E9E0D4]"
-                      onClick={() => setSelectedProject(project)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          setSelectedProject(project)
-                        }
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`Ver detalles del proyecto ${project.title}`}
+                      key={project.id}
+                      initial={reduced ? false : 'hidden'}
+                      whileInView="show"
+                      viewport={{ once: true, amount: 0.25, margin: '0px 0px -40px 0px' }}
+                      custom={dir}
+                      className="grid md:grid-cols-12 gap-5 md:gap-12 items-center group"
                     >
+                      {/* Fila editorial: la foto se descubre con la cortina,
+                          el relato del trabajo entra desde su lado. */}
                       <motion.div
-                        variants={zoomVariants}
-                        whileHover={reduced ? undefined : { scale: 1.04 }}
-                        className={`${MASONRY_ASPECTS[index % MASONRY_ASPECTS.length]} w-full`}
+                        variants={rowCurtainVariants}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Ver detalles del proyecto ${project.title}`}
+                        onClick={() => setSelectedProject(project)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            setSelectedProject(project)
+                          }
+                        }}
+                        className={`relative rounded-2xl overflow-hidden bg-[#E9E0D4] shadow-sm group-hover:shadow-xl transition-shadow duration-300 cursor-pointer md:col-span-7 aspect-[4/3] ${
+                          photoLeft ? '' : 'md:order-2'
+                        } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`}
                       >
-                        {project.images.length > 0 && project.images[0] ? (
-                          <img
-                            src={project.images[0]}
-                            alt={project.title}
-                            className="w-full h-full object-cover block"
-                            style={{ filter: 'saturate(1.06) contrast(1.04)' }}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <ProjectPlaceholder category={project.category} />
-                        )}
+                        <motion.div
+                          variants={rowZoomVariants}
+                          whileHover={reduced ? undefined : { scale: 1.04 }}
+                          className="w-full h-full"
+                        >
+                          {project.images.length > 0 && project.images[0] ? (
+                            <img
+                              src={project.images[0]}
+                              alt={project.title}
+                              className="w-full h-full object-cover block"
+                              style={{ filter: 'saturate(1.06) contrast(1.04)' }}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <ProjectPlaceholder category={project.category} />
+                          )}
+                        </motion.div>
                       </motion.div>
 
-                      {/* Velo con el relato — solo en pantallas grandes,
-                          donde la foto tiene altura para bancárselo */}
-                      <div
-                        className="hidden sm:block absolute inset-x-0 bottom-0 pt-14 pb-3.5 px-4 bg-gradient-to-t from-[#1A0F08]/85 via-[#1A0F08]/40 to-transparent"
-                        aria-hidden="true"
-                      />
-                      <div className="hidden sm:block absolute inset-x-0 bottom-0 px-4 pb-3.5">
-                        <span className="text-[0.58rem] font-semibold tracking-[0.22em] uppercase text-[var(--brand-accent-soft)]">
+                      {/* Relato del trabajo */}
+                      <motion.div
+                        variants={sideTextVariants}
+                        className={`md:col-span-5 px-1 ${photoLeft ? '' : 'md:order-1'}`}
+                      >
+                        <span className="text-[0.62rem] font-semibold tracking-[0.26em] uppercase text-[var(--brand-accent)]">
                           {project.category}
                           {project.completed_date ? ` · ${project.completed_date}` : ''}
                         </span>
                         <h3
-                          className="text-lg leading-snug font-bold text-[#F5EDE2] line-clamp-2 mt-0.5"
+                          className="text-2xl sm:text-3xl leading-tight font-bold text-foreground mt-1.5 cursor-pointer hover:text-[var(--brand-accent-strong)] transition-colors"
                           style={{ fontFamily: "'Playfair Display', serif" }}
+                          onClick={() => setSelectedProject(project)}
                         >
                           {project.title}
                         </h3>
-                        <p className="text-xs text-[#D9C9B4]/90 line-clamp-2 mt-1 opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-12 transition-all duration-300 overflow-hidden">
-                          {project.description}
-                        </p>
-                      </div>
+                        {project.description && (
+                          <p className="text-sm text-muted-foreground leading-relaxed mt-3 line-clamp-3 sm:line-clamp-4 max-w-prose">
+                            {project.description}
+                          </p>
+                        )}
+                        {project.materials.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-4">
+                            {project.materials.slice(0, 4).map((m, i) => (
+                              <span
+                                key={i}
+                                className="text-[0.65rem] px-2.5 py-1 rounded-full bg-[var(--brand-accent)]/10 text-[var(--brand-accent-strong)] font-medium"
+                              >
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <button
+                          onClick={() => setSelectedProject(project)}
+                          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--brand-accent)] hover:text-[var(--brand-accent-strong)] mt-5 group/link"
+                        >
+                          Ver proyecto
+                          <ArrowRight size={15} className="group-hover/link:translate-x-0.5 transition-transform" />
+                        </button>
+                      </motion.div>
                     </motion.article>
-
-                    {/* En mobile la leyenda respira debajo de la foto */}
-                    <motion.div variants={captionVariants} className="sm:hidden pt-1.5 px-1">
-                      <span className="text-[0.55rem] font-semibold tracking-[0.18em] uppercase text-[var(--brand-accent)]">
-                        {project.category}
-                      </span>
-                      <h3
-                        className="text-sm leading-snug font-bold text-foreground line-clamp-2"
-                        style={{ fontFamily: "'Playfair Display', serif" }}
-                      >
-                        {project.title}
-                      </h3>
-                    </motion.div>
-                  </motion.div>
-                ))
+                  )
+                })
               )}
             </motion.div>
           </AnimatePresence>

@@ -70,13 +70,28 @@ const zoomVariants = {
   }),
 }
 
-const infoVariants = {
-  hidden: { opacity: 0, y: 16 },
-  show: (i: number) => ({
+/* En filas editoriales el texto entra desde su propio lado
+   (dir: 1 = texto a la derecha, -1 = a la izquierda). */
+const sideTextVariants = {
+  hidden: (dir: number) => ({ opacity: 0, x: 26 * dir }),
+  show: (dir: number) => ({
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: SOFT_EASE, delay: 0.12 + i * 0.09 },
+    x: 0,
+    transition: { duration: 0.6, ease: SOFT_EASE, delay: 0.18, custom: dir },
   }),
+}
+
+const rowCurtainVariants = {
+  hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
+  show: {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    transition: { duration: 0.7, ease: CURTAIN_EASE },
+  },
+}
+
+const rowZoomVariants = {
+  hidden: { scale: 1.14 },
+  show: { scale: 1, transition: { duration: 1.1, ease: ZOOM_EASE } },
 }
 
 // "2000" → "$U 2.000"; texto libre queda tal cual; vacío → Consultar.
@@ -434,7 +449,7 @@ export function Products({ onNavigate }: ProductsProps) {
               transition={{
                 duration: DESIGN_TOKENS.animations.duration.slow / 1000,
               }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-7 sm:gap-x-6 sm:gap-y-10 items-start"
+              className="max-w-6xl mx-auto space-y-14 sm:space-y-24"
             >
               {filteredProducts.length === 0 ? (
                 <motion.div
@@ -476,44 +491,49 @@ export function Products({ onNavigate }: ProductsProps) {
                   </div>
                 </motion.div>
               ) : (
-                filteredProducts.map((product, index) => (
-                  <motion.div
-                    key={product.id}
-                    initial={reduced ? false : 'hidden'}
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.2, margin: '0px 0px -60px 0px' }}
-                    custom={index % 4}
-                    className={product.featured ? 'col-span-2' : ''}
-                  >
-                    {/* Revelado cortina: la foto se descubre al scrollear
-                        (clip-path + micro-zoom); el texto entra después. */}
-                    <article
-                      className="group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-2xl"
-                      onClick={() => setSelectedProduct(product)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          setSelectedProduct(product)
-                        }
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`Ver detalles de ${product.name}`}
+                filteredProducts.map((product, index) => {
+                  const photoLeft = index % 2 === 0
+                  const dir = photoLeft ? 1 : -1
+                  const isPortrait =
+                    !product.featured && orientation[product.id] !== 'landscape'
+                  return (
+                    <motion.article
+                      key={product.id}
+                      initial={reduced ? false : 'hidden'}
+                      whileInView="show"
+                      viewport={{ once: true, amount: 0.25, margin: '0px 0px -40px 0px' }}
+                      custom={dir}
+                      className="grid md:grid-cols-12 gap-5 md:gap-12 items-center group"
                     >
+                      {/* Fila editorial: foto de un lado, relato del otro,
+                          alternando — la cortina descubre la foto y el texto
+                          entra desde su propio lado. */}
                       <motion.div
-                        variants={curtainVariants}
-                        className={`relative rounded-2xl overflow-hidden bg-[#E9E0D4] shadow-sm group-hover:shadow-lg transition-shadow duration-300 ${
+                        variants={rowCurtainVariants}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Ver detalles de ${product.name}`}
+                        onClick={() => setSelectedProduct(product)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            setSelectedProduct(product)
+                          }
+                        }}
+                        className={`relative rounded-2xl overflow-hidden bg-[#E9E0D4] shadow-sm group-hover:shadow-xl transition-shadow duration-300 cursor-pointer md:col-span-7 ${
+                          photoLeft ? '' : 'md:order-2'
+                        } ${
                           product.featured
                             ? 'aspect-[8/5]'
-                            : orientation[product.id] === 'landscape'
-                              ? 'aspect-[4/3]'
-                              : 'aspect-[4/5]'
-                        }`}
+                            : isPortrait
+                              ? 'aspect-[4/5] max-w-md w-full mx-auto'
+                              : 'aspect-[4/3]'
+                        } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`}
                       >
                         {product.images.length > 0 && product.images[0] ? (
                           <motion.img
-                            variants={zoomVariants}
-                            whileHover={reduced ? undefined : { scale: 1.05 }}
+                            variants={rowZoomVariants}
+                            whileHover={reduced ? undefined : { scale: 1.04 }}
                             src={product.images[0]}
                             alt={product.name}
                             className="w-full h-full object-cover"
@@ -521,34 +541,54 @@ export function Products({ onNavigate }: ProductsProps) {
                             loading="lazy"
                           />
                         ) : (
-                          <motion.div variants={zoomVariants} className="w-full h-full">
+                          <motion.div variants={rowZoomVariants} className="w-full h-full">
                             <ProductPlaceholder category={product.category} />
                           </motion.div>
                         )}
-
                         {product.featured && (
                           <span
-                            className="absolute top-3 right-3 text-[0.6rem] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full text-[#1A0F08] pointer-events-none"
+                            className="absolute top-4 right-4 text-[0.62rem] font-semibold tracking-wide uppercase px-3 py-1.5 rounded-full text-[#1A0F08] pointer-events-none"
                             style={{ background: 'var(--brand-accent-soft)' }}
                           >
                             Destacado
                           </span>
                         )}
+                      </motion.div>
 
-                        {/* Acciones flotantes: siempre a mano en touch, al
-                            pasar el mouse en desktop */}
-                        <div
-                          className="absolute bottom-3 right-3 flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-1 sm:group-hover:translate-y-0 transition-all duration-300"
-                          onClick={(e) => e.stopPropagation()}
-                          onKeyDown={(e) => e.stopPropagation()}
+                      {/* Relato del producto */}
+                      <motion.div
+                        variants={sideTextVariants}
+                        className={`md:col-span-5 px-1 ${photoLeft ? '' : 'md:order-1'}`}
+                      >
+                        <span className="text-[0.62rem] font-semibold tracking-[0.26em] uppercase text-[var(--brand-accent)]">
+                          {product.category}
+                        </span>
+                        <h3
+                          className="text-2xl sm:text-3xl leading-tight font-bold text-foreground mt-1.5 cursor-pointer hover:text-[var(--brand-accent-strong)] transition-colors"
+                          style={{ fontFamily: "'Playfair Display', serif" }}
+                          onClick={() => setSelectedProduct(product)}
                         >
-                          <button
+                          {product.name}
+                        </h3>
+                        {product.description && (
+                          <p className="text-sm text-muted-foreground leading-relaxed mt-3 line-clamp-3 sm:line-clamp-4 max-w-prose">
+                            {product.description}
+                          </p>
+                        )}
+                        <p className="text-xs text-muted-foreground/80 mt-3">
+                          {[product.material, product.dimensions].filter(Boolean).join('  ·  ')}
+                        </p>
+                        <p
+                          className="text-xl sm:text-2xl font-bold text-[var(--brand-accent)] mt-4"
+                          style={{ fontVariantNumeric: 'tabular-nums' }}
+                        >
+                          {fmtPrice(product.price)}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-3 mt-5">
+                          <Button
                             onClick={() => handleToggleCart(product)}
-                            className={`inline-flex items-center justify-center w-10 h-10 rounded-full shadow-md backdrop-blur-md transition-colors ${
-                              has(product.id)
-                                ? 'bg-[var(--brand-accent)] text-white'
-                                : 'bg-white/90 text-[#33261B] hover:bg-white'
-                            }`}
+                            variant={has(product.id) ? 'default' : 'outline'}
+                            className="rounded-full px-6"
                             aria-label={
                               has(product.id)
                                 ? `Quitar ${product.name} del presupuesto`
@@ -556,51 +596,32 @@ export function Products({ onNavigate }: ProductsProps) {
                             }
                           >
                             {has(product.id) ? (
-                              <Check size={17} weight="bold" />
+                              <>
+                                <Check size={16} weight="bold" className="mr-2" />
+                                En tu presupuesto
+                              </>
                             ) : (
-                              <ShoppingBag size={17} />
+                              <>
+                                <ShoppingBag size={16} className="mr-2" />
+                                Agregar al presupuesto
+                              </>
                             )}
-                          </button>
+                          </Button>
                           <a
                             href={buildWhatsappConsultLink(toCartItem(product))}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center w-10 h-10 rounded-full text-white shadow-md hover:scale-105 transition-transform"
+                            className="inline-flex items-center justify-center w-11 h-11 rounded-full text-white shadow-md hover:scale-105 transition-transform"
                             style={{ backgroundColor: '#1FAF5A' }}
                             aria-label={`Consultar por ${product.name} en WhatsApp`}
                           >
-                            <WhatsappLogo size={17} weight="fill" />
+                            <WhatsappLogo size={18} weight="fill" />
                           </a>
                         </div>
                       </motion.div>
-
-                      {/* Tipografía editorial con confianza: overline ámbar,
-                          serif grande, precio con aire */}
-                      <motion.div variants={infoVariants} className="pt-4 px-1">
-                        <span className="text-[0.6rem] font-semibold tracking-[0.24em] uppercase text-[var(--brand-accent)]">
-                          {product.category}
-                        </span>
-                        <h3
-                          className="text-xl sm:text-2xl leading-snug font-bold text-foreground line-clamp-1 mt-1"
-                          style={{ fontFamily: "'Playfair Display', serif" }}
-                        >
-                          {product.name}
-                        </h3>
-                        <div className="flex items-baseline justify-between gap-3 mt-1.5">
-                          <p className="text-xs text-muted-foreground line-clamp-1">
-                            {product.material}
-                          </p>
-                          <p
-                            className="text-sm sm:text-base font-bold text-[var(--brand-accent)] whitespace-nowrap"
-                            style={{ fontVariantNumeric: 'tabular-nums' }}
-                          >
-                            {fmtPrice(product.price)}
-                          </p>
-                        </div>
-                      </motion.div>
-                    </article>
-                  </motion.div>
-                ))
+                    </motion.article>
+                  )
+                })
               )}
             </motion.div>
           </AnimatePresence>

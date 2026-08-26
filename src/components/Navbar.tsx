@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, X, ShoppingBag } from '@phosphor-icons/react'
+import { List, X, ShoppingBag, GearSix } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { useCart, buildQuoteMessage } from '@/lib/cart'
 import { CartSheet } from '@/components/CartSheet'
@@ -44,6 +44,26 @@ function SofaLogo({ className }: { className?: string }) {
         opacity="0.5"
       />
     </svg>
+  )
+}
+
+/* Engranaje de acceso al panel: discreto pero siempre a mano
+   (clave en la PWA instalada, que no tiene barra de direcciones). */
+function AdminGear({ onDark }: { onDark?: boolean }) {
+  return (
+    <a
+      href="/admin"
+      className={cn(
+        'p-2 rounded-full transition-colors inline-flex',
+        onDark
+          ? 'text-[#F5EDE2]/70 hover:bg-white/10 hover:text-[var(--brand-accent-soft)]'
+          : 'text-muted-foreground hover:bg-accent/10 hover:text-accent'
+      )}
+      aria-label="Panel de administración"
+      title="Panel de administración"
+    >
+      <GearSix size={20} weight="duotone" />
+    </a>
   )
 }
 
@@ -172,9 +192,11 @@ export function Navbar({ currentView, onNavigate }: NavbarProps) {
             ))}
             <div className={cn('w-px h-6 mx-1', onDark ? 'bg-[#C4A882]/30' : 'bg-border')} />
             <CartButton onClick={() => setCartOpen(true)} onDark={onDark} />
+            <AdminGear onDark={onDark} />
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
+            <AdminGear onDark={onDark} />
             <CartButton onClick={() => setCartOpen(true)} onDark={onDark} />
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
