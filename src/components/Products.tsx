@@ -514,7 +514,7 @@ export function Products({ onNavigate }: ProductsProps) {
                       key={product.id}
                       initial={reduced ? false : 'hidden'}
                       whileInView="show"
-                      viewport={{ once: true, amount: 0.3 }}
+                      viewport={{ once: true, amount: 0.25, margin: '10000px 0px -60px 0px' }}
                       custom={dir}
                       className="grid md:grid-cols-12 gap-5 md:gap-12 items-center group"
                     >
