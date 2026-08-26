@@ -321,7 +321,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               transition={{
                 duration: DESIGN_TOKENS.animations.duration.slow / 1000,
               }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="columns-2 md:columns-3 gap-3 sm:gap-5 [&>*]:mb-3 sm:[&>*]:mb-5"
             >
               {filteredProjects.length === 0 ? (
                 <motion.div
@@ -366,19 +366,19 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                 filteredProjects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{
                       duration: DESIGN_TOKENS.animations.duration.medium / 1000,
-                      delay: index * 0.05,
+                      delay: Math.min(index * 0.04, 0.4),
                     }}
+                    className="break-inside-avoid"
                   >
-                    <Card
-                      className="group overflow-hidden cursor-pointer card-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      style={{
-                        transitionDuration: `${DESIGN_TOKENS.animations.duration.medium}ms`,
-                        transitionTimingFunction: DESIGN_TOKENS.animations.easing,
-                      }}
+                    {/* Pieza de galería: masonry de alturas naturales, la foto
+                        manda y el relato aparece sobre un velo espresso al pie.
+                        Ritmo de portfolio fotográfico, no de tienda. */}
+                    <article
+                      className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-[#E9E0D4]"
                       onClick={() => setSelectedProject(project)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -390,63 +390,54 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       role="button"
                       aria-label={`Ver detalles del proyecto ${project.title}`}
                     >
-                      <div className="aspect-[4/3] overflow-hidden bg-secondary card-image-container">
-                        {project.images.length > 0 && project.images[0] ? (
-                          <img
-                            src={project.images[0]}
-                            alt={project.title}
-                            className="w-full h-full object-cover card-image-zoom"
-                            loading="lazy"
-                          />
-                        ) : (
+                      {project.images.length > 0 && project.images[0] ? (
+                        <img
+                          src={project.images[0]}
+                          alt={project.title}
+                          className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="aspect-[4/3]">
                           <ProjectPlaceholder category={project.category} />
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span
-                            className="text-xs px-2 py-1 rounded font-medium"
-                            style={{
-                              backgroundColor: `${getStyleForCategory(project.category).accent}20`,
-                              color: getStyleForCategory(project.category).accent,
-                            }}
-                          >
-                            {project.category}
-                          </span>
-                          <span
-                            className="text-xs"
-                            style={{ color: DESIGN_TOKENS.colors.description }}
-                          >
-                            {project.completed_date}
-                          </span>
                         </div>
+                      )}
+
+                      {/* Velo con el relato — solo en pantallas grandes,
+                          donde la foto tiene altura para bancárselo */}
+                      <div
+                        className="hidden sm:block absolute inset-x-0 bottom-0 pt-14 pb-3.5 px-4 bg-gradient-to-t from-[#1A0F08]/85 via-[#1A0F08]/40 to-transparent"
+                        aria-hidden="true"
+                      />
+                      <div className="hidden sm:block absolute inset-x-0 bottom-0 px-4 pb-3.5">
+                        <span className="text-[0.58rem] font-semibold tracking-[0.22em] uppercase text-[var(--brand-accent-soft)]">
+                          {project.category}
+                          {project.completed_date ? ` · ${project.completed_date}` : ''}
+                        </span>
                         <h3
-                          className="text-xl font-semibold mb-2 line-clamp-1"
-                          style={{
-                            color: DESIGN_TOKENS.colors.title,
-                            fontSize: DESIGN_TOKENS.typography.title.minSize,
-                          }}
+                          className="text-lg leading-snug font-bold text-[#F5EDE2] line-clamp-2 mt-0.5"
+                          style={{ fontFamily: "'Playfair Display', serif" }}
                         >
                           {project.title}
                         </h3>
-                        <p
-                          className="text-sm line-clamp-2 mb-3"
-                          style={{
-                            color: DESIGN_TOKENS.colors.description,
-                            fontSize: '14px',
-                            lineHeight: DESIGN_TOKENS.typography.lineHeight,
-                          }}
-                        >
+                        <p className="text-xs text-[#D9C9B4]/90 line-clamp-2 mt-1 opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-12 transition-all duration-300 overflow-hidden">
                           {project.description}
                         </p>
-                        {project.materials.length > 0 && (
-                          <p className="text-xs text-muted-foreground">
-                            {project.materials.slice(0, 2).join(', ')}
-                            {project.materials.length > 2 && '...'}
-                          </p>
-                        )}
                       </div>
-                    </Card>
+                    </article>
+
+                    {/* En mobile la leyenda respira debajo de la foto */}
+                    <div className="sm:hidden pt-1.5 px-1">
+                      <span className="text-[0.55rem] font-semibold tracking-[0.18em] uppercase text-[var(--brand-accent)]">
+                        {project.category}
+                      </span>
+                      <h3
+                        className="text-sm leading-snug font-bold text-foreground line-clamp-2"
+                        style={{ fontFamily: "'Playfair Display', serif" }}
+                      >
+                        {project.title}
+                      </h3>
+                    </div>
                   </motion.div>
                 ))
               )}

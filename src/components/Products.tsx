@@ -46,6 +46,17 @@ function getProductStyle(category: string) {
   return categoryProductStyles[category] || categoryProductStyles['Otros']
 }
 
+// "2000" → "$U 2.000"; texto libre queda tal cual; vacío → Consultar.
+function fmtPrice(price?: string): string {
+  const p = (price || '').trim()
+  if (!p) return 'Consultar'
+  if (/^\d+([.,]\d+)?$/.test(p.replace(/\./g, ''))) {
+    const n = Number(p.replace(/\./g, '').replace(',', '.'))
+    if (Number.isFinite(n) && n > 0) return `$U ${n.toLocaleString('es-UY')}`
+  }
+  return p
+}
+
 function SofaSilhouette({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 200 120" fill="none" className="w-3/5 h-auto opacity-25" aria-hidden="true">
@@ -376,7 +387,7 @@ export function Products({ onNavigate }: ProductsProps) {
               transition={{
                 duration: DESIGN_TOKENS.animations.duration.slow / 1000,
               }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-7 sm:gap-x-6 sm:gap-y-10 items-start"
             >
               {filteredProducts.length === 0 ? (
                 <motion.div
@@ -421,18 +432,19 @@ export function Products({ onNavigate }: ProductsProps) {
                 filteredProducts.map((product, index) => (
                   <motion.div
                     key={product.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{
                       duration: DESIGN_TOKENS.animations.duration.medium / 1000,
-                      delay: index * 0.05,
+                      delay: index * 0.04,
                     }}
+                    className={product.featured ? 'col-span-2' : ''}
                   >
-                    {/* Ficha editorial: la foto ES la tarjeta; la información
-                        vive sobre un degradado espresso, como catálogo de
-                        mobiliario premium — nada de caja blanca. */}
+                    {/* Ficha "unboxed" (patrón premium actual): la foto respira
+                        sin overlays y la información va debajo, sin caja.
+                        Los destacados ocupan doble ancho, ritmo de revista. */}
                     <article
-                      className="group relative aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-2xl"
                       onClick={() => setSelectedProduct(product)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -444,97 +456,96 @@ export function Products({ onNavigate }: ProductsProps) {
                       role="button"
                       aria-label={`Ver detalles de ${product.name}`}
                     >
-                      {/* Fotografía a sangre completa */}
-                      <div className="absolute inset-0">
+                      {/* Fotografía sobre lino, protagonista absoluta */}
+                      <div
+                        className={`relative rounded-2xl overflow-hidden bg-[#E9E0D4] shadow-sm group-hover:shadow-lg transition-shadow duration-300 ${
+                          product.featured ? 'aspect-[8/5]' : 'aspect-[4/5]'
+                        }`}
+                      >
                         {product.images.length > 0 && product.images[0] ? (
                           <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-105">
+                          <div className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                             <ProductPlaceholder category={product.category} />
                           </div>
                         )}
-                      </div>
 
-                      {/* Degradado espresso para legibilidad */}
-                      <div
-                        className="absolute inset-0 bg-gradient-to-t from-[#1A0F08]/95 via-[#1A0F08]/35 to-transparent transition-opacity duration-300"
-                        aria-hidden="true"
-                      />
-
-                      {/* Categoría (arriba a la izquierda) + destacado */}
-                      <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
-                        <span className="text-[0.62rem] font-semibold tracking-[0.22em] uppercase text-[#F5EDE2]/90 bg-[#1A0F08]/45 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                          {product.category}
-                        </span>
-                        {product.featured && (
-                          <span
-                            className="text-[0.62rem] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full text-[#1A0F08]"
-                            style={{ background: 'var(--brand-accent-soft)' }}
-                          >
-                            Destacado
+                        {/* Chips discretos sobre la foto */}
+                        <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2 pointer-events-none">
+                          <span className="text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-white/95 bg-[#1A0F08]/35 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                            {product.category}
                           </span>
-                        )}
+                          {product.featured && (
+                            <span
+                              className="text-[0.6rem] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full text-[#1A0F08]"
+                              style={{ background: 'var(--brand-accent-soft)' }}
+                            >
+                              Destacado
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Acciones flotantes: siempre a mano en touch, al
+                            pasar el mouse en desktop */}
+                        <div
+                          className="absolute bottom-3 right-3 flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-1 sm:group-hover:translate-y-0 transition-all duration-300"
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                        >
+                          <button
+                            onClick={() => handleToggleCart(product)}
+                            className={`inline-flex items-center justify-center w-10 h-10 rounded-full shadow-md backdrop-blur-md transition-colors ${
+                              has(product.id)
+                                ? 'bg-[var(--brand-accent)] text-white'
+                                : 'bg-white/90 text-[#33261B] hover:bg-white'
+                            }`}
+                            aria-label={
+                              has(product.id)
+                                ? `Quitar ${product.name} del presupuesto`
+                                : `Agregar ${product.name} al presupuesto`
+                            }
+                          >
+                            {has(product.id) ? (
+                              <Check size={17} weight="bold" />
+                            ) : (
+                              <ShoppingBag size={17} />
+                            )}
+                          </button>
+                          <a
+                            href={buildWhatsappConsultLink(toCartItem(product))}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center w-10 h-10 rounded-full text-white shadow-md hover:scale-105 transition-transform"
+                            style={{ backgroundColor: '#1FAF5A' }}
+                            aria-label={`Consultar por ${product.name} en WhatsApp`}
+                          >
+                            <WhatsappLogo size={17} weight="fill" />
+                          </a>
+                        </div>
                       </div>
 
-                      {/* Información sobre la foto */}
-                      <div className="absolute inset-x-0 bottom-0 p-4">
+                      {/* Información debajo, sin caja: aire de catálogo */}
+                      <div className="pt-3 px-1">
                         <h3
-                          className="text-base sm:text-lg leading-snug font-bold text-[#F5EDE2] line-clamp-2"
+                          className="text-[1.02rem] sm:text-lg leading-snug font-bold text-foreground line-clamp-1"
                           style={{ fontFamily: "'Playfair Display', serif" }}
                         >
                           {product.name}
                         </h3>
-                        <p className="text-[0.72rem] text-[#C4A882] mt-0.5 line-clamp-1">
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                           {product.material}
                         </p>
-                        <div className="flex items-end justify-between gap-2 mt-2.5">
-                          <span
-                            className="text-xs sm:text-sm font-bold text-[var(--brand-accent-soft)] line-clamp-1"
-                            style={{ fontVariantNumeric: 'tabular-nums' }}
-                          >
-                            {product.price || 'Consultar'}
-                          </span>
-                          <div
-                            className="flex items-center gap-1.5"
-                            onClick={(e) => e.stopPropagation()}
-                            onKeyDown={(e) => e.stopPropagation()}
-                          >
-                            <button
-                              onClick={() => handleToggleCart(product)}
-                              className={`inline-flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-md border transition-all ${
-                                has(product.id)
-                                  ? 'bg-[var(--brand-accent)] border-[var(--brand-accent)] text-white'
-                                  : 'bg-white/15 border-white/30 text-[#F5EDE2] hover:bg-white/30'
-                              }`}
-                              aria-label={
-                                has(product.id)
-                                  ? `Quitar ${product.name} del presupuesto`
-                                  : `Agregar ${product.name} al presupuesto`
-                              }
-                            >
-                              {has(product.id) ? (
-                                <Check size={16} weight="bold" />
-                              ) : (
-                                <ShoppingBag size={16} />
-                              )}
-                            </button>
-                            <a
-                              href={buildWhatsappConsultLink(toCartItem(product))}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center justify-center w-10 h-10 rounded-full text-white backdrop-blur-md hover:scale-105 transition-transform"
-                              style={{ backgroundColor: 'rgba(31,175,90,0.92)' }}
-                              aria-label={`Consultar por ${product.name} en WhatsApp`}
-                            >
-                              <WhatsappLogo size={16} weight="fill" />
-                            </a>
-                          </div>
-                        </div>
+                        <p
+                          className="mt-1 text-sm font-bold text-[var(--brand-accent)]"
+                          style={{ fontVariantNumeric: 'tabular-nums' }}
+                        >
+                          {fmtPrice(product.price)}
+                        </p>
                       </div>
                     </article>
                   </motion.div>
@@ -599,11 +610,12 @@ export function Products({ onNavigate }: ProductsProps) {
                       {selectedProduct.name}
                     </h3>
 
-                    {selectedProduct.price && (
-                      <p className="text-sm text-muted-foreground">
-                        {selectedProduct.price}
-                      </p>
-                    )}
+                    <p
+                      className="text-xl font-bold text-[var(--brand-accent)]"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {fmtPrice(selectedProduct.price)}
+                    </p>
 
                     <p
                       className="leading-relaxed"
