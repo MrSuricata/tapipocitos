@@ -290,10 +290,12 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
     'Proyectos Especiales',
   ]
 
-  const filteredProjects =
-    filter === 'Todos'
-      ? projects
-      : projects.filter((p) => p.category === filter)
+  // Vidriera: los trabajos destacados abren la galería.
+  const filteredProjects = (
+    filter === 'Todos' ? projects : projects.filter((p) => p.category === filter)
+  )
+    .slice()
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
 
   return (
     <>

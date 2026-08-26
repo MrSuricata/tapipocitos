@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
@@ -309,6 +309,26 @@ export function Products({ onNavigate }: ProductsProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const reduced = useReducedMotion()
 
+  // Orientación real de cada foto: el marco se adapta (apaisada → 4:3,
+  // vertical/cuadrada → 4:5) en vez de recortar mal.
+  const [orientation, setOrientation] = useState<Record<string, 'landscape' | 'portrait'>>({})
+  useEffect(() => {
+    products.forEach((p) => {
+      const src = p.images?.[0]
+      if (!src || orientation[p.id]) return
+      const img = new Image()
+      img.onload = () => {
+        setOrientation((prev) =>
+          prev[p.id]
+            ? prev
+            : { ...prev, [p.id]: img.naturalWidth >= img.naturalHeight * 1.15 ? 'landscape' : 'portrait' }
+        )
+      }
+      img.src = src
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products])
+
   const toCartItem = (p: Product): CartItem => ({
     id: p.id,
     name: p.name,
@@ -325,10 +345,12 @@ export function Products({ onNavigate }: ProductsProps) {
 
   const categories = ['Todos', 'Sofás', 'Sillas', 'Sillones', 'Mesas', 'Banquetas', 'Otros']
 
-  const filteredProducts =
-    filter === 'Todos'
-      ? products
-      : products.filter((p) => p.category === filter)
+  // Vidriera: los destacados siempre primero (orden estable para el resto).
+  const filteredProducts = (
+    filter === 'Todos' ? products : products.filter((p) => p.category === filter)
+  )
+    .slice()
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
 
   return (
     <>
@@ -481,7 +503,11 @@ export function Products({ onNavigate }: ProductsProps) {
                       <motion.div
                         variants={curtainVariants}
                         className={`relative rounded-2xl overflow-hidden bg-[#E9E0D4] shadow-sm group-hover:shadow-lg transition-shadow duration-300 ${
-                          product.featured ? 'aspect-[8/5]' : 'aspect-[4/5]'
+                          product.featured
+                            ? 'aspect-[8/5]'
+                            : orientation[product.id] === 'landscape'
+                              ? 'aspect-[4/3]'
+                              : 'aspect-[4/5]'
                         }`}
                       >
                         {product.images.length > 0 && product.images[0] ? (
