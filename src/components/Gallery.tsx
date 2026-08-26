@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { FilterTabs } from '@/components/FilterTabs'
 import { X, ArrowRight, ImageSquare } from '@phosphor-icons/react'
 import { useStore } from '@/lib/store'
 import type { Project } from '@/lib/types'
@@ -13,6 +12,36 @@ import { BackgroundDecor } from '@/components/BackgroundDecor'
 interface GalleryProps {
   onNavigate: (view: string, data?: any) => void
   initialFilter?: string
+}
+
+/* Revelado "cortina de taller" — mismo lenguaje que Productos. */
+const CURTAIN_EASE = [0.65, 0, 0.35, 1] as const
+const ZOOM_EASE = [0.22, 1, 0.36, 1] as const
+const SOFT_EASE = [0.33, 1, 0.68, 1] as const
+
+const curtainVariants = {
+  hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
+  show: (i: number) => ({
+    clipPath: 'inset(0% 0% 0% 0%)',
+    transition: { duration: 0.7, ease: CURTAIN_EASE, delay: i * 0.09 },
+  }),
+}
+
+const zoomVariants = {
+  hidden: { scale: 1.14 },
+  show: (i: number) => ({
+    scale: 1,
+    transition: { duration: 1.1, ease: ZOOM_EASE, delay: i * 0.09 },
+  }),
+}
+
+const captionVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: SOFT_EASE, delay: 0.12 + i * 0.09 },
+  }),
 }
 
 const categoryStyles: Record<string, { gradient: string; accent: string; overlay: string }> = {
@@ -239,6 +268,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
   const { projects } = useStore()
   const [filter, setFilter] = useState<string>(initialFilter || 'Todos')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const reduced = useReducedMotion()
 
   useEffect(() => {
     if (initialFilter) {
@@ -289,27 +319,21 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
               Retapizados, restauraciones, piezas a medida y proyectos especiales. Todo hecho a mano en nuestro taller.
             </p>
 
-            <ToggleGroup
-              type="single"
+            <FilterTabs
+              options={categories}
               value={filter}
-              onValueChange={(value) => value && setFilter(value)}
-              className="flex flex-wrap justify-center gap-1.5 segmented rounded-2xl p-1.5 mx-auto"
-              data-wrap=""
-            >
-              {categories.map((category) => (
-                <ToggleGroupItem
-                  key={category}
-                  value={category}
-                  className="button-text px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground transition-all rounded-full whitespace-nowrap"
-                  style={{
-                    transitionDuration: `${DESIGN_TOKENS.animations.duration.fast}ms`,
-                  }}
-                  aria-label={`Filtrar por ${category}`}
-                >
-                  {category}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+              onChange={setFilter}
+              counts={Object.fromEntries([
+                ['Todos', projects.length],
+                ...categories
+                  .filter((c) => c !== 'Todos')
+                  .map((c) => [c, projects.filter((p) => p.category === c).length]),
+              ])}
+              className="max-w-4xl mx-auto"
+            />
+            <p className="mt-7 text-[0.62rem] tracking-[0.32em] uppercase font-semibold text-[var(--brand-accent)]">
+              {filteredProjects.length} {filteredProjects.length === 1 ? 'pieza hecha' : 'piezas hechas'} a mano en el taller
+            </p>
           </motion.div>
 
           <AnimatePresence mode="wait">
@@ -366,18 +390,16 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                 filteredProjects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: DESIGN_TOKENS.animations.duration.medium / 1000,
-                      delay: Math.min(index * 0.04, 0.4),
-                    }}
+                    initial={reduced ? false : 'hidden'}
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.2, margin: '0px 0px -60px 0px' }}
+                    custom={index % 3}
                     className="break-inside-avoid"
                   >
-                    {/* Pieza de galería: masonry de alturas naturales, la foto
-                        manda y el relato aparece sobre un velo espresso al pie.
-                        Ritmo de portfolio fotográfico, no de tienda. */}
-                    <article
+                    {/* Pieza de galería con revelado cortina: masonry de
+                        alturas naturales, la foto se descubre al scrollear. */}
+                    <motion.article
+                      variants={curtainVariants}
                       className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-[#E9E0D4]"
                       onClick={() => setSelectedProject(project)}
                       onKeyDown={(e) => {
@@ -391,16 +413,19 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       aria-label={`Ver detalles del proyecto ${project.title}`}
                     >
                       {project.images.length > 0 && project.images[0] ? (
-                        <img
+                        <motion.img
+                          variants={zoomVariants}
+                          whileHover={reduced ? undefined : { scale: 1.04 }}
                           src={project.images[0]}
                           alt={project.title}
-                          className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                          className="w-full h-auto block"
+                          style={{ filter: 'saturate(1.06) contrast(1.04)' }}
                           loading="lazy"
                         />
                       ) : (
-                        <div className="aspect-[4/3]">
+                        <motion.div variants={zoomVariants} className="aspect-[4/3]">
                           <ProjectPlaceholder category={project.category} />
-                        </div>
+                        </motion.div>
                       )}
 
                       {/* Velo con el relato — solo en pantallas grandes,
@@ -424,10 +449,10 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                           {project.description}
                         </p>
                       </div>
-                    </article>
+                    </motion.article>
 
                     {/* En mobile la leyenda respira debajo de la foto */}
-                    <div className="sm:hidden pt-1.5 px-1">
+                    <motion.div variants={captionVariants} className="sm:hidden pt-1.5 px-1">
                       <span className="text-[0.55rem] font-semibold tracking-[0.18em] uppercase text-[var(--brand-accent)]">
                         {project.category}
                       </span>
@@ -437,7 +462,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                       >
                         {project.title}
                       </h3>
-                    </div>
+                    </motion.div>
                   </motion.div>
                 ))
               )}
@@ -464,7 +489,7 @@ export function Gallery({ onNavigate, initialFilter }: GalleryProps) {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{
                   duration: DESIGN_TOKENS.animations.duration.medium / 1000,
-                  ease: 'easeOut',
+                  ease: SOFT_EASE,
                 }}
                 className="relative"
               >
