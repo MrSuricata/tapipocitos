@@ -5,7 +5,8 @@ import { Footer } from '@/components/Footer'
 import { Hero } from '@/components/Hero'
 import { Services } from '@/components/Services'
 import { About } from '@/components/About'
-import { Gallery } from '@/components/Gallery'
+import { Catalogo } from '@/components/Catalogo'
+import { TemporadaExterior } from '@/components/TemporadaExterior'
 import { Products } from '@/components/Products'
 import { Contact } from '@/components/Contact'
 import { PhotoShowcase } from '@/components/PhotoShowcase'
@@ -173,6 +174,7 @@ function App() {
             <Services onNavigate={handleNavigation} />
             <About />
             <TrabajosDestacados />
+            <TemporadaExterior />
             <Testimonials />
             <Faq />
             <Contact />
@@ -191,10 +193,7 @@ function App() {
 
         {currentView === 'gallery' && (
           <div className="pt-20">
-            <Gallery
-              onNavigate={handleNavigation}
-              initialFilter={galleryFilter}
-            />
+            <Catalogo onNavigate={handleNavigation} />
           </div>
         )}
 
