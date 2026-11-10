@@ -39,20 +39,20 @@ export const CATALOGO: CatalogoTrabajo[] = [
   },
   {
     id: 'butacas-rayadas',
-    titulo: 'Butacas',
+    titulo: 'Butaca Leopoldo',
     tituloItalica: 'a rayas finas',
     categoria: 'Sillones',
     texto:
-      'Un par de butacas de respaldo envolvente, tapizadas en una tela clara de rayas finas. Las rayas se alinean de pieza a pieza para que el dibujo no se corte.',
+      'Un par de butacas Leopoldo, de respaldo envolvente, tapizadas en una tela clara de rayas finas. Las rayas se alinean de pieza a pieza para que el dibujo no se corte.',
     detalles: [
       { label: 'Trabajo', valor: 'Tapizado completo' },
       { label: 'Tela', valor: 'Rayada clara' },
       { label: 'Patas', valor: 'Madera natural' },
     ],
     fotos: [
-      { src: F + 'butacas-rayadas-par.jpg', alt: 'Par de butacas blancas con rayas finas' },
-      { src: F + 'butacas-rayadas-detalle.jpg', alt: 'Detalle de una butaca rayada' },
-      { src: F + 'butacas-rayadas-patio.jpg', alt: 'Las dos butacas en el patio' },
+      { src: F + 'butacas-rayadas-par.jpg', alt: 'Par de butacas Leopoldo blancas con rayas finas' },
+      { src: F + 'butacas-rayadas-detalle.jpg', alt: 'Detalle de una butaca Leopoldo' },
+      { src: F + 'butacas-rayadas-patio.jpg', alt: 'Las dos butacas Leopoldo en el patio' },
     ],
   },
   {
